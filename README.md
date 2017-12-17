@@ -22,6 +22,14 @@ By doing this, there are a great deal of things we can measure!
 3. Visualize the learning over time
 
 
+## Environment Variables
+* Twitter Api Credentials
+  * TWITTER_ACCESS_TOKEN
+  * TWITTER_CONSUMER_KEY
+  * TWITTER_CONSUMER_SECRET
+  * TWITTER_TOKEN_SECRET
+
+
 ## Contributing
 
 1. Fork it!
