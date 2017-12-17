@@ -1,0 +1,10 @@
+tweepy
+
+# non-functional
+pytest
+
+bandit
+coveralls
+coverage
+pylint
+tox

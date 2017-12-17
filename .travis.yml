@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r ./requirements.txt
+
+script:
+  - coverage run --timid --source ./app/ -m py.test
+  - coverage report
+  - bandit -r ./app/
+
+after_success:
+  coveralls
