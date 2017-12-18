@@ -13,7 +13,7 @@ By doing this, there are a great deal of things we can measure!
 * Blogs published words
 * Tweeted words
 
-# Methodology
+# Plan
 
 1. Scrape a twitter feed using Tweepy
     * Eventually need to get beyond 3k tweets
@@ -22,12 +22,21 @@ By doing this, there are a great deal of things we can measure!
 3. Visualize the learning over time
 
 
-## Environment Variables
+# Environment Variables
 * Twitter Api Credentials
   * TWITTER_ACCESS_TOKEN
   * TWITTER_CONSUMER_KEY
   * TWITTER_CONSUMER_SECRET
   * TWITTER_TOKEN_SECRET
+
+
+# References
+
+* [Introduction to SQLite In Python](https://www.pythoncentral.io/introduction-to-sqlite-in-python/)
+* [SQLAlchemy Tutorial](http://docs.sqlalchemy.org/en/latest/orm/tutorial.html)
+* [Python 3 Using 'yield from' In Generators](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-1.html)
+
+
 
 
 ## Contributing

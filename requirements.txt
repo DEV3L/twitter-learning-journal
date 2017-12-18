@@ -1,3 +1,4 @@
+sqlalchemy
 tweepy
 
 # non-functional
