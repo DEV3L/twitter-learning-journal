@@ -10,7 +10,7 @@ class Favorite(Base):
     created_at = Column(DateTime)
     full_text = Column(String)
     hashtags = Column(String)
-    word_count = Column(String, default=0)
+    word_count = Column(Integer, default=0)
     classification = Column(String)
 
     def __str__(self):
