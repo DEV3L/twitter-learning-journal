@@ -15,7 +15,7 @@ def test_words_classifier_with_words():
         (0, 0, ['tagz']),
     )
 
-    for (tag_count, not_tag_count, words) in test_cases:
+    for tag_count, not_tag_count, words in test_cases:
         expected_classification = {}
 
         if tag_count:
