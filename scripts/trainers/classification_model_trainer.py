@@ -43,7 +43,7 @@ classification_model = {
 }
 
 if __name__ == '__main__':
-    database = Database()
+    database = Database(database_url='../../data/twitter-learning-journal')
     favorite_dao = FavoriteDao(database)
 
     _favorites = favorite_dao.query_all()

@@ -3,8 +3,8 @@ from sqlalchemy.orm import sessionmaker
 
 
 class Database():
-    def __init__(self):
-        self._engine = create_engine('sqlite:///data/twitter-learning-journal', echo=True)
+    def __init__(self, database_url='data/twitter-learning-journal'):
+        self._engine = create_engine(f'sqlite:///{database_url}', echo=True)
 
         Session = sessionmaker(bind=self._engine)
         self._session = Session()

@@ -21,6 +21,15 @@ def _database(mock_create_engine, mock_sessionmaker):
     return database
 
 
+@patch('app.twitter_learning_journal.database.sqlalchemy_database.sessionmaker')
+@patch('app.twitter_learning_journal.database.sqlalchemy_database.create_engine')
+def test_database_database_url(mock_create_engine, mock_sessionmaker):
+    Database(database_url='test_url')
+
+    mock_create_engine.assert_called_with('sqlite:///test_url', echo=True)
+    mock_sessionmaker.assert_called_with(bind=mock_create_engine.return_value)
+
+
 def test_add(database):
     mock_session = database._session
 
