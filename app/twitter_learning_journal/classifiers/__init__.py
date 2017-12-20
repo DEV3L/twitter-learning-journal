@@ -13,7 +13,7 @@ ignore_characters = [
     "'"
 ]
 
-classification_model = {
+global_classification_model = {
     'engineering': {'iot', 'engineer', 'stranglerapplication', 'softwaredevelopment', 'nodejs', 'flask',
                     '100daysofcode', 'dev', 'leaddev', 'bizdev', 'development', 'adventofcode', 'software',
                     'deeplearning', 'less', 'mythicalmanmonth', 'opencv', 'lambda', 'codereview', 'docker', 'bigdata',
