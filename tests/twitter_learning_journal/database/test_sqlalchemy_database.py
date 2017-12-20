@@ -24,10 +24,17 @@ def _database(mock_create_engine, mock_sessionmaker):
 def test_add(database):
     mock_session = database._session
 
-    entity = database.add('entity')
+    database.add('entity')
 
-    assert mock_session.add.return_value == entity
     mock_session.add.assert_called_with('entity')
+
+
+def test_add_all(database):
+    mock_session = database._session
+
+    database.add_all(['entity'])
+
+    mock_session.add_all.assert_called_with(['entity'])
 
 
 def test_query(database):

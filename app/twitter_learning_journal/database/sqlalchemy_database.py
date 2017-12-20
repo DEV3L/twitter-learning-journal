@@ -9,11 +9,14 @@ class Database():
         Session = sessionmaker(bind=self._engine)
         self._session = Session()
 
-    def add(self, entity):
-        return self._session.add(entity)
-
     def query(self, entity):
         return self._session.query(entity)
+
+    def add(self, entity):
+        self._session.add(entity)
+
+    def add_all(self, entities: list):
+        self._session.add_all(entities)
 
     def commit(self):
         self._session.commit()
