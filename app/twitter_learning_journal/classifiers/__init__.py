@@ -1,3 +1,18 @@
+ignore_characters = [
+    '.',
+    ',',
+    '!',
+    '*',
+    '(',
+    ')',
+    '=',
+    '+',
+    '`',
+    '~',
+    '"',
+    "'"
+]
+
 classification_model = {
     'engineering': {'iot', 'engineer', 'stranglerapplication', 'softwaredevelopment', 'nodejs', 'flask',
                     '100daysofcode', 'dev', 'leaddev', 'bizdev', 'development', 'adventofcode', 'software',
