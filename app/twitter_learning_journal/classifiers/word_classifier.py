@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
 class WordClassifier:
@@ -11,4 +11,4 @@ class WordClassifier:
         for key, classifications in self.classification_model.items():
             word_classification[key] += self.word in classifications
 
-        return word_classification
+        return Counter(word_classification)

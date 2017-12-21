@@ -12,8 +12,8 @@ class WordsClassifier:
         classification = Counter()
 
         for word in self.words:
-            word_classifier = WordClassifier(word, self.classification_model)
-            word_classification = Counter(word_classifier.classify())
-            classification += word_classification
+            _word = word.lower()
+            word_classifier = WordClassifier(_word, self.classification_model)
+            classification += word_classifier.classify()
 
         return classification
