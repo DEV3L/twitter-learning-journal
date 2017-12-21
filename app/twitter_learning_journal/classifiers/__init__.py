@@ -52,3 +52,7 @@ global_classification_model = {
                 'productnerd', 'arch', 'productcraft', 'customerfirst', 'design'},
     'diversity': {'diversity'},
 }
+
+
+def get_classification_model(classification_model):
+    return classification_model or global_classification_model

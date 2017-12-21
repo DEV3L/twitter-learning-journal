@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.twitter_learning_journal.transformers.transform_datetime_to_str import transform_datetime_to_iso_date_str
+from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 
 
 def test_transform_datetime_to_iso_date_str():

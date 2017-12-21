@@ -1,3 +1,4 @@
+from app.twitter_learning_journal.classifiers.favorite_classifier import FavoriteClassifier
 from app.twitter_learning_journal.models.favorite import Favorite
 from app.twitter_learning_journal.services.favorites_processing_service import FavoritesProcessingService
 
@@ -24,16 +25,22 @@ def test_count_words_in_favorites():
 
 def test_classify_favorites():
     test_cases = (
-        ([''], ['']),
-        (['tag'], ['tag']),
-        (['tag', ''], ['tag', 'tagz']),
-        (['tag', 'tag'], ['tag|tags', 'tag']),
-        (['tag'], ['tag|not_tag']),
-        ([''], ['tagz']),
+        # expected_classification_values, hashtags, full_text
+        ([''], [''], [None, ]),
+        (['tag'], ['tag'], [None]),
+        (['tag', ''], ['tag', 'tagz'], [None, None]),
+        (['tag', ''], ['tag', 'tagz'], [None, None]),
+        (['tag', 'tag'], ['tag|tags', 'tag'], [None, None]),
+        (['tag'], ['tag|not_tag'], [None]),
+        ([''], ['tagz'], [None]),
+        (['tag'], [''], ['tag']),
+        (['tag'], ['tag'], ['not tag']),
+        (['not_tag'], ['tag'], ['not_tag not_tag']),
     )
 
-    for expected_classification_values, hashtags in test_cases:
-        favorites = [Favorite(hashtags=hashtag) for hashtag in hashtags]
+    for expected_classification_values, hashtags, full_texts in test_cases:
+        favorites = [Favorite(hashtags=hashtag, full_text=full_text)
+                     for hashtag, full_text in zip(hashtags, full_texts)]
         favorites_processing_service = FavoritesProcessingService(favorites, classification_model=classification_model)
 
         favorites_processing_service.classify_favorites()
@@ -64,7 +71,9 @@ def test_classify_hashtags():
         favorites_processing_service = FavoritesProcessingService(favorites, classification_model=classification_model)
 
         for favorite in favorites:
-            classification = favorites_processing_service._classify_hashtags(favorite.hashtags)
+            favorite_classifier = FavoriteClassifier(favorite, classification_model=classification_model)
+            classification = favorite_classifier._classify_hashtags()
+            # classification = favorites_processing_service._classify_hashtags(favorite.hashtags)
 
             assert expected_classification == classification
 
