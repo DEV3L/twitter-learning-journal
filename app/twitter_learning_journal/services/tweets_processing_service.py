@@ -11,15 +11,15 @@ class TweetsProcessingService:
         self.weight_text = weight_text
         self.weight_hashtag = weight_hashtag
 
-    def count_words_in_tweets(self):
-        for favorite in self.tweets:
-            _full_text = remove_ignore_characters_from_str(favorite.full_text)
+    def count_tweet_words(self):
+        for tweet in self.tweets:
+            _full_text = remove_ignore_characters_from_str(tweet.full_text)
             word_count = count_tokens(_full_text)
-            favorite.word_count = word_count
+            tweet.word_count = word_count
 
     def classify_tweets(self):
-        for favorite in self.tweets:
-            TweetClassifier(favorite, classification_model=self.classification_model).classify()
+        for tweet in self.tweets:
+            TweetClassifier(tweet, classification_model=self.classification_model).classify()
 
 
 def count_tokens(input_str):

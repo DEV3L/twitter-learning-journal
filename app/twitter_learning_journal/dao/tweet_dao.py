@@ -8,11 +8,11 @@ class TweetDao:
     def __init__(self, database: 'Database'):
         self._database = database
 
-    def add(self, favorite: 'Tweet'):
-        self._database.add(favorite)
+    def add(self, tweet: 'Tweet'):
+        self._database.add(tweet)
 
-    def add_all(self, favorites: list):
-        self._database.add_all(favorites)
+    def add_all(self, tweets: list):
+        self._database.add_all(tweets)
 
     def exists(self, id: int) -> bool:
         return self._database.query(exists().where(Tweet.id == id)).scalar()

@@ -8,4 +8,4 @@ def test_timeline_service_init():
     timeline_service = TimelineService(tweets)
 
     assert defaultdict(dict) == timeline_service.timeline
-    assert tweets == timeline_service.favorites
+    assert tweets == timeline_service.tweets

@@ -20,7 +20,7 @@ def test_count_words_in_tweets():
     ]
 
     tweets_processing_service = TweetsProcessingService(tweets)
-    tweets_processing_service.count_words_in_tweets()
+    tweets_processing_service.count_tweet_words()
 
     assert 6 == sum([tweet.word_count for tweet in tweets])
 

@@ -5,13 +5,12 @@ from app.twitter_learning_journal.models.tweet import Tweet
 
 
 class Tweets:
-    def __init__(self, twitter_api: 'API', screen_name: str, tweet_type: str = 'favorite'):
+    def __init__(self, twitter_api: 'API', screen_name: str, *, tweet_type: str = 'favorite'):
+        self.tweet_type = tweet_type
+        self.screen_name = screen_name
+
         self._twitter_api = twitter_api
         self._twitter_api_type = twitter_api.favorites if 'favorite' == tweet_type else twitter_api.user_timeline
-
-        self.tweet_type = tweet_type
-
-        self.screen_name = screen_name
 
     def get(self):
         tweets = []
@@ -20,7 +19,8 @@ class Tweets:
                 id=call_response.id,
                 created_at=call_response.created_at,
                 full_text=call_response.full_text,
-                hashtags=self.extract_hashtags(call_response)
+                hashtags=self.extract_hashtags(call_response),
+                type=self.tweet_type
             )
 
             tweets.append(tweet_model)
