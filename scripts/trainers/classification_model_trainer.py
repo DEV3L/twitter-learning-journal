@@ -1,5 +1,5 @@
 from app.twitter_learning_journal.classifiers.word_classifier import WordClassifier
-from app.twitter_learning_journal.dao.favorite_dao import FavoriteDao
+from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 
 classification_model = {
@@ -44,26 +44,26 @@ classification_model = {
 
 if __name__ == '__main__':
     database = Database(database_url='../../data/twitter-learning-journal')
-    favorite_dao = FavoriteDao(database)
+    tweet_dao = TweetDao(database)
 
-    _favorites = favorite_dao.query_all()
-    total = len(_favorites)
-    print(f'Total Favorites: {total}')
+    _tweets = tweet_dao.query_all()
+    total = len(_tweets)
+    print(f'Total Tweets: {total}')
 
-    for count, favorite in enumerate(_favorites):
-        if not favorite.hashtags:
+    for count, tweet in enumerate(_tweets):
+        if not tweet.hashtags:
             continue
 
         print(f'{count} of {total}')
 
-        for hashtag in favorite.hashtags.split('|'):
+        for hashtag in tweet.hashtags.split('|'):
             _hashtag = hashtag.lower().strip()
             word_classifier = WordClassifier(_hashtag, classification_model)
             classification = word_classifier.classify()
 
             if not sum([classification[key] for key in classification.keys()]):
                 print(f'Not classified: {_hashtag}')
-                print(f'            - : {favorite.full_text}\n')
+                print(f'            - : {tweet.full_text}\n')
 
                 tag = input('Enter classification tag: ')
                 tag = tag.lower().strip()
