@@ -4,8 +4,8 @@ from app.twitter_learning_journal.services.timeline_service import TimelineServi
 
 
 def test_timeline_service_init():
-    favorites = []
-    timeline_service = TimelineService(favorites)
+    tweets = []
+    timeline_service = TimelineService(tweets)
 
     assert defaultdict(dict) == timeline_service.timeline
-    assert favorites == timeline_service.favorites
+    assert tweets == timeline_service.tweets

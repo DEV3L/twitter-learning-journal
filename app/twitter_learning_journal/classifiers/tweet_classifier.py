@@ -2,15 +2,15 @@ from collections import Counter
 
 from app.twitter_learning_journal.classifiers import get_classification_model
 from app.twitter_learning_journal.classifiers.words_classifier import WordsClassifier
-from app.twitter_learning_journal.models.favorite import Favorite
+from app.twitter_learning_journal.models.tweet import Tweet
 from app.twitter_learning_journal.transformers.transform_dict import transform_dict_into_keys_sorted_by_value
 from app.twitter_learning_journal.transformers.transform_str import tokenize
 
 
-class FavoriteClassifier():
-    def __init__(self, favorite: 'Favorite', *, classification_model=None):
+class TweetClassifier():
+    def __init__(self, tweet: 'Tweet', *, classification_model=None):
         self.classification_model = get_classification_model(classification_model)
-        self.favorite = favorite
+        self.tweet = tweet
 
     def classify(self):
         hashtag_classification = self._classify_hashtags()
@@ -21,13 +21,13 @@ class FavoriteClassifier():
 
         classification_value = _extract_classification(classification)
 
-        self.favorite.classification = classification_value
+        self.tweet.classification = classification_value
 
     def _classify_hashtags(self) -> Counter:
-        return self._classify_words(self.favorite.hashtags, delimiter='|')
+        return self._classify_words(self.tweet.hashtags, delimiter='|')
 
     def _classify_full_text(self) -> Counter:
-        return self._classify_words(self.favorite.full_text)
+        return self._classify_words(self.tweet.full_text)
 
     def _classify_words(self, words, *, delimiter=None):
         words = tokenize(words, delimiter=delimiter)
