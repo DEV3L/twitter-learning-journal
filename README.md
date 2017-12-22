@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/DEV3L/twitter-learning-journal.svg?branch=master)](https://travis-ci.org/DEV3L/track-my-beer)
-[![Coverage Status](https://coveralls.io/repos/github/DEV3L/twitter-learning-journal/badge.svg)](https://coveralls.io/github/DEV3L/track-my-beer)
-[![Code Climate](https://codeclimate.com/github/DEV3L/twitter-learning-journal/badges/gpa.svg)](https://codeclimate.com/github/DEV3L/track-my-beer)
+[![Build Status](https://travis-ci.org/DEV3L/twitter-learning-journal.svg?branch=master)](https://travis-ci.org/DEV3L/twitter-learning-journal)
+[![Coverage Status](https://coveralls.io/repos/github/DEV3L/twitter-learning-journal/badge.svg)](https://coveralls.io/github/DEV3L/twitter-learning-journal)
+[![Code Climate](https://codeclimate.com/github/DEV3L/twitter-learning-journal/badges/gpa.svg)](https://codeclimate.com/github/DEV3L/twitter-learning-journal)
 
 # twitter-learning-journal
 Qualify learnings of a Twitter account as a learning journal.
