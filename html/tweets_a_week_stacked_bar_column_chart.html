@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+    categories =
+        [
+            '2017-12-14',
+            '2017-12-15',
+            '2017-12-16',
+            '2017-12-17',
+            '2017-12-18',
+            '2017-12-19',
+            '2017-12-20'
+        ];
+
+    //        ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas','Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas',]
+
+
+    series =
+        [
+            {
+                name: 'agile',
+                data: [
+                    60, 121, 64, 352, 195, 472, 0,
+                ]
+            },
+            {
+                name: 'diversity',
+                data: [
+                    0, 0, 0, 0, 0, 0, 0,
+                ]
+            },
+            {
+                name: 'engineering',
+                data: [
+                    0, 23, 0, 29, 0, 0, 29,
+                ]
+            },
+            {
+                name: 'leadership',
+                data: [
+                    0, 39, 16, 20, 0, 49, 0,
+                ]
+            },
+            {
+                name: 'other',
+                data: [
+                    0, 0, 0, 0, 0, 0, 0,
+                ]
+            },
+            {
+                name: 'product',
+                data: [
+                    55, 0, 40, 134, 25, 50, 0,
+                ]
+            }
+        ];
+
+    /*
+     [
+     {
+     name: 'agile',
+     data: [
+     0,0,16,0,9,0,0,0,0,0,0,21,15,0,0,0,0,19,0,0,112,138,175,10,0,0,0,0,23,21,0,6,0,0,0,0,0,23,17,0,0,0,0,0,0,0,7,6,0,0,22,0,0,23,19,0,22,19,37,0,0,5,40,0,20,32,34,0,0,51,0,0,14,42,0,0,0,17,25,16,0,29,0,0,10,0,0,46,0,0,0,17,0,0,0,17,12,27,35,0,19,0,0,0,0,0,0,0,0,13,24,0,22,51,19,145,0,0,0,0,0,19,0,0,12,0,19,13,29,21,22,0,15,15,16,0,43,0,25,0,0,0,0,0,0,0,0,32,0,24,23,0,19,39,12,0,0,0,0,0,16,0,45,0,0,50,23,28,41,0,0,0,80,0,0,0,0,0,20,0,5,20,47,0,0,9,0,0,0,12,0,18,93,0,0,46,62,17,0,41,14,73,0,20,0,30,0,0,51,83,0,0,0,0,0,0,48,33,0,65,0,0,0,0,19,71,38,25,
+     ]
+     },
+     {
+     name: 'John',
+     data: [5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0,
+     5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0, 5, 3, 4, 7, 2, 2, 0
+     ]
+     }, {
+     name: 'Jane',
+     data: [2, 2, 3, 2, 1]
+     }, {
+     name: 'Joe',
+     data: [3, 4, 4, 2, 5]
+     }
+     ];
+     */
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Twitter Tweets & Favorites Words Per Day By Classification - Last Week'
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Word Count'
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                }
+            }
+        },
+        series: series
+    });
+
+</script>
+</body>
+</html>

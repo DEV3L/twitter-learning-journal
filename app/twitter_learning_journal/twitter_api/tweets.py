@@ -15,10 +15,16 @@ class Tweets:
     def get(self):
         tweets = []
         for call_response in self._call():
+            # this mapping logic could be extracted
+            full_text = call_response.full_text
+
+            if hasattr(call_response, 'retweeted_status'):
+                full_text = call_response.retweeted_status.full_text
+
             tweet_model = Tweet(
                 id=call_response.id,
                 created_at=call_response.created_at,
-                full_text=call_response.full_text,
+                full_text=full_text,
                 hashtags=self.extract_hashtags(call_response),
                 type=self.tweet_type
             )

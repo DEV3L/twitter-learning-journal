@@ -9,82 +9,189 @@ It has been stitched together from a few github gist files
 
 # https://gist.github.com/yanofsky/5436496
 # https://gist.github.com/datagrok/74a71f572493e603919e
+import collections
 from collections import defaultdict
+from datetime import datetime, timedelta
 
 from app.twitter_learning_journal.classifiers import global_classification_model
-from app.twitter_learning_journal.dao.favorite_dao import FavoriteDao
+from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models import Base
-from app.twitter_learning_journal.services.favorites_processing_service import FavoritesProcessingService
+from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 from app.twitter_learning_journal.twitter_api.api import get_api
-from app.twitter_learning_journal.twitter_api.favorites import Favorites
+from app.twitter_learning_journal.twitter_api.tweets import Tweets
 
 
-def collect_favorites(screen_name):
+def build_tables(database):
+    Base.metadata.create_all(database._engine)
+
+
+def collect(screen_name, *, tweet_type='favorite'):
     api = get_api()
-    favorites = Favorites(api, screen_name)
-    return favorites.get()
+    tweets = Tweets(api, screen_name, tweet_type=tweet_type)
+    return tweets.get()
 
 
-def write_favorites(favorites):
+def save_tweets(tweets):
     database = Database()
-    favorite_dao = FavoriteDao(database)
+    tweet_dao = TweetDao(database)
 
-    for favorite in favorites:
-        if not favorite_dao.exists(favorite.id):
-            favorite_dao.add(favorite)
+    for tweet in tweets:
+        if not tweet_dao.exists(tweet.id):
+            tweet_dao.add(tweet)
 
     database.commit()
 
 
-def classify_favorites():
+AudioDetail = collections.namedtuple('AudioDetail', 'start_date stop_date title classification total_audio_minutes')
+
+audio_detail = {
+    'start_date': '',
+    'stop_date': '',
+    'title': '',
+    'classification': '',
+    'total_audio_minutes': 0
+}
+
+
+def classify_audible_books():
+    database = Database()
+
+    tweet_dao = TweetDao(database)
+    tweets = tweet_dao.query_all()
+
+    # sorted(input_dict, key=input_dict.get, reverse=reverse)
+    for tweet in tweets:
+        _full_text = tweet.full_text.lower()
+        _created_at = transform_datetime_to_iso_date_str(tweet.created_at)
+
+        # if 'started listen' in _full_text:
+        #     print(f'started:{_full_text}, start_date:{_created_at}, classification:{tweet.classification}')
+        # elif 'finished listening' in _full_text:
+        #     print(f'stopped:{_full_text}, stop_date:{_created_at}, classification:{tweet.classification}')
+        # elif 'listen' in _full_text:
+        #     print(f'listen:{_full_text}, date:{_created_at}, classification:{tweet.classification}')
+        pass
+    books = []
+
+    switch_book = AudioDetail(
+        start_date=datetime(year=2017, month=5, day=24),
+        stop_date=datetime(year=2017, month=6, day=8),
+        title='switch: how to change things when change is hard',
+        classification='agile',
+        total_audio_minutes=456
+    )
+    books.append(switch_book)
+
+    return books
+
+
+audio_details = []
+
+
+# audio_details.append(
+#     AudioDetail()
+# )
+
+# 'switch: how to change things when change is hard'
+#     AudioDetail(
+#       start_date='2017-05-24',
+#       stop_date='2017-06-08',
+#       title='switch: how to change things when change is hard',
+#       classification='agile',
+#       total_audio_minutes=0,
+#       daily_average_audio_minutes=0
+# )
+
+
+# 'the subtle art of not giving a f*ck'
+#     AudioDetail(
+#       start_date=,
+#       stop_date='2017-05-23',
+#       title='the subtle art of not giving a f*ck',
+#       classification='leadership',
+#       total_audio_minutes=0,
+#       daily_average_audio_minutes=0
+# )
+
+
+def classify_tweets():
     database = Database()
     Base.metadata.create_all(database._engine)
 
-    favorite_dao = FavoriteDao(database)
-    favorites = favorite_dao.query_all()
+    tweet_dao = TweetDao(database)
+    tweets = tweet_dao.query_all()
 
-    favorites_processing_service = FavoritesProcessingService(favorites)
-    favorites_processing_service.count_words_in_favorites()
-    favorites_processing_service.classify_favorites()
+    tweets_processing_service = TweetsProcessingService(tweets)
+    tweets_processing_service.count_tweet_words()
+    tweets_processing_service.classify_tweets()
 
-    favorite_dao.add_all(favorites_processing_service.favorites)
+    tweet_dao.add_all(tweets_processing_service.tweets)
     database.commit()
 
 
-def timeline():
+def timeline(audio_details: list):
     # from here below still needs to be gracefully implemented
     database = Database()
     Base.metadata.create_all(database._engine)
 
-    favorite_dao = FavoriteDao(database)
-    favorites = favorite_dao.query_all()
+    tweet_dao = TweetDao(database)
+    tweets = tweet_dao.query_all()
 
     _timeline = defaultdict(list)
 
-    for favorite in favorites:
-        _timeline[transform_datetime_to_iso_date_str(favorite.created_at)].append(favorite)
+    min_date = datetime(year=2017, month=5, day=22)
+    max_date = datetime(year=2017, month=6, day=10)
+
+    start_date = datetime(year=2017, month=5, day=1)
+
+    while start_date < max_date:
+        _timeline[transform_datetime_to_iso_date_str(start_date)] = []
+        start_date += timedelta(days=1)
+
+    for tweet in tweets:
+        _timeline[transform_datetime_to_iso_date_str(tweet.created_at)].append(tweet)
 
     per_day_count_by_classification = []
     for key in sorted(global_classification_model.keys()):
         per_day_count_by_classification.append({key: []})
 
-    for key in sorted(_timeline.keys()):
-        favorites = [favorite for favorite in _timeline[key]]
 
-        word_count = sum([favorite.word_count for favorite in favorites])
+    for key in sorted(_timeline.keys()):
+        key_date = datetime.strptime(key, '%Y-%m-%d')
+        if key_date < min_date \
+                or key_date > max_date:
+            continue
+
+        tweets = [tweet for tweet in _timeline[key]]
+
+        word_count = sum([tweet.word_count for tweet in tweets])
         count = len(_timeline[key])
 
         classification_values = defaultdict(int)
 
-        for favorite in favorites:
-            classification_value = favorite.classification
+        for tweet in tweets:
+            classification_value = tweet.classification
 
             if not classification_value:
                 classification_value = 'not_classified'
 
-            classification_values[classification_value] += favorite.word_count
+            classification_values[classification_value] += tweet.word_count
+
+        for audio_detail in audio_details:
+            if key_date >= audio_detail.start_date and key_date <= audio_detail.stop_date:
+                total_days = (audio_detail.stop_date - audio_detail.start_date).days
+
+                """
+                https://www.quora.com/Speeches-For-the-average-person-speaking-at-a-normal-pace-what-is-the-typical-number-of-words-they-can-say-in-one-minute
+                "publishers recommend books on tape to be voiced at 150-160 wpm"
+                """
+                words_per_minute = 125  # well below stated suggestion
+                total_words = words_per_minute * audio_detail.total_audio_minutes
+
+                average_words_per_day = total_words / total_days
+                classification_values[audio_detail.classification] += average_words_per_day
 
         display_str = ''
         for _key, value in classification_values.items():
@@ -99,11 +206,14 @@ def timeline():
             classification[classification_name].append(classification_count or 0)
             print()
 
-        print(f'date={key}:favorites_count={count}:total_words={word_count}|classifications:{display_str}')
+        print(f'date={key}:tweets_count={count}:total_words={word_count}|classifications:{display_str}')
 
     print('---------- html categories ----------')
     print('[')
     for key in sorted(_timeline.keys()):
+        if datetime.strptime(key, '%Y-%m-%d') < min_date \
+                or datetime.strptime(key, '%Y-%m-%d') > max_date:
+            continue
         print(f"'{key}',")
     print(']')
 
@@ -141,49 +251,4 @@ def timeline():
         print('},')
 
     print(']')
-    return favorites
-
-
-def get_all_tweets(screen_name):
-    # Twitter only allows access to a users most recent 3240 tweets with this method
-
-    # authorize twitter, initialize tweepy
-    api = get_api()
-
-    # initialize a list to hold all the tweepy Tweets
-    alltweets = []
-
-    # make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=None)
-
-    # save most recent tweets
-    alltweets.extend(new_tweets)
-
-    # save the id of the oldest tweet less one
-    oldest = alltweets[-1].id - 1
-
-    # keep grabbing tweets until there are no tweets left to grab
-    while len(new_tweets) > 0:
-        print("getting tweets before %s" % (oldest))
-
-        # all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest)
-
-        # save most recent tweets
-        alltweets.extend(new_tweets)
-
-        # update the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
-
-        print("...%s tweets downloaded so far" % (len(alltweets)))
-
-    # transform the tweepy tweets into a 2D array that will populate the csv
-    outtweets = [[tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")] for tweet in alltweets]
-
-    # write the csv
-    with open('%s_tweets.csv' % screen_name, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(["id", "created_at", "text"])
-        writer.writerows(outtweets)
-
-    return outtweets
+    return tweets

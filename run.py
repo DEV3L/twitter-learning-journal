@@ -1,14 +1,18 @@
-from tweet_dumper import classify_favorites, timeline
+from app.twitter_learning_journal.database.sqlalchemy_database import Database
+from tweet_dumper import timeline, collect, save_tweets, build_tables, classify_tweets, classify_audible_books
 
 if __name__ == '__main__':
     screen_name = 'dev3l_'
 
-    # only need once to save favorites
-    # favorites = collect_favorites(screen_name)
-    # write_favorites(favorites)
+    build_tables(Database())
 
-    classify_favorites()
-    timeline()
+    favorites = collect(screen_name)
+    tweets = collect(screen_name, tweet_type='tweets')
 
-    # to be refined
-    # get_all_tweets(sceen_name)
+    save_tweets(favorites)
+    save_tweets(tweets)
+
+    classify_tweets()
+    books = classify_audible_books()
+
+    timeline(books)
