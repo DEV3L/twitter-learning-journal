@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pytest import mark
+
 from app.twitter_learning_journal.models.detail import Detail
 
 
@@ -29,3 +31,15 @@ def test_detail():
 
     assert None == detail.tweet
     assert expected_str == str(detail)
+
+
+@mark.parametrize("detail_id, other_detail_id, expected_result",
+                  [
+                      (None, None, False),
+                      (1, None, False),
+                      (None, 1, False),
+                      (1, 1, True),
+                      (1, 2, False),
+                  ])
+def test_detail_equal(detail_id, other_detail_id, expected_result):
+    assert expected_result == (Detail(id=detail_id) == Detail(id=other_detail_id))

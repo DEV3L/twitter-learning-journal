@@ -48,7 +48,13 @@ def test_get(mock_call, tweets):
         ]
     }
 
-    tweet_response = MagicMock(id=id, created_at=created_at, full_text=full_text, entities=entities)
+    tweet_response = MagicMock(id=id,
+                               created_at=created_at,
+                               full_text=full_text,
+                               entities=entities)
+    delattr(tweet_response, 'retweeted_status')
+    mock_call.return_value = [tweet_response]
+
     expected_tweet_model = Tweet(
         id=id,
         created_at=created_at,
@@ -57,11 +63,29 @@ def test_get(mock_call, tweets):
         type='favorite'
     )
 
+    tweets_list = tweets.get()
 
+    assert [expected_tweet_model] == tweets_list
+    assert mock_call.called
+
+
+@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets.extract_hashtags')
+@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
+def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, tweets):
+    full_text = 'full_text'
+
+    tweet_response = MagicMock(id=id, retweeted_status=MagicMock(full_text=full_text))
     mock_call.return_value = [tweet_response]
+
+    expected_tweet_model = Tweet(
+        id=tweet_response.id,
+        created_at=tweet_response.created_at,
+        full_text=full_text,
+        type='favorite',
+        hashtags=mock_extract_hashtags.return_value
+    )
 
     tweets_list = tweets.get()
 
-    # assert [expected_tweet_model] == tweets_list  # TODO: this needs to be fixed...
+    assert [expected_tweet_model] == tweets_list
     assert mock_call.called
-    # mock_json.dumps.assert_called_with(mock_like._json)

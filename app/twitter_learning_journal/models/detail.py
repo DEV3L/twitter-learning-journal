@@ -32,4 +32,4 @@ class Detail(Base):
                f'classification={self.classification})>'
 
     def __eq__(self, other):
-        return self.id == other.id
+        return self.id is not None and other.id is not None and self.id == other.id
