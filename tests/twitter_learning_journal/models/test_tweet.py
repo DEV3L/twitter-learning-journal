@@ -8,6 +8,7 @@ def test_tweet():
     full_text = 'full_text'
     _type = 'type'
     hashtags = 'hashtags'
+    urls = None
     word_count = 0
     classification = 'classification'
 
@@ -16,6 +17,7 @@ def test_tweet():
                    f'full_text={full_text}, ' \
                    f'type={_type}, ' \
                    f'hashtags={hashtags}, ' \
+                   f'urls={urls}, ' \
                    f'word_count={word_count}, ' \
                    f'classification={classification})>'
 

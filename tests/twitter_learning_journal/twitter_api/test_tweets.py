@@ -45,7 +45,8 @@ def test_get(mock_call, tweets):
             {
                 'text': 'other_text'
             }
-        ]
+        ],
+        'urls': []
     }
 
     tweet_response = MagicMock(id=id,
@@ -89,3 +90,82 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, tweets):
 
     assert [expected_tweet_model] == tweets_list
     assert mock_call.called
+
+
+def test_extract_urls_without_url_without_retweeted_status():
+    expected_url = []
+    entities = {'urls': [], }
+
+    call_response = MagicMock(entities=entities)
+
+    urls = Tweets.extract_urls(call_response)
+
+    assert expected_url == urls
+
+
+def test_extract_urls_with_url_without_retweeted_status():
+    expected_url = ['url']
+
+    call_response = MagicMock(entities=_entities)
+
+    urls = Tweets.extract_urls(call_response)
+
+    assert expected_url == urls
+
+
+def test_extract_urls_with_url_with_retweeted_status():
+    expected_url = ['url']
+    retweeted_status = MagicMock(entities=_retweeted_entities)
+    call_response = MagicMock(entities=_entities, retweeted_status=retweeted_status)
+
+    urls = Tweets.extract_urls(call_response)
+
+    assert expected_url == urls
+
+
+def test_extract_urls_without_url_with_retweeted_status():
+    expected_url = ['url']
+    entities = {'urls': [], }
+    retweeted_status = MagicMock(entities=_retweeted_entities)
+    call_response = MagicMock(entities=entities, retweeted_status=retweeted_status)
+
+    urls = Tweets.extract_urls(call_response)
+
+    assert expected_url == urls
+
+
+def test_remove_ignore_urls():
+    urls = [
+        'https://twitter.com/dev3l_',
+        'url',
+        'url2'
+    ]
+
+    assert ['url', 'url2'] == Tweets._remove_ignore_urls(urls)
+
+
+_entities_urls = [
+    {
+        'expanded_url': 'url'
+    },
+    {
+        'expanded_url': 'https://twitter.com/dev3l_'  # ignored
+    },
+]
+
+_retweeted_urls = [
+    {
+        'expanded_url': 'url'
+    },
+    {
+        'expanded_url': 'https://twitter.com/dev3l_'  # ignored
+    },
+]
+
+_entities = {
+    'urls': _entities_urls,
+}
+
+_retweeted_entities = {
+    'urls': _retweeted_urls
+}

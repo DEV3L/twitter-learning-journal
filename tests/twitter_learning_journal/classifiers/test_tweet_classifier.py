@@ -98,11 +98,7 @@ def test_extract_classification(classification, expected_value):
                   [
                       (0, 0, 'tag', '', 0, 0),
                       (5, 0, 'tag', '', 5, 0),
-
-                      # (1, 0, 'tag', None),
-                      # (1, 0, 'tag tags', None),
-                      # (1, 1, 'tag not_tag', None),
-                      # (0, 0, 'tagz', None),
+                      (5, 5, 'tag', 'not_tag', 5, 5),
                   ])
 def test_weights(tag_count, not_tag_count, full_text, hashtags, weight_text, weight_hashtag):
     expected_classification = {}

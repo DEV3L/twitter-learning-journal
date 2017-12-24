@@ -15,17 +15,15 @@ class Tweets:
     def get(self):
         tweets = []
         for call_response in self._call():
-            # this mapping logic could be extracted
-            full_text = call_response.full_text
-
-            if hasattr(call_response, 'retweeted_status'):
-                full_text = call_response.retweeted_status.full_text
+            full_text = self.extract_full_text(call_response)
+            urls = self.extract_urls(call_response)
 
             tweet_model = Tweet(
                 id=call_response.id,
                 created_at=call_response.created_at,
                 full_text=full_text,
                 hashtags=self.extract_hashtags(call_response),
+                urls='|'.join(urls),
                 type=self.tweet_type
             )
 
@@ -34,8 +32,38 @@ class Tweets:
         return tweets
 
     @staticmethod
+    def extract_full_text(call_response):
+        full_text = call_response.full_text
+        if hasattr(call_response, 'retweeted_status'):
+            full_text = call_response.retweeted_status.full_text
+        return full_text
+
+    @staticmethod
     def extract_hashtags(call_response):
         return '|'.join([hashtag['text'] for hashtag in call_response.entities['hashtags']])
+
+    @staticmethod
+    def extract_urls(call_response):
+        urls = [url['expanded_url'] for url in call_response.entities['urls']]
+        urls = Tweets._remove_ignore_urls(urls)
+
+        if hasattr(call_response, 'retweeted_status'):
+            if not urls:
+                urls = [url['expanded_url'] for url in call_response.retweeted_status.entities['urls']]
+                urls = Tweets._remove_ignore_urls(urls)
+
+        return urls
+
+    @staticmethod
+    def _remove_ignore_urls(urls):
+        ignore_twitter_url = 'https://twitter.com/'
+        _urls = []
+
+        for url in urls:
+            if ignore_twitter_url not in url:
+                _urls.append(url)
+
+        return _urls
 
     def _call(self):
         yield from Cursor(self._twitter_api_type, self.screen_name, tweet_mode='extended', count=200).items()

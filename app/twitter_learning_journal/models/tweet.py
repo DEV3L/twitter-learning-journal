@@ -16,6 +16,7 @@ class Tweet(Base):
     created_at = Column(DateTime)
     full_text = Column(String)
     hashtags = Column(String)
+    urls = Column(String)
     type = Column(String)
     word_count = Column(Integer, default=0)
     classification = Column(String)
@@ -28,6 +29,7 @@ class Tweet(Base):
                f'full_text={self.full_text}, ' \
                f'type={self.type}, ' \
                f'hashtags={self.hashtags}, ' \
+               f'urls={self.urls}, ' \
                f'word_count={self.word_count}, ' \
                f'classification={self.classification})>'
 
