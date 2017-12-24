@@ -26,7 +26,7 @@ def test_count_words_in_tweets():
 
 
 @mark.parametrize("expected_classification_values, hashtags, full_texts",
-                  [  # expected_classification_values, hashtags, full_text
+                  [
                       ([''], [''], [None, ]),
                       (['tag'], ['tag'], [None]),
                       (['tag', ''], ['tag', 'tagz'], [None, None]),
@@ -36,7 +36,7 @@ def test_count_words_in_tweets():
                       ([''], ['tagz'], [None]),
                       (['tag'], [''], ['tag']),
                       (['tag'], ['tag'], ['not tag']),
-                      (['not_tag'], ['tag'], ['not_tag not_tag']),
+                      (['tag'], ['tag'], ['not_tag not_tag']),  # weight of hashtag > word
                   ])
 def test_classify_tweets(expected_classification_values, hashtags, full_texts):
     tweets = [Tweet(hashtags=hashtag, full_text=full_text)

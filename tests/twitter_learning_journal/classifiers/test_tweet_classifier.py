@@ -48,7 +48,7 @@ def test_classify(hashtags, full_text, expected_classification):
                       (1, 1, 'tag not_tag', None),
                       (0, 0, 'tagz', None),
                   ])
-def test_classify_words_(tag_count, not_tag_count, words, delimiter):
+def test_classify_words(tag_count, not_tag_count, words, delimiter):
     expected_classification = {}
 
     if tag_count:
@@ -58,7 +58,7 @@ def test_classify_words_(tag_count, not_tag_count, words, delimiter):
         expected_classification['not_tag'] = not_tag_count
 
     tweet_classifier = TweetClassifier(Tweet(), classification_model=test_classification_model)
-    classification = tweet_classifier._classify_words(words, delimiter=delimiter)
+    classification = tweet_classifier._classify_words(words, weight=1, delimiter=delimiter)
     assert expected_classification == classification
 
 
@@ -70,7 +70,7 @@ def test_classify_hashtags(mock_classify_words):
     classified_hashtags = tweet_classifier._classify_hashtags()
 
     assert mock_classify_words.return_value == classified_hashtags
-    mock_classify_words.assert_called_with(mock_tweet.hashtags, delimiter='|')
+    mock_classify_words.assert_called_with(mock_tweet.hashtags, 3, delimiter='|')
 
 
 @patch('app.twitter_learning_journal.classifiers.tweet_classifier.TweetClassifier._classify_words')
@@ -81,7 +81,7 @@ def test_classify_full_text(mock_classify_words):
     classified_full_text = tweet_classifier._classify_full_text()
 
     assert mock_classify_words.return_value == classified_full_text
-    mock_classify_words.assert_called_with(mock_tweet.full_text)
+    mock_classify_words.assert_called_with(mock_tweet.full_text, 1)
 
 
 @mark.parametrize('classification, expected_value',
@@ -92,3 +92,36 @@ def test_classify_full_text(mock_classify_words):
                   ])
 def test_extract_classification(classification, expected_value):
     assert expected_value == _extract_classification(classification)
+
+
+@mark.parametrize('tag_count, not_tag_count, full_text, hashtags, weight_text, weight_hashtag',
+                  [
+                      (0, 0, 'tag', '', 0, 0),
+                      (5, 0, 'tag', '', 5, 0),
+
+                      # (1, 0, 'tag', None),
+                      # (1, 0, 'tag tags', None),
+                      # (1, 1, 'tag not_tag', None),
+                      # (0, 0, 'tagz', None),
+                  ])
+def test_weights(tag_count, not_tag_count, full_text, hashtags, weight_text, weight_hashtag):
+    expected_classification = {}
+
+    if tag_count:
+        expected_classification['tag'] = tag_count
+
+    if not_tag_count:
+        expected_classification['not_tag'] = not_tag_count
+
+    tweet = Tweet(full_text=full_text, hashtags=hashtags)
+
+    tweet_classifier = TweetClassifier(tweet, classification_model=test_classification_model,
+                                       weight_text=weight_text, weight_hashtag=weight_hashtag)
+
+    hashtag_classification = tweet_classifier._classify_hashtags()
+    full_text_classification = tweet_classifier._classify_full_text()
+
+    classification = hashtag_classification
+    classification += full_text_classification
+
+    assert expected_classification == classification

@@ -8,9 +8,11 @@ from app.twitter_learning_journal.transformers.transform_str import tokenize, re
 
 
 class TweetClassifier():
-    def __init__(self, tweet: 'Tweet', *, classification_model=None):
+    def __init__(self, tweet: 'Tweet', *, classification_model=None, weight_text=1, weight_hashtag=3):
         self.classification_model = get_classification_model(classification_model)
         self.tweet = tweet
+        self.weight_text = weight_text
+        self.weight_hashtag = weight_hashtag
 
     def classify(self):
         hashtag_classification = self._classify_hashtags()
@@ -28,14 +30,14 @@ class TweetClassifier():
         self.tweet.classification = classification_value
 
     def _classify_hashtags(self) -> Counter:
-        return self._classify_words(self.tweet.hashtags, delimiter='|')
+        return self._classify_words(self.tweet.hashtags, self.weight_hashtag, delimiter='|')
 
     def _classify_full_text(self) -> Counter:
-        return self._classify_words(self.tweet.full_text)
+        return self._classify_words(self.tweet.full_text, self.weight_text)
 
-    def _classify_words(self, words, *, delimiter=None):
+    def _classify_words(self, words, weight, *, delimiter=' '):
         words = tokenize(remove_ignore_characters_from_str(words), delimiter=delimiter)
-        words_classifier = WordsClassifier(words, self.classification_model)
+        words_classifier = WordsClassifier(words, self.classification_model, weight=weight)
         return words_classifier.classify()
 
 
