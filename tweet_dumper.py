@@ -17,6 +17,7 @@ from app.twitter_learning_journal.classifiers import global_classification_model
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models import Base
+from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 from app.twitter_learning_journal.twitter_api.api import get_api
@@ -138,13 +139,14 @@ def timeline(audio_details: list):
 
     tweet_dao = TweetDao(database)
     tweets = tweet_dao.query_all()
+    _details = database.query(Detail).all()
 
     _timeline = defaultdict(list)
 
-    min_date = datetime(year=2017, month=5, day=22)
-    max_date = datetime(year=2017, month=6, day=10)
+    min_date = datetime(year=2017, month=11, day=1)
+    max_date = datetime(year=2017, month=12, day=23)
 
-    start_date = datetime(year=2017, month=5, day=1)
+    start_date = datetime(year=2017, month=11, day=1)
 
     while start_date < max_date:
         _timeline[transform_datetime_to_iso_date_str(start_date)] = []
@@ -187,11 +189,38 @@ def timeline(audio_details: list):
                 https://www.quora.com/Speeches-For-the-average-person-speaking-at-a-normal-pace-what-is-the-typical-number-of-words-they-can-say-in-one-minute
                 "publishers recommend books on tape to be voiced at 150-160 wpm"
                 """
-                words_per_minute = 125  # well below stated suggestion
+                words_per_minute = 20  # 125  # well below stated suggestion
                 total_words = words_per_minute * audio_detail.total_audio_minutes
 
                 average_words_per_day = total_words / total_days
                 classification_values[audio_detail.classification] += average_words_per_day
+
+        for detail in [detail for detail in _details if detail.is_fully_classified]:
+            if detail.start_date is not None and \
+                            detail.stop_date is not None and \
+                            detail.word_count is not None:
+
+                print(
+                    f'type:{detail.type}, start_date:{detail.start_date.date()}, stop_date:{detail.stop_date.date()}, key_date:{key_date.date()}')
+
+                if (detail.start_date.date() <= key_date.date() <= detail.stop_date.date()):
+                    total_days = (detail.stop_date - detail.start_date).days
+                    word_count = detail.word_count or 0
+                    total_words = word_count
+
+                    if total_days == 0:
+                        total_days = 1
+
+                    if detail.type == 'audio':
+                        """
+                        https://www.quora.com/Speeches-For-the-average-person-speaking-at-a-normal-pace-what-is-the-typical-number-of-words-they-can-say-in-one-minute
+                        "publishers recommend books on tape to be voiced at 150-160 wpm"
+                        """
+                        words_per_minute = 10  # 125  # well below stated suggestion
+                        total_words = words_per_minute * word_count
+
+                    average_words_per_day = total_words / total_days
+                    classification_values[detail.classification] += average_words_per_day
 
         display_str = ''
         for _key, value in classification_values.items():
@@ -204,7 +233,6 @@ def timeline(audio_details: list):
             classification_name = next(iter(classification.keys()))
             classification_count = classification_values.get(classification_name)
             classification[classification_name].append(classification_count or 0)
-            print()
 
         print(f'date={key}:tweets_count={count}:total_words={word_count}|classifications:{display_str}')
 
@@ -238,6 +266,9 @@ def timeline(audio_details: list):
 
     for classification in per_day_count_by_classification:
         classification_name = next(iter(classification.keys()))
+
+        if sum(classification[classification_name]) == 0:
+            continue
 
         data = ''
         for word_count in classification[classification_name]:
