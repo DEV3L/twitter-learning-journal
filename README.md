@@ -35,8 +35,8 @@ By doing this, there are a great deal of things we can measure!
 * [Introduction to SQLite In Python](https://www.pythoncentral.io/introduction-to-sqlite-in-python/)
 * [SQLAlchemy Tutorial](http://docs.sqlalchemy.org/en/latest/orm/tutorial.html)
 * [Python 3 Using 'yield from' In Generators](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-1.html)
-
-
+* [Speeches: For the average person speaking at a normal pace, what is the typical number of words they can say in one minute?](https://www.quora.com/Speeches-For-the-average-person-speaking-at-a-normal-pace-what-is-the-typical-number-of-words-they-can-say-in-one-minute)
+  * "publishers recommend books on tape to be voiced at 150-160 wpm"
 
 
 ## Contributing

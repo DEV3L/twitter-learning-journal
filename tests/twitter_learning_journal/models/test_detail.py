@@ -10,6 +10,8 @@ def test_detail():
     stop_date = datetime.now()
     _type = 'type'
     title = 'title'
+    url = 'url'
+    word_count = 0
     classification = 'classification'
 
     expected_str = '<Detail(id=1, ' \
@@ -18,6 +20,8 @@ def test_detail():
                    f'stop_date={stop_date}, ' \
                    f'type={_type}, ' \
                    f'title={title}, ' \
+                   f'url={url}, ' \
+                   f'word_count={word_count}, ' \
                    f'classification={classification})>'
 
     detail = Detail(
@@ -26,6 +30,8 @@ def test_detail():
         stop_date=stop_date,
         type=_type,
         title=title,
+        url=url,
+        word_count=word_count,
         classification=classification
     )
 

@@ -20,6 +20,8 @@ class Detail(Base):
     stop_date = Column(DateTime)
     type = Column(String)
     title = Column(String)
+    url = Column(String)
+    word_count = Column(Integer)
     classification = Column(String)
 
     def __str__(self):
@@ -29,6 +31,8 @@ class Detail(Base):
                f'stop_date={self.stop_date}, ' \
                f'type={self.type}, ' \
                f'title={self.title}, ' \
+               f'url={self.url}, ' \
+               f'word_count={self.word_count}, ' \
                f'classification={self.classification})>'
 
     def __eq__(self, other):
