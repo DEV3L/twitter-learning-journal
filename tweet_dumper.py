@@ -13,14 +13,14 @@ import collections
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from app.twitter_learning_journal.classifiers import global_classification_model
+from app.twitter_learning_journal.classifiers import global_classification_model, get_classification_model
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models import Base
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
-from app.twitter_learning_journal.twitter_api.api import get_api
+from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 from app.twitter_learning_journal.twitter_api.tweets import Tweets
 
 
@@ -28,100 +28,20 @@ def build_tables(database):
     Base.metadata.create_all(database._engine)
 
 
-def collect(screen_name, *, tweet_type='favorite'):
-    api = get_api()
+def collect(api, screen_name, *, tweet_type='favorite'):
     tweets = Tweets(api, screen_name, tweet_type=tweet_type)
     return tweets.get()
 
 
-def save_tweets(tweets):
-    database = Database()
-    tweet_dao = TweetDao(database)
-
+def save_tweets(tweet_dao, tweets):
     for tweet in tweets:
         if not tweet_dao.exists(tweet.id):
             tweet_dao.add(tweet)
 
-    database.commit()
+    tweet_dao.commit()
 
 
-AudioDetail = collections.namedtuple('AudioDetail', 'start_date stop_date title classification total_audio_minutes')
-
-audio_detail = {
-    'start_date': '',
-    'stop_date': '',
-    'title': '',
-    'classification': '',
-    'total_audio_minutes': 0
-}
-
-
-def classify_audible_books():
-    database = Database()
-
-    tweet_dao = TweetDao(database)
-    tweets = tweet_dao.query_all()
-
-    # sorted(input_dict, key=input_dict.get, reverse=reverse)
-    for tweet in tweets:
-        _full_text = tweet.full_text.lower()
-        _created_at = transform_datetime_to_iso_date_str(tweet.created_at)
-
-        # if 'started listen' in _full_text:
-        #     print(f'started:{_full_text}, start_date:{_created_at}, classification:{tweet.classification}')
-        # elif 'finished listening' in _full_text:
-        #     print(f'stopped:{_full_text}, stop_date:{_created_at}, classification:{tweet.classification}')
-        # elif 'listen' in _full_text:
-        #     print(f'listen:{_full_text}, date:{_created_at}, classification:{tweet.classification}')
-        pass
-    books = []
-
-    switch_book = AudioDetail(
-        start_date=datetime(year=2017, month=5, day=24),
-        stop_date=datetime(year=2017, month=6, day=8),
-        title='switch: how to change things when change is hard',
-        classification='agile',
-        total_audio_minutes=456
-    )
-    books.append(switch_book)
-
-    return books
-
-
-audio_details = []
-
-
-# audio_details.append(
-#     AudioDetail()
-# )
-
-# 'switch: how to change things when change is hard'
-#     AudioDetail(
-#       start_date='2017-05-24',
-#       stop_date='2017-06-08',
-#       title='switch: how to change things when change is hard',
-#       classification='agile',
-#       total_audio_minutes=0,
-#       daily_average_audio_minutes=0
-# )
-
-
-# 'the subtle art of not giving a f*ck'
-#     AudioDetail(
-#       start_date=,
-#       stop_date='2017-05-23',
-#       title='the subtle art of not giving a f*ck',
-#       classification='leadership',
-#       total_audio_minutes=0,
-#       daily_average_audio_minutes=0
-# )
-
-
-def classify_tweets():
-    database = Database()
-    Base.metadata.create_all(database._engine)
-
-    tweet_dao = TweetDao(database)
+def classify_tweets(tweet_dao):
     tweets = tweet_dao.query_all()
 
     tweets_processing_service = TweetsProcessingService(tweets)
@@ -129,22 +49,41 @@ def classify_tweets():
     tweets_processing_service.classify_tweets()
 
     tweet_dao.add_all(tweets_processing_service.tweets)
-    database.commit()
+    tweet_dao.commit()
 
 
-def timeline(audio_details: list):
-    # from here below still needs to be gracefully implemented
-    database = Database()
-    Base.metadata.create_all(database._engine)
-
-    tweet_dao = TweetDao(database)
+def add_sub_classification_to_models(tweet_dao):
     tweets = tweet_dao.query_all()
-    _details = database.query(Detail).all()
+
+    unclassified_tweets = [tweet for tweet in tweets if not tweet.classification]
+    classified_tweets = [tweet for tweet in tweets if tweet.classification]
+
+    sub_classification_model = dict(get_classification_model(None))
+
+    for tweet in classified_tweets:
+        cleaned_full_text = remove_ignore_characters_from_str(tweet.full_text)
+        updated_classification = sub_classification_model[tweet.classification].union(cleaned_full_text)
+        sub_classification_model[tweet.classification] = updated_classification
+
+    tweets_processing_service = TweetsProcessingService(unclassified_tweets,
+                                                        classification_model=sub_classification_model,
+                                                        weight_text=.1, weight_hashtag=.5)
+    tweets_processing_service.classify_tweets()
+
+    tweet_dao.add_all(tweets_processing_service.tweets)
+    tweet_dao.commit()
+
+
+def timeline(tweet_dao: TweetDao, audio_details: list):
+    # from here below still needs to be gracefully implemented
+
+    tweets = tweet_dao.query_all()
+    _details = tweet_dao._database.query(Detail).all()
 
     _timeline = defaultdict(list)
 
-    min_date = datetime(year=2017, month=11, day=1)
-    max_date = datetime(year=2017, month=12, day=23)
+    min_date = datetime(year=2017, month=12, day=1)
+    max_date = datetime(year=2017, month=12, day=24)
 
     start_date = datetime(year=2017, month=11, day=1)
 
@@ -283,3 +222,81 @@ def timeline(audio_details: list):
 
     print(']')
     return tweets
+
+
+########
+########
+######## Original hack for finding and classifying audio book
+########
+########
+
+AudioDetail = collections.namedtuple('AudioDetail', 'start_date stop_date title classification total_audio_minutes')
+
+audio_detail = {
+    'start_date': '',
+    'stop_date': '',
+    'title': '',
+    'classification': '',
+    'total_audio_minutes': 0
+}
+
+
+def classify_audible_books():
+    database = Database()
+
+    tweet_dao = TweetDao(database)
+    tweets = tweet_dao.query_all()
+
+    # sorted(input_dict, key=input_dict.get, reverse=reverse)
+    for tweet in tweets:
+        _full_text = tweet.full_text.lower()
+        _created_at = transform_datetime_to_iso_date_str(tweet.created_at)
+
+        # if 'started listen' in _full_text:
+        #     print(f'started:{_full_text}, start_date:{_created_at}, classification:{tweet.classification}')
+        # elif 'finished listening' in _full_text:
+        #     print(f'stopped:{_full_text}, stop_date:{_created_at}, classification:{tweet.classification}')
+        # elif 'listen' in _full_text:
+        #     print(f'listen:{_full_text}, date:{_created_at}, classification:{tweet.classification}')
+        pass
+    books = []
+
+    switch_book = AudioDetail(
+        start_date=datetime(year=2017, month=5, day=24),
+        stop_date=datetime(year=2017, month=6, day=8),
+        title='switch: how to change things when change is hard',
+        classification='agile',
+        total_audio_minutes=456
+    )
+    books.append(switch_book)
+
+    return books
+
+
+audio_details = []
+
+
+# audio_details.append(
+#     AudioDetail()
+# )
+
+# 'switch: how to change things when change is hard'
+#     AudioDetail(
+#       start_date='2017-05-24',
+#       stop_date='2017-06-08',
+#       title='switch: how to change things when change is hard',
+#       classification='agile',
+#       total_audio_minutes=0,
+#       daily_average_audio_minutes=0
+# )
+
+
+# 'the subtle art of not giving a f*ck'
+#     AudioDetail(
+#       start_date=,
+#       stop_date='2017-05-23',
+#       title='the subtle art of not giving a f*ck',
+#       classification='leadership',
+#       total_audio_minutes=0,
+#       daily_average_audio_minutes=0
+# )
