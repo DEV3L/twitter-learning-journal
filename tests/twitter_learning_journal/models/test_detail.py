@@ -13,6 +13,7 @@ def test_detail():
     url = 'url'
     word_count = 0
     classification = 'classification'
+    is_fully_classified = None
 
     expected_str = '<Detail(id=1, ' \
                    f'tweet_id=None, ' \
@@ -22,7 +23,8 @@ def test_detail():
                    f'title={title}, ' \
                    f'url={url}, ' \
                    f'word_count={word_count}, ' \
-                   f'classification={classification})>'
+                   f'classification={classification}, ' \
+                   f'is_fully_classified={is_fully_classified})>'
 
     detail = Detail(
         id=1,

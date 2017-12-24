@@ -1,3 +1,4 @@
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -23,6 +24,7 @@ class Detail(Base):
     url = Column(String)
     word_count = Column(Integer)
     classification = Column(String)
+    is_fully_classified = Column(Boolean, default=False)
 
     def __str__(self):
         return f'<Detail(id={self.id}, ' \
@@ -33,7 +35,8 @@ class Detail(Base):
                f'title={self.title}, ' \
                f'url={self.url}, ' \
                f'word_count={self.word_count}, ' \
-               f'classification={self.classification})>'
+               f'classification={self.classification}, ' \
+               f'is_fully_classified={self.is_fully_classified})>'
 
     def __eq__(self, other):
         return self.id is not None and other.id is not None and self.id == other.id
