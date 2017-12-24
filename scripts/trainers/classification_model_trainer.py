@@ -1,6 +1,5 @@
 from app.twitter_learning_journal.classifiers.word_classifier import WordClassifier
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
-from app.twitter_learning_journal.database.sqlalchemy_database import Database
 
 classification_model = {
     'engineering': {'iot', 'engineer', 'stranglerapplication', 'softwaredevelopment', 'nodejs', 'flask',
@@ -42,8 +41,9 @@ classification_model = {
     'diversity': {'diversity'},
 }
 
+from scripts.trainers.script_dependencies import make_database
 if __name__ == '__main__':
-    database = Database(database_url='../../data/twitter-learning-journal')
+    database = make_database()
     tweet_dao = TweetDao(database)
 
     _tweets = tweet_dao.query_all()
