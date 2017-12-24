@@ -73,3 +73,11 @@ def test_add_all(tweet_dao, tweet):
     tweet_dao.add_all([tweet])
 
     mock_database.add_all.assert_called_with([tweet])
+
+
+def test_commit(tweet_dao):
+    mock_database = tweet_dao._database
+
+    tweet_dao.commit()
+
+    mock_database.commit.assert_called_with()

@@ -22,3 +22,6 @@ class TweetDao:
 
     def query_all(self) -> list:
         return self._database.query(Tweet).all()
+
+    def commit(self):
+        return self._database.commit()
