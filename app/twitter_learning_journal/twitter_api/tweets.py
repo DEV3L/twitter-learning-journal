@@ -56,13 +56,18 @@ class Tweets:
 
     @staticmethod
     def _remove_ignore_urls(urls):
-        ignore_twitter_url = 'https://twitter.com/'
+        ignore_twitter_urls = ['https://twitter.com/', 'https://github.com/']
         _urls = []
 
         for url in urls:
-            if ignore_twitter_url not in url:
-                _urls.append(url)
+            found = False
+            for ignore_url in ignore_twitter_urls:
+                if ignore_url in url:
+                    found = True
+                    break
 
+            if not found:
+                _urls.append(url)
         return _urls
 
     def _call(self):
