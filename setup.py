@@ -11,6 +11,7 @@ setup(
     download_url='https://github.com/DEV3L/twitter-learning-journal/tarball/0.1',
     keywords=['dev3l', 'tweepy', 'learning', ],
     install_requires=[
+        'beautifulsoup4',
         'sqlalchemy',
         'tweepy',
         'pytest',

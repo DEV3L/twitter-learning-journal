@@ -82,10 +82,10 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
 
     _timeline = defaultdict(list)
 
-    min_date = datetime(year=2017, month=12, day=1)
+    min_date = datetime(year=2017, month=6, day=1)
     max_date = datetime(year=2017, month=12, day=24)
 
-    start_date = datetime(year=2017, month=11, day=1)
+    start_date = datetime(year=2017, month=6, day=1)
 
     while start_date < max_date:
         _timeline[transform_datetime_to_iso_date_str(start_date)] = []
@@ -98,6 +98,19 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
     for key in sorted(global_classification_model.keys()):
         per_day_count_by_classification.append({key: []})
 
+    blog_counts_by_date = defaultdict(int)
+    total_blogs = 0
+    for detail in _details:
+        if detail.type != 'blog':
+            pass
+
+        key_date = transform_datetime_to_iso_date_str(detail.start_date)
+        blog_counts_by_date[key_date] += 1
+
+        if detail.start_date >= min_date and detail.start_date <= max_date:
+            total_blogs += 1
+            print(f'blog_url:{detail.url}')
+    print(f'total_blogs = {total_blogs}')
 
     for key in sorted(_timeline.keys()):
         key_date = datetime.strptime(key, '%Y-%m-%d')
@@ -108,6 +121,10 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
         tweets = [tweet for tweet in _timeline[key]]
 
         word_count = sum([tweet.word_count for tweet in tweets])
+
+        blogs = len([tweet.details for tweet in tweets if tweet.details and [
+            [detail for detail in tweet.details if detail.url and detail.type == 'blog']]])
+
         count = len(_timeline[key])
 
         classification_values = defaultdict(int)
@@ -140,7 +157,8 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
                             detail.word_count is not None:
 
                 print(
-                    f'type:{detail.type}, start_date:{detail.start_date.date()}, stop_date:{detail.stop_date.date()}, key_date:{key_date.date()}')
+                    f'type:{detail.type}, start_date:{detail.start_date.date()}, '
+                    f'stop_date:{detail.stop_date.date()}, key_date:{key_date.date()}')
 
                 if (detail.start_date.date() <= key_date.date() <= detail.stop_date.date()):
                     total_days = (detail.stop_date - detail.start_date).days
@@ -173,6 +191,7 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
             classification_count = classification_values.get(classification_name)
             classification[classification_name].append(classification_count or 0)
 
+
         print(f'date={key}:tweets_count={count}:total_words={word_count}|classifications:{display_str}')
 
     print('---------- html categories ----------')
@@ -181,6 +200,7 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
         if datetime.strptime(key, '%Y-%m-%d') < min_date \
                 or datetime.strptime(key, '%Y-%m-%d') > max_date:
             continue
+        blogs = blog_counts_by_date[key]
         print(f"'{key}',")
     print(']')
 
