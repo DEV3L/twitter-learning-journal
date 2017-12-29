@@ -23,10 +23,6 @@ class TweetClassifier():
 
         classification_value = _extract_classification(classification)
 
-        if not classification_value:
-            print(self.tweet.full_text)
-            full_text_classification = self._classify_full_text()
-
         self.tweet.classification = classification_value
 
     def _classify_hashtags(self) -> Counter:
@@ -36,7 +32,13 @@ class TweetClassifier():
         return self._classify_words(self.tweet.full_text, self.weight_text)
 
     def _classify_words(self, words, weight, *, delimiter=' '):
-        words = tokenize(remove_ignore_characters_from_str(words), delimiter=delimiter)
+        if delimiter is None:
+            words = tokenize(remove_ignore_characters_from_str(words), delimiter=delimiter)
+        else:
+            _words = words.split(delimiter) if words else []
+            words = tokenize(delimiter.join([remove_ignore_characters_from_str(word) for word in _words]),
+                             delimiter=delimiter)
+
         words_classifier = WordsClassifier(words, self.classification_model, weight=weight)
         return words_classifier.classify()
 
