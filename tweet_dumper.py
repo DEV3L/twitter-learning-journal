@@ -82,10 +82,13 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
 
     _timeline = defaultdict(list)
 
-    min_date = datetime(year=2017, month=6, day=1)
-    max_date = datetime(year=2017, month=12, day=24)
+    min_date = datetime(year=2017, month=11, day=15)
+    max_date = datetime(year=2017, month=12, day=15)
 
-    start_date = datetime(year=2017, month=6, day=1)
+    _tweets = [tweet for tweet in tweets if tweet.created_at >= min_date and tweet.created_at <= max_date]
+    tweet_count = len(_tweets)
+
+    start_date = datetime(year=2017, month=11, day=15)
 
     while start_date < max_date:
         _timeline[transform_datetime_to_iso_date_str(start_date)] = []
@@ -100,6 +103,7 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
 
     blog_counts_by_date = defaultdict(int)
     total_blogs = 0
+
     for detail in _details:
         if detail.type != 'blog':
             pass
@@ -110,7 +114,6 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
         if detail.start_date >= min_date and detail.start_date <= max_date:
             total_blogs += 1
             print(f'blog_url:{detail.url}')
-    print(f'total_blogs = {total_blogs}')
 
     for key in sorted(_timeline.keys()):
         key_date = datetime.strptime(key, '%Y-%m-%d')
@@ -208,7 +211,6 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
     print('--------------------')
     print('--------------------')
     print('--------------------')
-    print('--------------------')
 
     """
     series = [
@@ -223,6 +225,7 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
     print('---------- series ----------')
     print('[')
 
+    classification_counts = defaultdict(int)
     for classification in per_day_count_by_classification:
         classification_name = next(iter(classification.keys()))
 
@@ -230,8 +233,12 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
             continue
 
         data = ''
+        classifcation_total_words = 0
         for word_count in classification[classification_name]:
+            classifcation_total_words += word_count
             data += f'{word_count},'
+
+        classification_counts[classification_name] = classifcation_total_words
 
         print('{')
         print(f"  name: '{classification_name}',")
@@ -240,7 +247,47 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
         print('        ]')
         print('},')
 
-    print(']')
+    print('];')
+
+    print('--------------------')
+    print('--------------------')
+    print('--------------------')
+    print('--------------------')
+
+    print('---------- table count data ----------')
+
+    print('<div>')
+    print('  <div style="float: left;">')
+    print('    <table border="border">')
+    print('      <thead>Total Professional Media Consumption by Type</thead>')
+    print('      <tr><th>type</th><th>count</th></tr>')
+    print(f'      <tr><td>Twitter Tweets & Favorites</td><td>{tweet_count}</td></tr>')
+    print(f'       <tr><td>Blogs</td><td>{total_blogs}</td></tr>')
+    print('    </table>')
+    print('  </div>')
+    print('  <div style="float: left; padding-left: 100pt">')
+    print('    <table border="border">')
+    print('      <thead>Total Professional Media Consumption by ''Word'' count</thead>')
+    print('      <tr><th>type</th><th>count</th></tr>')
+
+    for classification, value in classification_counts.items():
+        print(f'      <tr><td>{classification}</td><td>{int(value)}</td></tr>')
+
+    print(f'      <tr><th>total</th><td>{int(sum(classification_counts.values()))}</td></tr>')
+    print('    </table>')
+    print('  </div>')
+    print('</div>')
+
+    """
+    print(f'<tr><td>Twitter Tweets & Favorites</td><td>{tweet_count}</td></tr>')
+    print(f'<tr><td>Blogs</td><td>{total_blogs}</td></tr>')
+
+    print(f'<tr><td>Total Words</td><td>{int(sum(classification_counts.values()))}</td></tr>')
+
+    for classification, value in classification_counts.items():
+        print(f'<tr><td>{classification} Words</td><td>{int(value)}</td></tr>')
+    """
+
     return tweets
 
 
@@ -266,11 +313,15 @@ def classify_audible_books():
 
     tweet_dao = TweetDao(database)
     tweets = tweet_dao.query_all()
-
+    tweets = [tweet for tweet in tweets if tweet.type != 'favorite']
     # sorted(input_dict, key=input_dict.get, reverse=reverse)
     for tweet in tweets:
-        _full_text = tweet.full_text.lower()
+        _full_text = remove_ignore_characters_from_str(tweet.full_text.lower())
         _created_at = transform_datetime_to_iso_date_str(tweet.created_at)
+        title = ' '.join(_full_text.splitlines()[0].split()).strip()
+
+        if 'start' in _full_text:
+            print('START:')
 
         # if 'started listen' in _full_text:
         #     print(f'started:{_full_text}, start_date:{_created_at}, classification:{tweet.classification}')
