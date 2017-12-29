@@ -82,19 +82,22 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
 
     _timeline = defaultdict(list)
 
-    min_date = datetime(year=2017, month=11, day=15)
-    max_date = datetime(year=2017, month=12, day=15)
+    min_date = datetime(year=2017, month=11, day=28)
+    max_date = datetime(year=2017, month=12, day=28, hour=23, minute=59)
 
     _tweets = [tweet for tweet in tweets if tweet.created_at >= min_date and tweet.created_at <= max_date]
     tweet_count = len(_tweets)
 
-    start_date = datetime(year=2017, month=11, day=15)
+    start_date = datetime(year=2017, month=11, day=28)
 
     while start_date < max_date:
         _timeline[transform_datetime_to_iso_date_str(start_date)] = []
         start_date += timedelta(days=1)
 
+    twitter_words = 0
+
     for tweet in tweets:
+        twitter_words += tweet.word_count
         _timeline[transform_datetime_to_iso_date_str(tweet.created_at)].append(tweet)
 
     per_day_count_by_classification = []
@@ -102,10 +105,20 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
         per_day_count_by_classification.append({key: []})
 
     blog_counts_by_date = defaultdict(int)
+
+    blog_words = 0
     total_blogs = 0
 
+    podcast_words = 0
+    total_podcasts = 0
+
+
     for detail in _details:
-        if detail.type != 'blog':
+        if detail.type == 'podcast':
+            if detail.start_date >= min_date and detail.start_date <= max_date:
+                total_podcasts += 1
+                podcast_words += detail.word_count
+        elif detail.type != 'blog':
             pass
 
         key_date = transform_datetime_to_iso_date_str(detail.start_date)
@@ -113,6 +126,7 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
 
         if detail.start_date >= min_date and detail.start_date <= max_date:
             total_blogs += 1
+            blog_words += detail.word_count
             print(f'blog_url:{detail.url}')
 
     for key in sorted(_timeline.keys()):
@@ -259,15 +273,25 @@ def timeline(tweet_dao: TweetDao, audio_details: list):
     print('<div>')
     print('  <div style="float: left;">')
     print('    <table border="border">')
-    print('      <thead>Total Professional Media Consumption by Type</thead>')
+    print('      <thead>Consumption by Type</thead>')
     print('      <tr><th>type</th><th>count</th></tr>')
     print(f'      <tr><td>Twitter Tweets & Favorites</td><td>{tweet_count}</td></tr>')
     print(f'       <tr><td>Blogs</td><td>{total_blogs}</td></tr>')
+    print(f'       <tr><td>Podcasts</td><td>{total_podcasts}</td></tr>')
     print('    </table>')
     print('  </div>')
     print('  <div style="float: left; padding-left: 100pt">')
     print('    <table border="border">')
-    print('      <thead>Total Professional Media Consumption by ''Word'' count</thead>')
+    print('      <thead>Words by Type</thead>')
+    print('      <tr><th>type</th><th>count</th></tr>')
+    print(f'      <tr><td>Twitter</td><td>{twitter_words}</td></tr>')
+    print(f'       <tr><td>Blogs</td><td>{blog_words}</td></tr>')
+    print(f'       <tr><td>Podcasts</td><td>{podcast_words}</td></tr>')
+    print('    </table>')
+    print('  </div>')
+    print('  <div style="float: left; padding-left: 100pt">')
+    print('    <table border="border">')
+    print('      <thead>Consumption by ''Word'' count</thead>')
     print('      <tr><th>type</th><th>count</th></tr>')
 
     for classification, value in classification_counts.items():

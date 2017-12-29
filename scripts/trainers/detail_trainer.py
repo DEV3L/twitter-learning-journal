@@ -22,8 +22,8 @@ def create_detail(tweet, database):
     detail.is_fully_classified = True
 
     if 'listened to' in tweet.full_text.lower():
-        detail.type = 'audio'
-        detail.word_count = 45
+        detail.type = 'podcast'
+        detail.word_count = 20
     else:
         detail.type = 'blog'
         detail.word_count = 500
@@ -76,10 +76,16 @@ def train_details():
                 has_quoted_keywords = True
 
         if has_keywords and not has_quoted_keywords:
-            # handle these later
-            # books, audio, videos
-            print()  # breakpoint for debugger to hit
-            continue
+            if tweet.urls:
+                detail = create_detail(tweet, database)
+                print(f'Detail created: {detail}')
+
+                total_details += 1
+            else:
+                # handle these later
+                # books, audio, videos
+                print()  # breakpoint for debugger to hit
+                continue
         elif not tweet.urls:
             print('No details for tweet')
             print('processed')
