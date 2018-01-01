@@ -41,7 +41,7 @@
                     <th>Medium</th>
                     <th>Num. Items</th>
                     <th>Word Count</th>
-                    <th>KCV</th>
+                    <th>KCV (in hours)</th>
                 </tr>
                 {% for result in results %}
                     <tr>
@@ -87,17 +87,32 @@
     <hr/>
     <div class="row">
         <div class="col">
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-striped table-bordered">
                 <caption>Books</caption>
+                <thead>
                 <tr>
                     <th>Title</th>
                     <th>Type</th>
                     <th>Length</th>
-                    <th>Category</th>
+                    <th>Percent In Range</th>
+                    <th>Classification</th>
                     <th>Start</th>
                     <th>Stop</th>
                 </tr>
-
+                </thead>
+                <tbody>
+                {% for book_report in book_reports %}
+                    <tr>
+                        <td>{{ book_report.title }}</td>
+                        <td>{{ book_report.medium }}</td>
+                        <td>{{ book_report.length }}</td>
+                        <td>{{ book_report.distribution_percent }}</td>
+                        <td>{{ book_report.classification }}</td>
+                        <td>{{ book_report.start_date }}</td>
+                        <td>{{ book_report.stop_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
@@ -107,11 +122,9 @@
     <div class="row">
         <div class="col">
             <table class="table table-sm table-striped table-bordered">
-                <caption>* System Estimated Variable</caption>
                 <thead>
                 <tr>
                     <th>Medium</th>
-                    <th>Assumption Variables</th>
                     <th>Conversion Calculation</th>
                 </tr>
                 </thead>
@@ -119,24 +132,17 @@
                 <tr>
                     <td>Books</td>
                     <td>
-                        average reading speed in minutes (*ars) = 200 words/minute<br/>
-                        average words per page (*awpp) = 250-300 words/page<br/>
-                        deviation book pages (*dbp) = number of auxiliary pages<br/>
-                        <hr/>
-                        <span class="font-italic">*awpp</span> = 275 words/page<br/>
-                        <span class="font-italic">*dbp</span> = 50 pages<br/>
-                        <span class="font-italic">*ars</span> = 200 words/minute<br/>
-                    </td>
-                    <td>
                         <span class="font-weight-bold">pages</span> = pages in book - <span
                             class="font-italic">*dbp</span><br/>
                         <span class="font-weight-bold">word count</span> = pages x <span
                             class="font-italic">*awpp</span><br/>
-                        <span class="font-weight-bold">days to read book</span> = (book stop date - book sart date) +
-                        1<br/>
-                        <span class="font-weight-bold">days overlap</span> = len( [ day for day in book_days <br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;if day >= report_start and day <= report_stop ] )<br/>
-                        <span class="font-weight-bold">total minutes</span> = word_count / <span class="font-italic">*ars</span><br/>
+                        <span class="font-weight-bold">days to read book</span>
+                        = (book stop date - book sart date) + 1<br/>
+                        <span class="font-weight-bold">days overlap</span>
+                        = len( [ day for day in book_days <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp; if day >= report_start and day <= report_stop ] )<br/>
+                        <span class="font-weight-bold">total minutes</span>
+                        = word_count / <span class="font-italic">*ars</span><br/>
                         <span class="font-weight-bold">total hours</span> = total minutes / minutes per hour<br/>
                         <span class="font-weight-bold">hours per day</span> = total hours / days to read book<br/>
                         <hr/>
@@ -147,18 +153,25 @@
                 <tr>
                     <td>Audio Books</td>
                     <td>
-                        * average spoken word per minute (aswpm) = 150<br/>
-                        minutes = audio book length in minutes<br/>
+                        <span class="font-weight-bold">hours</span> = audio book length in hours<br/>
+                        <span class="font-weight-bold">days to hear book</span>
+                        = (book stop date - book sart date) + 1<br/>
+                        <span class="font-weight-bold">days overlap</span>
+                        = len( [ day for day in audio_book_days <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp; if day >= report_start and day <= report_stop ] )<br/>
+                        <span class="font-weight-bold">hours per day</span> = total hours / days to hear book<br/>
+                        <hr/>
+                        average KCV (<span class="font-weight-bold">aKCV</span>) = hours per day<br/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = aKCV x days overlap<br/>
                     </td>
-                    <td>word count = minutes * aswpm</td>
                 </tr>
                 <tr>
                     <td>Podcast</td>
                     <td>
-                        * average spoken word per minute (aswpm) = 150<br/>
-                        minutes = podcast length in minutes<br/>
+                        <span class="font-weight-bold">hours</span> = podcast length in hours<br/>
+                        <hr/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = hours<br/>
                     </td>
-                    <td>word count = minutes * aswpm</td>
                 </tr>
                 <tr>
                     <td>Blogs</td>
@@ -166,14 +179,40 @@
                         total words = words received from url<br/>
                         content words = manually calculated<br/>
                         * domain specific deviation (dsd) = url total words - content words<br/>
+                        word count = total words - dsd
                     </td>
-                    <td>word count = total words - dsd</td>
                 </tr>
                 <tr>
                     <td>Tweets & Favorites</td>
-                    <td>-</td>
                     <td>word count = tweet word count</td>
                 </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>* System Estimated Variable</caption>
+                <thead>
+                <tr>
+                    <th>Assumption Variables</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        average reading speed in minutes = *ars<br/>
+                        average words per page = *awpp<br/>
+                        deviation book pages (number of auxiliary pages)= *dbp<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="font-italic">*ars</span> = 200 words/minute<br/>
+                        <span class="font-italic">*awpp</span> = 250 words/page<br/>
+                        <span class="font-italic">*dbp</span> = 50 pages<br/>
+                    </td>
+                </tr>
+
                 </tbody>
             </table>
         </div>
@@ -187,10 +226,28 @@
         title = "{{ title }}";
     {% endif %}
 
-    categories = {{ categories }}
+    categories = {{ categories }};
+
+    categories = [
+        {% for category in categories %}
+            '{{ category }}',
+        {%  endfor %}
+    ];
 
 
-        series = {{ series }};
+    series = [
+        {% for entry in series  %}
+            {
+                name: '{{ entry['name'] }}',
+                data: [
+                    {% for data_point in entry['data']  %}
+                        {{ data_point }},
+                    {% endfor %}
+                ]
+            },
+        {% endfor %}
+    ];
+
 </script>
 
 <script type="text/javascript">

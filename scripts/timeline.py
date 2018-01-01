@@ -232,12 +232,17 @@ def _create_per_day_count_by_classification():
     return per_day_count_by_classification
 
 
-def build_timeline(min_date, max_date):
-    _timeline = defaultdict(list)
-    _start_date = datetime(min_date.year, min_date.month, min_date.day)
+default_classifications = [key for key in global_classification_model.keys()]
 
-    while _start_date < max_date:
-        _timeline[transform_datetime_to_iso_date_str(_start_date)] = []
-        _start_date += timedelta(days=1)
 
-    return _timeline
+def build_timeline(min_date, max_date, *, classifications=None):
+    classifications = classifications if classifications is not None else default_classifications
+    timeline = {}
+    date = datetime(min_date.year, min_date.month, min_date.day)
+
+    while date < max_date:
+        timeline[transform_datetime_to_iso_date_str(date)] = \
+            {classification: 0 for classification in classifications}
+        date += timedelta(days=1)
+
+    return timeline
