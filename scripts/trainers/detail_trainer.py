@@ -4,7 +4,7 @@ from app.twitter_learning_journal.transformers.transform_str import remove_ignor
 from scripts.trainers.script_dependencies import make_database
 
 
-def create_detail(tweet, database):
+def create_detail(tweet, database, *, detail_type='blog'):
     _title = tweet.full_text.splitlines()[0]
     title = tweet.urls or _title.lower()
     full_text_without_ignore_characters = remove_ignore_characters_from_str(tweet.full_text.lower())
@@ -28,6 +28,9 @@ def create_detail(tweet, database):
         detail.type = 'blog'
         detail.word_count = 500
 
+    if detail_type:
+        detail.type = detail_type
+
     detail.classification = tweet.classification
 
     database.add(detail)
@@ -47,11 +50,11 @@ def train_details():
     _tweets = [tweet for tweet in _tweets if not tweet.is_fully_classified]
     _tweets = [tweet for tweet in _tweets if tweet.type == 'tweet']
     _tweets = sorted(_tweets, key=lambda x: x.created_at, reverse=True)
-    _details = database.query(Detail).all()
 
     total = len(_tweets)
 
     print(f'Total Tweets Not Fully Classified: {total}')
+
     keywords = ['read', 'listen', 'listened', 'listened to', 'watched', 'watch']
 
     total_processed = 0
@@ -82,6 +85,7 @@ def train_details():
 
                 total_details += 1
             else:
+                create_detail(tweet, database, detail_type='keyword')
                 # handle these later
                 # books, audio, videos
                 print()  # breakpoint for debugger to hit
