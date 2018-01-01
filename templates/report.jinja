@@ -1,0 +1,248 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Twitter Learning Journal - Knowledge Consumption Velocity (KVC)</title>
+
+    <!-- Bootstrap4 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <!-- Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+
+<div id="container" class="container-fluid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<hr/>
+
+<div class="container-fluid" style="font-size: 11pt">
+    <div class="container-fluid">
+        <h3>Data Aggregates</h3>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-bordered">
+                <caption>Consumption By Medium</caption>
+                <tr>
+                    <th>Medium</th>
+                    <th>Num. Items</th>
+                    <th>Word Count</th>
+                    <th>KCV</th>
+                </tr>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result[0] }}</td>
+                        <td>{{ result[1] }}</td>
+                        <td>{{ result[2] }}</td>
+                        <td>{{ result[3] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col">
+            <table class="table table-sm table-bordered">
+                <caption>Consumption by Classification</caption>
+                <tr>
+                    <th>Classification</th>
+                    <th>Word Count</th>
+                    <th>KCV</th>
+                </tr>
+                <tr>
+                    <td>leadership</td>
+                    <td>122372</td>
+                </tr>
+                <tr>
+                    <td>agile</td>
+                    <td>258049</td>
+                </tr>
+                <tr>
+                    <td>engineering</td>
+                    <td>48970</td>
+                </tr>
+                <tr>
+                    <th>total</th>
+                    <td>429391</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="container-fluid">
+        <h3>Books</h3>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-bordered">
+                <caption>Books</caption>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Length</th>
+                    <th>Category</th>
+                    <th>Start</th>
+                    <th>Stop</th>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h3>Conversion Legend</h3>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>* System Estimated Variable</caption>
+                <thead>
+                <tr>
+                    <th>Medium</th>
+                    <th>Assumption Variables</th>
+                    <th>Conversion Calculation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Books</td>
+                    <td>
+                        average reading speed in minutes (*ars) = 200 words/minute<br/>
+                        average words per page (*awpp) = 250-300 words/page<br/>
+                        deviation book pages (*dbp) = number of auxiliary pages<br/>
+                        <hr/>
+                        <span class="font-italic">*awpp</span> = 275 words/page<br/>
+                        <span class="font-italic">*dbp</span> = 50 pages<br/>
+                        <span class="font-italic">*ars</span> = 200 words/minute<br/>
+                    </td>
+                    <td>
+                        <span class="font-weight-bold">pages</span> = pages in book - <span
+                            class="font-italic">*dbp</span><br/>
+                        <span class="font-weight-bold">word count</span> = pages x <span
+                            class="font-italic">*awpp</span><br/>
+                        <span class="font-weight-bold">days to read book</span> = (book stop date - book sart date) +
+                        1<br/>
+                        <span class="font-weight-bold">days overlap</span> = len( [ day for day in book_days <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if day >= report_start and day <= report_stop ] )<br/>
+                        <span class="font-weight-bold">total minutes</span> = word_count / <span class="font-italic">*ars</span><br/>
+                        <span class="font-weight-bold">total hours</span> = total minutes / minutes per hour<br/>
+                        <span class="font-weight-bold">hours per day</span> = total hours / days to read book<br/>
+                        <hr/>
+                        average KCV (<span class="font-weight-bold">aKCV</span>) = hours per day<br/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = aKCV x days overlap<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Audio Books</td>
+                    <td>
+                        * average spoken word per minute (aswpm) = 150<br/>
+                        minutes = audio book length in minutes<br/>
+                    </td>
+                    <td>word count = minutes * aswpm</td>
+                </tr>
+                <tr>
+                    <td>Podcast</td>
+                    <td>
+                        * average spoken word per minute (aswpm) = 150<br/>
+                        minutes = podcast length in minutes<br/>
+                    </td>
+                    <td>word count = minutes * aswpm</td>
+                </tr>
+                <tr>
+                    <td>Blogs</td>
+                    <td>
+                        total words = words received from url<br/>
+                        content words = manually calculated<br/>
+                        * domain specific deviation (dsd) = url total words - content words<br/>
+                    </td>
+                    <td>word count = total words - dsd</td>
+                </tr>
+                <tr>
+                    <td>Tweets & Favorites</td>
+                    <td>-</td>
+                    <td>word count = tweet word count</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    title = "Twitter Learning Journal - Knowledge Consumption Velocity (KVC)";
+    {% if title %}
+        title = "{{ title }}";
+    {% endif %}
+
+    categories = {{ categories }}
+
+
+        series = {{ series }};
+</script>
+
+<script type="text/javascript">
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: title
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Word Count'
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                }
+            }
+        },
+        series: series
+    });
+</script>
+</body>
+</html>

@@ -5,10 +5,10 @@ from app.twitter_learning_journal.models.tweet import Tweet
 
 
 class TweetDao:
-    def __init__(self, database: 'Database'):
+    def __init__(self, database: Database):
         self._database = database
 
-    def add(self, tweet: 'Tweet'):
+    def add(self, tweet: Tweet):
         self._database.add(tweet)
 
     def add_all(self, tweets: list):
@@ -17,7 +17,7 @@ class TweetDao:
     def exists(self, id: int) -> bool:
         return self._database.query(exists().where(Tweet.id == id)).scalar()
 
-    def by_id(self, id: int) -> 'Tweet':
+    def by_id(self, id: int) -> Tweet:
         return self._database.query(Tweet).filter(Tweet.id == id).first()
 
     def query_all(self) -> list:

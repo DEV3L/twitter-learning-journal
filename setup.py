@@ -12,6 +12,9 @@ setup(
     keywords=['dev3l', 'tweepy', 'learning', ],
     install_requires=[
         'beautifulsoup4',
+        'flask',
+        'flask-runner',
+        'flask-script',
         'sqlalchemy',
         'tweepy',
         'pytest',

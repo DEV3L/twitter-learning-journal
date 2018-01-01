@@ -1,4 +1,7 @@
 beautifulsoup4
+flask
+flask-runner
+flask-script
 requests
 sqlalchemy
 tweepy
