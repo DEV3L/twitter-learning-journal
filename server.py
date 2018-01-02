@@ -7,7 +7,7 @@ from flask_script import Manager
 
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
-from scripts.audio_books import _get_audio_books
+from scripts.audio_books import get_audio_books
 from scripts.book_report import process_books, process_audio_books
 from scripts.books import get_books
 from scripts.timeline import build_timeline, _create_per_day_count_by_classification
@@ -53,7 +53,7 @@ def _index():
     book_reports.extend(books_aggregate_result.book_reports)
 
     # audio books
-    audio_books = _get_audio_books()
+    audio_books = get_audio_books()
     filtered_audio_books = [audio_book for audio_book in audio_books
                             if audio_book.start_date <= report_stop_date and audio_book.stop_date >= report_start_date]
     audio_books_aggregate_result = process_audio_books(report_start_date, report_stop_date, filtered_audio_books)
@@ -87,8 +87,6 @@ def _index():
         )
 
     results.extend([
-        # ('Books', 0, 0, 0),
-        # ('Audio Books', 1.86, 101250, 0),
         ('Podcasts', 19, 111479, 0),
         ('Blogs', 123, 219572, 0),
         ('Tweets & Favorites', 319, 36474, 0),
@@ -123,39 +121,6 @@ def _index():
         series.append(node)
 
     series.sort(key=lambda node: node['name'])
-
-    # series = [
-    #     {
-    #         'name': 'agile',
-    #         'data': [
-    #             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    #         ]
-    #     },
-    #     {
-    #         'name': 'engineering',
-    #         'data': [
-    #             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    #         ]
-    #     },
-    #     {
-    #         'name': 'leadership',
-    #         'data': [
-    #             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    #         ]
-    #     },
-    # ]
-
-    # for entry in series:
-    #     classification = entry['name']
-    #     entry_data = entry['data']
-    #
-    #     timeline_data = _series[classification]
-    #
-    #     for index, data_point in enumerate(timeline_data):
-    #         value = ()
-    #         entry_data[index] += data_point
-    #
-    # end timelines
 
     categories = [key for key in timeline.keys()]
 
