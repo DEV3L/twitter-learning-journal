@@ -174,6 +174,35 @@
             </table>
         </div>
     </div>
+    <hr/>
+    <div class="container-fluid">
+        <h2>Tweets</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>Blogs</caption>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Length</th>
+                    <th>Classification</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry_report in tweet_entry_reports %}
+                    <tr>
+                        <td><span title="{{ entry_report.url }}">{{ entry_report.title }}</span></td>
+                        <td>{{ entry_report.length }}</td>
+                        <td>{{ entry_report.classification }}</td>
+                        <td>{{ entry_report.start_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="container-fluid">
         <h2>Conversion Legend</h2>
     </div>
@@ -234,15 +263,25 @@
                 <tr>
                     <td>Blogs</td>
                     <td>
-                        total words = words received from url<br/>
-                        content words = manually calculated<br/>
-                        * domain specific deviation (dsd) = url total words - content words<br/>
-                        word count = total words - dsd
+                        <span class="font-weight-bold">words</span> = words received from url - <span
+                            class="font-italic">*dsd</span><br/>
+                        <span class="font-weight-bold">minutes</span> = words / <span
+                            class="font-italic">*abrs</span><br/>
+                        <span class="font-weight-bold">hours</span> = minutes / 60<br/>
+                        <hr/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = hours<br/>
                     </td>
                 </tr>
                 <tr>
-                    <td>Tweets & Favorites</td>
-                    <td>word count = tweet word count</td>
+                    <td>Tweets</td>
+                    <td>
+                        <span class="font-weight-bold">words</span> = words in tweet<br/>
+                        <span class="font-weight-bold">minutes</span> = words / <span
+                            class="font-italic">*atrs</span><br/>
+                        <span class="font-weight-bold">hours</span> = minutes / 60<br/>
+                        <hr/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = hours<br/>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -259,15 +298,21 @@
                 <tr>
                     <td>
                         average reading speed in minutes = *ars<br/>
+                        average blog speed in minutes = *abrs<br/>
+                        average tweet speed in minutes = *atrs<br/>
                         average words per page = *awpp<br/>
-                        deviation book pages (number of auxiliary pages)= *dbp<br/>
+                        deviation book pages (number of auxiliary pages) = *dbp<br/>
+                        domain specific deviation = *dsd<br/>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <span class="font-italic">*ars</span> = 200 words/minute<br/>
+                        <span class="font-italic">*ars</span> = 175 words/minute<br/>
+                        <span class="font-italic">*ars</span> = 125 words/minute<br/>
                         <span class="font-italic">*awpp</span> = 250 words/page<br/>
                         <span class="font-italic">*dbp</span> = 50 pages<br/>
+                        <span class="font-italic">*dsd</span> = per domain (url total words - content words)<br/>
                     </td>
                 </tr>
 

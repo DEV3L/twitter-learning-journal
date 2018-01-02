@@ -14,6 +14,7 @@ from scripts.book_report import process_books, process_audio_books
 from scripts.books import get_books
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
+from scripts.tweets_report import process_tweets
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -38,6 +39,7 @@ def _index():
     book_entry_reports = []
     podcast_entry_reports = []
     blogs_entry_reports = []
+    tweet_entry_reports = []
 
     database = Database()
     tweet_dao = TweetDao(database)
@@ -92,10 +94,10 @@ def _index():
     blogs_entry_reports.extend(blog_aggregate_result.report_entries)
 
     # tweets
-    blog_aggregate_result = process_blogs(blog_details)
-    aggregates.append(blog_aggregate_result)
-    aggregate_timelines.append(blog_aggregate_result.timeline)
-    blogs_entry_reports.extend(blog_aggregate_result.report_entries)
+    tweet_aggregate_result = process_tweets(filtered_tweets)
+    aggregates.append(tweet_aggregate_result)
+    aggregate_timelines.append(tweet_aggregate_result.timeline)
+    tweet_entry_reports.extend(tweet_aggregate_result.report_entries)
 
     # aggregates
     results = []
@@ -156,6 +158,7 @@ def _index():
                            book_entry_reports=book_entry_reports,
                            blog_entry_reports=blogs_entry_reports,
                            podcast_entry_reports=podcast_entry_reports,
+                           tweet_entry_reports=tweet_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day', )
 

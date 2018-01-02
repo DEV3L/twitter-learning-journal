@@ -23,10 +23,10 @@ def process_podcasts(podcasts):
         aggregate_result.item_count += 1
         aggregate_result.kcv += hours
 
-        podcast_report = create_podcast_report_entry(podcast, minutes)
-        aggregate_result.report_entries.append(podcast_report)
+        podcast_report_entry = create_podcast_report_entry(podcast, minutes)
+        aggregate_result.report_entries.append(podcast_report_entry)
 
-    aggregate_result.report_entries.sort(key=lambda book_report: book_report.start_date, reverse=True)
+    aggregate_result.report_entries.sort(key=lambda podcast_report_entry: podcast_report_entry.start_date, reverse=True)
 
     return aggregate_result
 

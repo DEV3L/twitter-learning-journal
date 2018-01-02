@@ -43,7 +43,7 @@ def process_books(report_start_date, report_stop_date, books):
         book_report_entry = create_book_report_entry(book, distribution_percent)
         aggregate_result.report_entries.append(book_report_entry)
 
-    aggregate_result.report_entries.sort(key=lambda book_report: book_report.start_date, reverse=True)
+    aggregate_result.report_entries.sort(key=lambda book_report_entry: book_report_entry.start_date, reverse=True)
 
     return aggregate_result
 
@@ -79,7 +79,8 @@ def process_audio_books(report_start_date, report_stop_date, audio_books):
         audio_book_report_entry = create_book_report_entry(audio_book, distribution_percent, is_book=False)
         aggregate_result.report_entries.append(audio_book_report_entry)
 
-    aggregate_result.report_entries.sort(key=lambda book_report: book_report.start_date, reverse=True)
+    aggregate_result.report_entries.sort(key=lambda audio_book_report_report: audio_book_report_report.start_date,
+                                         reverse=True)
 
     return aggregate_result
 
