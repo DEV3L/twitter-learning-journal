@@ -1,5 +1,6 @@
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
+from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.twitter_api.api import get_api
 from scripts.blogs import count_html_words
 from scripts.podcasts import count_podcast_words
@@ -33,7 +34,11 @@ if __name__ == '__main__':
     train_details()
 
     count_html_words()
-    count_podcast_words()
+
+    details = database.query(Detail).all()
+    podcast_details = count_podcast_words(details)
+    database.add_all(podcast_details)
+    database.commit()
 
     classify_keyword_tweets()
     classify_other_details()

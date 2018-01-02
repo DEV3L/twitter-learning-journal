@@ -26,12 +26,17 @@
 <body>
 
 <div id="container" class="container-fluid" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-<hr/>
-
 <div class="container-fluid" style="font-size: 11pt">
     <div class="container-fluid">
-        <h3>Data Aggregates</h3>
+        <h6>KCV = {{ tkcv }}</h6>
+        <h6>KCV/day = {{ akcv }}</h6>
+    </div>
+    <hr/>
+<div class="container-fluid" style="font-size: 11pt">
+    <div class="container-fluid">
+        <h2>Data Aggregates</h2>
+        <h5>KCV = {{ akcv }}</h5>
+        <h5>KCV/day = {{ akcv }}</h5>
     </div>
     <div class="row">
         <div class="col">
@@ -82,7 +87,7 @@
     </div>
     <hr/>
     <div class="container-fluid">
-        <h3>Books</h3>
+        <h2>Books</h2>
     </div>
     <hr/>
     <div class="row">
@@ -101,15 +106,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for book_report in book_reports %}
+                {% for entry_report in book_entry_reports %}
                     <tr>
-                        <td>{{ book_report.title }}</td>
-                        <td>{{ book_report.medium }}</td>
-                        <td>{{ book_report.length }}</td>
-                        <td>{{ book_report.distribution_percent }}</td>
-                        <td>{{ book_report.classification }}</td>
-                        <td>{{ book_report.start_date }}</td>
-                        <td>{{ book_report.stop_date }}</td>
+                        <td>{{ entry_report.title }}</td>
+                        <td>{{ entry_report.medium }}</td>
+                        <td>{{ entry_report.length }}</td>
+                        <td>{{ entry_report.distribution_percent }}</td>
+                        <td>{{ entry_report.classification }}</td>
+                        <td>{{ entry_report.start_date }}</td>
+                        <td>{{ entry_report.stop_date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -117,7 +122,7 @@
         </div>
     </div>
     <div class="container-fluid">
-        <h3>Conversion Legend</h3>
+        <h2>Conversion Legend</h2>
     </div>
     <div class="row">
         <div class="col">

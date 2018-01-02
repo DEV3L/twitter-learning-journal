@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 from scripts.models.aggregate_result import AggregateResult
+from scripts.models.report_entry import ReportEntry
 
 
 def process_books(report_start_date, report_stop_date, books):
@@ -43,10 +44,10 @@ def process_books(report_start_date, report_stop_date, books):
         aggregate_result.item_count += distribution_percent
         aggregate_result.kcv += average_knowlege_consumption_velocity * days_overlap
 
-        book_report = create_book_report(book, distribution_percent)
-        aggregate_result.book_reports.append(book_report)
+        book_report_entry = create_book_report_entry(book, distribution_percent)
+        aggregate_result.report_entries.append(book_report_entry)
 
-    aggregate_result.book_reports.sort(key=lambda book_report: book_report.start_date, reverse=True)
+    aggregate_result.report_entries.sort(key=lambda book_report: book_report.start_date, reverse=True)
 
     return aggregate_result
 
@@ -81,17 +82,16 @@ def process_audio_books(report_start_date, report_stop_date, audio_books):
         aggregate_result.item_count += distribution_percent
         aggregate_result.kcv += average_knowlege_consumption_velocity * days_overlap
 
-        audio_book_report = create_book_report(audio_book, distribution_percent, is_book=False)
-        aggregate_result.book_reports.append(audio_book_report)
+        audio_book_report_entry = create_book_report_entry(audio_book, distribution_percent, is_book=False)
+        aggregate_result.report_entries.append(audio_book_report_entry)
 
-    aggregate_result.book_reports.sort(key=lambda book_report: book_report.start_date, reverse=True)
+    aggregate_result.report_entries.sort(key=lambda book_report: book_report.start_date, reverse=True)
 
     return aggregate_result
 
 
-def create_book_report(book, distribution_percent, *, is_book=True):
-    from server import BookReport
-    book_report = BookReport()
+def create_book_report_entry(book, distribution_percent, *, is_book=True):
+    report_entry = ReportEntry()
 
     title = book.title.title()
     if 'Pm' in title:
@@ -99,18 +99,18 @@ def create_book_report(book, distribution_percent, *, is_book=True):
     if 'F*Cked' in title:
         title = title.replace('F*Cked', 'F*cked')
 
-    book_report.title = title
-    book_report.classification = book.classification
-    book_report.start_date = book.start_date.date()
-    book_report.stop_date = book.stop_date.date()
+    report_entry.title = title
+    report_entry.classification = book.classification
+    report_entry.start_date = book.start_date.date()
+    report_entry.stop_date = book.stop_date.date()
 
     if is_book:
-        book_report.length = f'{book.pages} pages'
+        report_entry.length = f'{book.pages} pages'
     else:
-        book_report.medium = 'Audio Book'
-        book_report.length = f'{int(book.length)} minutes'
+        report_entry.medium = 'Audio Book'
+        report_entry.length = f'{int(book.length)} minutes'
         pass
 
-    book_report.distribution_percent = f'{distribution_percent:.2f}'
+    report_entry.distribution_percent = f'{distribution_percent:.2f}'
 
-    return book_report
+    return report_entry

@@ -6,4 +6,4 @@ class AggregateResult:
         self.kcv = 0
 
         self.timeline = {}  # { 'date': {'category': count} }
-        self.book_reports = []
+        self.report_entries = []
