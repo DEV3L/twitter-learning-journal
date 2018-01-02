@@ -9,10 +9,11 @@ from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
 from scripts.audio_books import get_audio_books
+from scripts.blog_report import process_blogs
 from scripts.book_report import process_books, process_audio_books
 from scripts.books import get_books
 from scripts.podcast_report import process_podcasts
-from scripts.timeline import build_timeline, _create_per_day_count_by_classification
+from scripts.timeline import build_timeline
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -33,25 +34,30 @@ def index():
 def _index():
     aggregates = []
     aggregate_timelines = []
-    book_entry_reports = []
 
+    book_entry_reports = []
     podcast_entry_reports = []
+    blogs_entry_reports = []
 
     database = Database()
     tweet_dao = TweetDao(database)
 
+    tweets = tweet_dao.query_all()
     details = database.query(Detail).all()
 
     screen_name = request.args.get('screen_name', default_screen_name)
+
     report_start_date, report_stop_date = get_report_date_ranges(request.args.get('report_start_date'),
                                                                  request.args.get('report_stop_date'))
 
+    filtered_tweets = [tweet for tweet in tweets
+                       if report_start_date <= tweet.created_at <= report_stop_date]
+
     filtered_details = [detail for detail in details
-                        if detail.start_date <= report_stop_date and detail.stop_date >= report_start_date]
+                        if report_stop_date >= detail.start_date >= report_start_date]
 
     timeline = build_timeline(report_start_date, report_stop_date)
 
-    per_day_count_by_classification = _create_per_day_count_by_classification()
 
     # books
     books = [book for book in get_books()]
@@ -72,25 +78,24 @@ def _index():
     book_entry_reports.extend(audio_books_aggregate_result.report_entries)
 
     # podcasts
-
     podcast_details = [detail for detail in filtered_details if detail.type == 'podcast']
     podcast_aggregate_result = process_podcasts(podcast_details)
     aggregates.append(podcast_aggregate_result)
     aggregate_timelines.append(podcast_aggregate_result.timeline)
     podcast_entry_reports.extend(podcast_aggregate_result.report_entries)
 
-    # tweets = tweet_dao.query_all()
-    # filtered_tweets = [tweet for tweet in tweets
-    #                    if tweet.created_at >= report_start_date and tweet.created_at <= report_stop_date]
-    #
+    # blogs
+    blog_details = [detail for detail in filtered_details if detail.type == 'blog']
+    blog_aggregate_result = process_blogs(blog_details)
+    aggregates.append(blog_aggregate_result)
+    aggregate_timelines.append(blog_aggregate_result.timeline)
+    blogs_entry_reports.extend(blog_aggregate_result.report_entries)
 
-    # filtered_details = [detail for detail in details
-    #                     if detail.start_date >= report_start_date and detail.stop_date <= report_stop_date]
-
-
-    # timeline = create_timeline(report_start_date, report_stop_date,
-    #                            filtered_tweets, filtered_details,
-    #                            filtered_audio_books, filtered_books)
+    # tweets
+    blog_aggregate_result = process_blogs(blog_details)
+    aggregates.append(blog_aggregate_result)
+    aggregate_timelines.append(blog_aggregate_result.timeline)
+    blogs_entry_reports.extend(blog_aggregate_result.report_entries)
 
     # aggregates
     results = []
@@ -106,19 +111,11 @@ def _index():
         results.append(
             (aggregate.medium,
              _item_count,
-             0,
              f'{aggregate.kcv:.2f}')
         )
 
     report_period_day_count = (report_stop_date - report_start_date).days + 1
     average_kcv = total_kcv / report_period_day_count
-
-    results.extend([
-        # ('Podcasts', 19, 111479, 0),
-        ('Blogs', 123, 219572, 0),
-        ('Tweets & Favorites', 319, 36474, 0),
-        # ('TOTAL', '-', 429391, 0),
-    ])
 
     # timelines
     for aggregate_timeline in aggregate_timelines:
@@ -157,6 +154,8 @@ def _index():
                            categories=categories,
                            results=results,
                            book_entry_reports=book_entry_reports,
+                           blog_entry_reports=blogs_entry_reports,
+                           podcast_entry_reports=podcast_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day', )
 

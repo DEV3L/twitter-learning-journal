@@ -3,6 +3,8 @@ class ReportEntry:
         self.medium = 'Book'
 
         self.title = None
+        self.url = None
+
         self.classification = None
 
         self.length = None

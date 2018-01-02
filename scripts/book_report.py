@@ -2,16 +2,12 @@ from collections import defaultdict
 from datetime import timedelta
 
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
+from scripts import average_reading_speed_in_minutes, average_words_per_page, devaiation_book_pages
 from scripts.models.aggregate_result import AggregateResult
 from scripts.models.report_entry import ReportEntry
 
 
 def process_books(report_start_date, report_stop_date, books):
-    # assumption variables
-    average_reading_speed_in_minutes = 200
-    average_words_per_page = 250
-    devaiation_book_pages = 50
-
     aggregate_result = AggregateResult('Books')
 
     for book in books:
@@ -30,7 +26,7 @@ def process_books(report_start_date, report_stop_date, books):
 
         for book_date in date_list:
             book_date_key = transform_datetime_to_iso_date_str(book_date)
-            if book_date >= report_start_date and book_date <= report_stop_date:
+            if report_start_date <= book_date <= report_stop_date:
                 if book_date_key not in aggregate_result.timeline:
                     aggregate_result.timeline[book_date_key] = defaultdict(int)
 
@@ -66,14 +62,12 @@ def process_audio_books(report_start_date, report_stop_date, audio_books):
 
         for book_date in date_list:
             book_date_key = transform_datetime_to_iso_date_str(book_date)
-            if book_date >= report_start_date and book_date <= report_stop_date:
+            if report_start_date <= book_date <= report_stop_date:
                 if book_date_key not in aggregate_result.timeline:
                     aggregate_result.timeline[book_date_key] = defaultdict(int)
 
                 aggregate_result.timeline[book_date_key][
                     audio_book.classification] += average_knowlege_consumption_velocity
-                # words = average_knowlege_consumption_velocity * 60 * 150 # 150 spoken words / minute
-                # aggregate_result.timeline[book_date_key][audio_book.classification] += int(words)
 
                 days_overlap += 1
 

@@ -35,8 +35,6 @@
 <div class="container-fluid" style="font-size: 11pt">
     <div class="container-fluid">
         <h2>Data Aggregates</h2>
-        <h5>KCV = {{ akcv }}</h5>
-        <h5>KCV/day = {{ akcv }}</h5>
     </div>
     <div class="row">
         <div class="col">
@@ -45,7 +43,6 @@
                 <tr>
                     <th>Medium</th>
                     <th>Num. Items</th>
-                    <th>Word Count</th>
                     <th>KCV (in hours)</th>
                 </tr>
                 {% for result in results %}
@@ -53,7 +50,6 @@
                         <td>{{ result[0] }}</td>
                         <td>{{ result[1] }}</td>
                         <td>{{ result[2] }}</td>
-                        <td>{{ result[3] }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -89,7 +85,6 @@
     <div class="container-fluid">
         <h2>Books</h2>
     </div>
-    <hr/>
     <div class="row">
         <div class="col">
             <table class="table table-sm table-striped table-bordered">
@@ -115,6 +110,64 @@
                         <td>{{ entry_report.classification }}</td>
                         <td>{{ entry_report.start_date }}</td>
                         <td>{{ entry_report.stop_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="container-fluid">
+        <h2>Podcasts</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>Podcasts</caption>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Length</th>
+                    <th>Classification</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry_report in podcast_entry_reports %}
+                    <tr>
+                        <td>{{ entry_report.title }}</td>
+                        <td>{{ entry_report.length }}</td>
+                        <td>{{ entry_report.classification }}</td>
+                        <td>{{ entry_report.start_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="container-fluid">
+        <h2>Blogs</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>Blogs</caption>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Length</th>
+                    <th>Classification</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry_report in blog_entry_reports %}
+                    <tr>
+                        <td><a href="{{ entry_report.url }}">{{ entry_report.title }}</a></td>
+                        <td>{{ entry_report.length }}</td>
+                        <td>{{ entry_report.classification }}</td>
+                        <td>{{ entry_report.start_date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

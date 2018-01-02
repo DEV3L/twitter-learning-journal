@@ -40,7 +40,7 @@ def create_podcast_report_entry(podcast, minutes):
     report_entry.classification = podcast.classification
     report_entry.start_date = podcast.start_date.date()
     report_entry.stop_date = podcast.stop_date.date()
-    report_entry.length = f'{minutes} minutes'
+    report_entry.length = f'{int(minutes)} minutes'
     report_entry.distribution_percent = 1
 
     return report_entry
