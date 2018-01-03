@@ -2,6 +2,7 @@ import hashlib
 import json
 import pickle
 import time
+from datetime import datetime, timedelta
 
 import requests
 
@@ -32,7 +33,9 @@ def _get_url(url):
 
 
 if __name__ == '__main__':
-    repositories_url = 'https://api.github.com/users/DEV3L/repos'
+    github_user = 'DEV3L'
+    repositories_url = f'https://api.github.com/users/{github_user}/repos'
+
     response = _get_url(repositories_url)
 
     repository_participations = []
@@ -45,25 +48,40 @@ if __name__ == '__main__':
     repository_commits = {}
 
     for repository_name, repository_participation in repository_participations:
-        repository_commit_history = {}
+        repository_commit_history = []
 
         owner_commits = repository_participation['owner']
+
+        if not sum(owner_commits) or repository_name == 'angular-starter':
+            continue
+
         owner_commits.reverse()
 
-        for week_index, count in enumerate(owner_commits):
-            pass
+        current_date = datetime.now().date() - timedelta(weeks=1)
+        week_day_start = datetime.now().date()
+        week_day_stop = datetime.now().date()
 
-        start_date = None
-        stop_date = None
-        print(repository_name, repository_participation)
+        year, week_num, day_of_week = current_date.isocalendar()  # DOW = day of week
 
-        repository_commit_history['start_date'] = None
-        repository_commit_history['stop_date'] = None
-        repository_commit_history['_data'] = owner_commits
+        week_day_start -= timedelta(days=(day_of_week))
+        week_day_stop += timedelta(days=(6 - day_of_week))
+
+        print(year, week_num, day_of_week)
+
+        for owner_commit in owner_commits:
+            commits = {
+                'start_date': str(week_day_start),
+                'stop_date': str(week_day_stop),
+                'count': owner_commit,
+                'repository': repository_name
+            }
+
+            repository_commit_history.append(commits)
+
+            week_day_start -= timedelta(weeks=1)
+            week_day_stop -= timedelta(weeks=1)
 
         repository_commits[repository_name] = repository_commit_history
 
     with open(repository_commits_json_file, 'w') as outfile:
         json.dump(repository_commits, outfile)
-
-    print()
