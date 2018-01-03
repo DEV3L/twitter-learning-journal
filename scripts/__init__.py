@@ -7,6 +7,8 @@ average_reading_speed_in_minutes = 200
 average_blog_reading_speed = 175
 average_tweet_reading_speed = 125
 
+github_commit_minute_count = 5
+
 start_phrases = ['started reading', 'began reading', 'started listening to', 'began listening to']
 stop_phrases = ['finished reading', 'finished listening to', ]
 title_termination_tokens = [' - ', ' by ']

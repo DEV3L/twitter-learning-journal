@@ -1,8 +1,9 @@
 .idea
+
 twitter_api_variables.txt
 
-/dev3l__favorites.txt
-/dev3l__likes.txt
+data
+
 /dev3l__tweets.txt
 
 # Byte-compiled / optimized / DLL files

@@ -12,6 +12,7 @@ from scripts.audio_books import get_audio_books
 from scripts.blog_report import process_blogs
 from scripts.book_report import process_books, process_audio_books
 from scripts.books import get_books
+from scripts.github_report import process_github
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
 from scripts.tweets_report import process_tweets
@@ -40,6 +41,7 @@ def _index():
     podcast_entry_reports = []
     blogs_entry_reports = []
     tweet_entry_reports = []
+    github_entry_reports = []
 
     database = Database()
     tweet_dao = TweetDao(database)
@@ -98,6 +100,12 @@ def _index():
     aggregates.append(tweet_aggregate_result)
     aggregate_timelines.append(tweet_aggregate_result.timeline)
     tweet_entry_reports.extend(tweet_aggregate_result.report_entries)
+
+    # github
+    github_aggregate_result = process_github(report_start_date, report_stop_date)
+    aggregates.append(github_aggregate_result)
+    aggregate_timelines.append(github_aggregate_result.timeline)
+    github_entry_reports.extend(github_aggregate_result.report_entries)
 
     # aggregates
     results = []
