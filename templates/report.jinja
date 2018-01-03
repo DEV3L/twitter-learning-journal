@@ -54,6 +54,7 @@
                 {% endfor %}
             </table>
         </div>
+        <!--
         <div class="col">
             <table class="table table-sm table-bordered">
                 <caption>Consumption by Classification</caption>
@@ -80,6 +81,7 @@
                 </tr>
             </table>
         </div>
+        -->
     </div>
     <hr/>
     <div class="container-fluid">
@@ -105,6 +107,39 @@
                     <tr>
                         <td>{{ entry_report.title }}</td>
                         <td>{{ entry_report.medium }}</td>
+                        <td>{{ entry_report.length }}</td>
+                        <td>{{ entry_report.distribution_percent }}</td>
+                        <td>{{ entry_report.classification }}</td>
+                        <td>{{ entry_report.start_date }}</td>
+                        <td>{{ entry_report.stop_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="container-fluid">
+        <h2>GitHub</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-striped table-bordered">
+                <caption>GitHub</caption>
+                <thead>
+                <tr>
+                    <th>Repository</th>
+                    <th>Length</th>
+                    <th>Percent In Range</th>
+                    <th>Classification</th>
+                    <th>Start Date</th>
+                    <th>Stop Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry_report in github_entry_reports %}
+                    <tr>
+                        <td><a href="{{ entry_report.url }}">{{ entry_report.title }}</a></td>
                         <td>{{ entry_report.length }}</td>
                         <td>{{ entry_report.distribution_percent }}</td>
                         <td>{{ entry_report.classification }}</td>
@@ -181,7 +216,7 @@
     <div class="row">
         <div class="col">
             <table class="table table-sm table-striped table-bordered">
-                <caption>Blogs</caption>
+                <caption>Tweets</caption>
                 <thead>
                 <tr>
                     <th>Title</th>
@@ -225,13 +260,13 @@
                             class="font-italic">*awpp</span><br/>
                         <span class="font-weight-bold">days to read book</span>
                         = (book stop date - book sart date) + 1<br/>
-                        <span class="font-weight-bold">days overlap</span>
-                        = len( [ day for day in book_days <br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp; if day >= report_start and day <= report_stop ] )<br/>
                         <span class="font-weight-bold">total minutes</span>
                         = word_count / <span class="font-italic">*ars</span><br/>
                         <span class="font-weight-bold">total hours</span> = total minutes / minutes per hour<br/>
                         <span class="font-weight-bold">hours per day</span> = total hours / days to read book<br/>
+                        <span class="font-weight-bold">days overlap</span>
+                        = len( [ day for day in book_days <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp; if report_stop >= day >= report_start ] )<br/>
                         <hr/>
                         average KCV (<span class="font-weight-bold">aKCV</span>) = hours per day<br/>
                         total KCV (<span class="font-weight-bold">tKCV</span>) = aKCV x days overlap<br/>
@@ -243,10 +278,25 @@
                         <span class="font-weight-bold">hours</span> = audio book length in hours<br/>
                         <span class="font-weight-bold">days to hear book</span>
                         = (book stop date - book sart date) + 1<br/>
+                        <span class="font-weight-bold">hours per day</span> = total hours / days to hear book<br/>
                         <span class="font-weight-bold">days overlap</span>
                         = len( [ day for day in audio_book_days <br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp; if day >= report_start and day <= report_stop ] )<br/>
-                        <span class="font-weight-bold">hours per day</span> = total hours / days to hear book<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp; if report_stop >= day >= report_start ] )<br/>
+                        <hr/>
+                        average KCV (<span class="font-weight-bold">aKCV</span>) = hours per day<br/>
+                        total KCV (<span class="font-weight-bold">tKCV</span>) = aKCV x days overlap<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GitHub</td>
+                    <td>
+                        <span class="font-weight-bold">minutes</span> = number commits per week x
+                        <span class="font-weight-bold">*gcmc</span><br/>
+                        <span class="font-weight-bold">hours</span> = minutes / 60<br/>
+                        <span class="font-weight-bold">hours per day</span> = hours / days in week<br/>
+                        <span class="font-weight-bold">days overlap</span>
+                        = len( [ day for day in commit week <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp; if report_stop >= day >= report_start ] )<br/>
                         <hr/>
                         average KCV (<span class="font-weight-bold">aKCV</span>) = hours per day<br/>
                         total KCV (<span class="font-weight-bold">tKCV</span>) = aKCV x days overlap<br/>
@@ -303,6 +353,7 @@
                         average words per page = *awpp<br/>
                         deviation book pages (number of auxiliary pages) = *dbp<br/>
                         domain specific deviation = *dsd<br/>
+                        github commit minute count = *gcmc
                     </td>
                 </tr>
                 <tr>
@@ -313,6 +364,7 @@
                         <span class="font-italic">*awpp</span> = 250 words/page<br/>
                         <span class="font-italic">*dbp</span> = 50 pages<br/>
                         <span class="font-italic">*dsd</span> = per domain (url total words - content words)<br/>
+                        <span class="font-italic">*gcmc</span> = 5 minutes<br/>
                     </td>
                 </tr>
 

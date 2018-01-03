@@ -64,7 +64,7 @@ def process_github(report_start_date, report_stop_date):
         github_report_entry = create_github_report_entry(weekly_commit, minutes_per_day, overlap)
         aggregate_result.report_entries.append(github_report_entry)
 
-    aggregate_result.report_entries.sort(key=lambda github_report_entry: github_report_entry.start_date, reverse=True)
+    # aggregate_result.report_entries.sort(key=lambda github_report_entry: github_report_entry.start_date, reverse=True)
 
     return aggregate_result
 
@@ -79,7 +79,7 @@ def create_github_report_entry(weekly_commit, minutes_per_day, overlap):
     report_entry.classification = 'engineering'
     report_entry.start_date = weekly_commit['start_date']
     report_entry.stop_date = weekly_commit['stop_date']
-    report_entry.length = f'{minutes_per_day:.2f} minutes'
+    report_entry.length = f'{weekly_commit["count"]} commits -- {minutes_per_day:.2f} minutes/day'
     report_entry.distribution_percent = f'{overlap:.2f}'
 
     return report_entry

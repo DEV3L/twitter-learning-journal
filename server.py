@@ -81,6 +81,12 @@ def _index():
     aggregate_timelines.append(audio_books_aggregate_result.timeline)
     book_entry_reports.extend(audio_books_aggregate_result.report_entries)
 
+    # github
+    github_aggregate_result = process_github(report_start_date, report_stop_date)
+    aggregates.append(github_aggregate_result)
+    aggregate_timelines.append(github_aggregate_result.timeline)
+    github_entry_reports.extend(github_aggregate_result.report_entries)
+
     # podcasts
     podcast_details = [detail for detail in filtered_details if detail.type == 'podcast']
     podcast_aggregate_result = process_podcasts(podcast_details)
@@ -100,12 +106,6 @@ def _index():
     aggregates.append(tweet_aggregate_result)
     aggregate_timelines.append(tweet_aggregate_result.timeline)
     tweet_entry_reports.extend(tweet_aggregate_result.report_entries)
-
-    # github
-    github_aggregate_result = process_github(report_start_date, report_stop_date)
-    aggregates.append(github_aggregate_result)
-    aggregate_timelines.append(github_aggregate_result.timeline)
-    github_entry_reports.extend(github_aggregate_result.report_entries)
 
     # aggregates
     results = []
@@ -167,6 +167,7 @@ def _index():
                            blog_entry_reports=blogs_entry_reports,
                            podcast_entry_reports=podcast_entry_reports,
                            tweet_entry_reports=tweet_entry_reports,
+                           github_entry_reports=github_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day', )
 
