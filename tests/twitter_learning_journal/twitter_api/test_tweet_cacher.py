@@ -43,9 +43,8 @@ def test_init_cache_dir_not_exists(mock_path, mock_makedirs):
 
 @patch('app.twitter_learning_journal.twitter_api.tweet_cacher.path')
 def test_is_cached(mock_path):
-    mock_path.isfile.return_value = True
-
     expected_is_cached = True
+    mock_path.isfile.return_value = expected_is_cached
     expected_file_path = f'{expected_cache_path}1'
 
     tweet = Tweet(id=1)
@@ -57,20 +56,16 @@ def test_is_cached(mock_path):
     mock_path.isfile.assert_called_with(expected_file_path)
 
 
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.path')
+def test_is_not_cached(mock_path):
+    expected_is_cached = False
+    mock_path.isfile.return_value = expected_is_cached
+    expected_file_path = f'{expected_cache_path}1'
 
+    tweet = Tweet(id=1)
+    tweet_cache = TweetCacher(expected_screen_name, tweet)
 
+    is_cached = tweet_cache.is_cached()
 
-"""
-
-def _get_url(url):
-    url_sha = f'{pickle_dir}{_sha_url(url)}'
-
-    try:
-        response = pickle.load(open(url_sha, 'rb'))
-    except:
-        response = requests.get(url)
-        pickle.dump(response, open(url_sha, 'wb'))
-        time.sleep(5)
-
-    return response
-"""
+    assert expected_is_cached == is_cached
+    mock_path.isfile.assert_called_with(expected_file_path)

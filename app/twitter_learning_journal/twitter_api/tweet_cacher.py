@@ -18,5 +18,4 @@ class TweetCacher:
             makedirs(self.cache_path)
 
     def is_cached(self):
-        if path.isfile(self.file_path):
-            return True
+        return path.isfile(self.file_path)
