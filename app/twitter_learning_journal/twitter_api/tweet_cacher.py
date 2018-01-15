@@ -1,3 +1,5 @@
+import pickle
+
 from app.twitter_learning_journal.dao.os_env import os_environ
 from app.twitter_learning_journal.models.tweet import Tweet
 
@@ -19,3 +21,6 @@ class TweetCacher:
 
     def is_cached(self):
         return path.isfile(self.file_path)
+
+    def _cache_file(self):
+        pickle.dump(self.tweet, open(self.file_path, 'wb'))

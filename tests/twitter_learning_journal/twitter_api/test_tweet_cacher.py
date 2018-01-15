@@ -69,3 +69,27 @@ def test_is_not_cached(mock_path):
 
     assert expected_is_cached == is_cached
     mock_path.isfile.assert_called_with(expected_file_path)
+
+
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.open')
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.pickle')
+def test_cache_file(mock_pickle, mock_open):
+    tweet = Tweet(id=1)
+    tweet_cache = TweetCacher(expected_screen_name, tweet)
+
+    tweet_cache._cache_file()
+
+    mock_open.assert_called_with(tweet_cache.file_path, 'wb')
+    mock_pickle.dump.assert_called_with(tweet, mock_open.return_value)
+
+# def _get_url(url):
+#     url_sha = f'{pickle_dir}{_sha_url(url)}'
+#
+#     try:
+#         response = pickle.load(open(url_sha, 'rb'))
+#     except:
+#         response = requests.get(url)
+#         pickle.dump(response, open(url_sha, 'wb'))
+#         time.sleep(5)
+#
+#     return response
