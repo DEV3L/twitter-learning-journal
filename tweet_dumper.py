@@ -14,16 +14,11 @@ from datetime import datetime, timedelta
 
 from app.twitter_learning_journal.classifiers import global_classification_model, get_classification_model
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
-from app.twitter_learning_journal.models import Base
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 from app.twitter_learning_journal.twitter_api.tweets import Tweets
-
-
-def build_tables(database):
-    Base.metadata.create_all(database._engine)
 
 
 def collect(api, screen_name, *, tweet_type='favorite'):

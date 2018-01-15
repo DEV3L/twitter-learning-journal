@@ -1,8 +1,8 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from pytest import fixture
 
-from app.twitter_learning_journal.database.sqlalchemy_database import Database
+from app.twitter_learning_journal.database.sqlalchemy_database import Database, build_tables
 
 
 @fixture(name='database')
@@ -60,3 +60,12 @@ def test_commit(database):
 
     assert not database.commit()
     assert mock_session.commit.called
+
+
+@patch('app.twitter_learning_journal.database.sqlalchemy_database.Base')
+def test_build_tables(mock_base):
+    mock_database = MagicMock()
+
+    build_tables(mock_database)
+
+    mock_base.metadata.create_all.assert_called_with(mock_database._engine)

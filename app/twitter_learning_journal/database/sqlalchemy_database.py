@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.twitter_learning_journal.models import Base
+
 
 class Database():
     def __init__(self, database_url='data/twitter-learning-journal', *, echo=True):
@@ -20,3 +22,7 @@ class Database():
 
     def commit(self):
         self._session.commit()
+
+
+def build_tables(database):
+    Base.metadata.create_all(database._engine)
