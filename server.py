@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template, request
 from flask_script import Manager
 
+from app.twitter_learning_journal.controllers.dashboard import dashboard_blueprint
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
@@ -18,11 +19,14 @@ from scripts.timeline import build_timeline
 from scripts.tweets_report import process_tweets
 
 app = Flask(__name__)
+app.register_blueprint(dashboard_blueprint)
+
 manager = Manager(app)
 
 default_screen_name = 'dev3l_'
 default_report_start_date = '2017-11-28'
 default_report_stop_date = '2017-12-28'
+
 
 @app.route("/")
 def index():
@@ -61,7 +65,6 @@ def _index():
                         if report_stop_date >= detail.start_date >= report_start_date]
 
     timeline = build_timeline(report_start_date, report_stop_date)
-
 
     # books
     books = [book for book in get_books()]
@@ -112,16 +115,27 @@ def _index():
 
     total_kcv = 0
 
+    mediums = {
+        'Books': 'books',
+        'Audio Books': 'books',
+        'GitHub': 'commits',
+        'Podcasts': 'podcasts',
+        'Blogs': 'blogs',
+        'Tweets': 'tweets/favorites'
+    }
+
     for aggregate in aggregates:
         total_kcv += aggregate.kcv
 
         item_count_int = int(aggregate.item_count)
         _item_count = item_count_int if item_count_int == aggregate.item_count else f'{aggregate.item_count:.2f}'
 
+        _item_count = f'{_item_count} {mediums[aggregate.medium]}'
+
         results.append(
             (aggregate.medium,
              _item_count,
-             f'{aggregate.kcv:.2f}')
+             f'{aggregate.kcv:.2f} hours')
         )
 
     report_period_day_count = (report_stop_date - report_start_date).days + 1
@@ -171,6 +185,7 @@ def _index():
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day', )
 
+
 def get_report_date_ranges(report_start_date_str, report_stop_date_str):
     report_start_date_str = report_start_date_str or default_report_start_date
     report_stop_date_str = report_stop_date_str or default_report_stop_date
@@ -189,7 +204,7 @@ def get_report_date_ranges(report_start_date_str, report_stop_date_str):
     return report_start_date, report_stop_date
 
 
-
-
 if __name__ == "__main__":
+    # app.register_blueprint(blueprint)
+
     manager.run()
