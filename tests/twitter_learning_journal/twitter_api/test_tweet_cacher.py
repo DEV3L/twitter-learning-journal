@@ -73,23 +73,27 @@ def test_is_not_cached(mock_path):
 
 @patch('app.twitter_learning_journal.twitter_api.tweet_cacher.open')
 @patch('app.twitter_learning_journal.twitter_api.tweet_cacher.pickle')
-def test_cache_file(mock_pickle, mock_open):
+def test_cache(mock_pickle, mock_open):
     tweet = Tweet(id=1)
     tweet_cache = TweetCacher(expected_screen_name, tweet)
 
-    tweet_cache._cache_file()
+    tweet_cache.cache()
 
     mock_open.assert_called_with(tweet_cache.file_path, 'wb')
     mock_pickle.dump.assert_called_with(tweet, mock_open.return_value)
 
-# def _get_url(url):
-#     url_sha = f'{pickle_dir}{_sha_url(url)}'
-#
-#     try:
-#         response = pickle.load(open(url_sha, 'rb'))
-#     except:
-#         response = requests.get(url)
-#         pickle.dump(response, open(url_sha, 'wb'))
-#         time.sleep(5)
-#
-#     return response
+
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.open')
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.pickle')
+def test_get(mock_pickle, mock_open):
+    expected_tweet = Tweet(id=1)
+    mock_pickle.load.return_value = expected_tweet
+
+    tweet_cache = TweetCacher(expected_screen_name, expected_tweet)
+
+    tweet = tweet_cache.get()
+
+    assert expected_tweet == tweet
+
+    mock_open.assert_called_with(tweet_cache.file_path, 'rb')
+    mock_pickle.load.assert_called_with(mock_open.return_value)

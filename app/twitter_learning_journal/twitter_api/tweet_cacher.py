@@ -15,12 +15,15 @@ class TweetCacher:
 
         self._init_cache_dir()
 
-    def _init_cache_dir(self):
-        if not path.isdir(self.cache_path):
-            makedirs(self.cache_path)
-
     def is_cached(self):
         return path.isfile(self.file_path)
 
-    def _cache_file(self):
+    def cache(self):
         pickle.dump(self.tweet, open(self.file_path, 'wb'))
+
+    def get(self):
+        return pickle.load(open(self.file_path, 'rb'))
+
+    def _init_cache_dir(self):
+        if not path.isdir(self.cache_path):
+            makedirs(self.cache_path)
