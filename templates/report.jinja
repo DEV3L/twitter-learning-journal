@@ -1,11 +1,10 @@
-<!doctype html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Twitter Learning Journal - Knowledge Consumption Velocity (KVC)</title>
+    <title>Twitter Learning Journal - Knowledge Consumption Velocity (KCV)</title>
 
     <!-- Bootstrap4 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
@@ -42,8 +41,8 @@
                 <caption>Consumption By Medium</caption>
                 <tr>
                     <th>Medium</th>
-                    <th>Num. Items</th>
-                    <th>KCV (in hours)</th>
+                    <th>Number Items</th>
+                    <th>Total KCV</th>
                 </tr>
                 {% for result in results %}
                     <tr>
@@ -376,7 +375,7 @@
 
 
 <script type="text/javascript">
-    title = "Twitter Learning Journal - Knowledge Consumption Velocity (KVC)";
+    title = "Twitter Learning Journal - Knowledge Consumption Velocity (KCV)";
     {% if title %}
         title = "{{ title }}";
     {% endif %}
