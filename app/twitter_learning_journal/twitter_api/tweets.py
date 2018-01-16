@@ -3,6 +3,7 @@ from tweepy import Cursor
 
 from app.twitter_learning_journal.models.tweet import Tweet
 from app.twitter_learning_journal.twitter_api.tweet_cache_loader import TweetCacheLoader
+from app.twitter_learning_journal.twitter_api.tweet_cacher import TweetCacher
 
 
 class Tweets:
@@ -16,7 +17,7 @@ class Tweets:
 
     @property
     def cached_tweets(self):
-        if self._cached_tweets:
+        if self._cached_tweets is not None:
             return self._cached_tweets
 
         tweet_cache_loader = TweetCacheLoader(self.screen_name)
@@ -30,15 +31,13 @@ class Tweets:
         for call_response in self._call():
             tweet_model = self._get_tweet(call_response)
 
-            # if tweet_model in self.cached_tweets:
-            #     break
+            if tweet_model in self.cached_tweets:
+                break
 
-            # TweetCacher(self.screen_name, tweet_model).cache()
+            TweetCacher(self.screen_name, tweet_model).cache()
             tweets.append(tweet_model)
 
-        # tweets.extend([cached_tweet for cached_tweet in self.cached_tweets if cached_tweet not in tweets])
-
-        return tweets
+        return self.merge_lists(tweets, self.cached_tweets)
 
     def _call(self):
         yield from Cursor(self._twitter_api_type, self.screen_name, tweet_mode='extended', count=50).items()

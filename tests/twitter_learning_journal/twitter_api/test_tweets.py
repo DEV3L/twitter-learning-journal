@@ -8,7 +8,9 @@ from app.twitter_learning_journal.twitter_api.tweets import Tweets
 
 
 @fixture(name='tweets')
-def _tweets():
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacheLoader')
+def _tweets(mock_tweet_cache_loader, mock_tweet_cacher):
     mock_twitter_api = MagicMock()
     tweets = Tweets(mock_twitter_api, 'screen_name')
 
@@ -46,8 +48,10 @@ def test_call(mock_cursor, tweets):
     mock_cursor.assert_called_with(tweets._twitter_api.favorites, 'screen_name', count=50, tweet_mode='extended')
 
 
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
 @patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
-def test_get(mock_call, tweets):
+def test_get(mock_call, mock_tweet_cacher, tweets):
+    tweets._cached_tweets = []
     id = 1
     created_at = datetime.now()
     full_text = 'full_text'
@@ -83,13 +87,18 @@ def test_get(mock_call, tweets):
     assert [expected_tweet_model] == tweets_list
     assert mock_call.called
 
+    mock_tweet_cacher.assert_called_with(tweets.screen_name, expected_tweet_model)
+    assert mock_tweet_cacher.return_value.cache.called
 
+
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
 @patch('app.twitter_learning_journal.twitter_api.tweets.Tweets.extract_hashtags')
 @patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
-def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, tweets):
+def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_cacher, tweets):
+    tweets._cached_tweets = []
     full_text = 'full_text'
 
-    tweet_response = MagicMock(id=id, retweeted_status=MagicMock(full_text=full_text))
+    tweet_response = MagicMock(id=1, retweeted_status=MagicMock(full_text=full_text))
     mock_call.return_value = [tweet_response]
 
     expected_tweet_model = Tweet(
@@ -104,6 +113,45 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, tweets):
 
     assert [expected_tweet_model] == tweets_list
     assert mock_call.called
+
+    mock_tweet_cacher.assert_called_with(tweets.screen_name, expected_tweet_model)
+    assert mock_tweet_cacher.return_value.cache.called
+
+
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets.extract_hashtags')
+@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
+def test_get_with_cached_tweets(mock_call, mock_extract_hashtags, mock_tweet_cacher, tweets):
+    full_text = 'full_text'
+
+    tweet_response = MagicMock(id=1, retweeted_status=MagicMock(full_text=full_text))
+    mock_call.return_value = [tweet_response]
+
+    expected_tweet_model_first = Tweet(
+        id=tweet_response.id,
+        created_at=tweet_response.created_at,
+        full_text=full_text,
+        type='favorite',
+        hashtags=mock_extract_hashtags.return_value
+    )
+    expected_tweet_model_second = Tweet(
+        id=2,
+        created_at=tweet_response.created_at,
+        full_text=full_text + '2',
+        type='favorite',
+        hashtags=mock_extract_hashtags.return_value
+    )
+
+    expected_tweets = [
+        expected_tweet_model_first,
+        expected_tweet_model_second
+    ]
+    tweets._cached_tweets = expected_tweets
+
+    tweets_list = tweets.get()
+
+    assert expected_tweets == tweets_list
+    assert not mock_tweet_cacher.called
 
 
 def test_merge_lists():
