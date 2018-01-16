@@ -2,13 +2,13 @@ from unittest.mock import patch, MagicMock
 
 from pytest import fixture
 
-from app.twitter_learning_journal.twitter_api.tweet_cache_loader import TweetCacheLoader
+from app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader import TweetCacheLoader
 
 expected_cache_path = './data/pickle/tweets/screen name'
 expected_screen_name = 'screen name'
 
 @fixture(name='tweet_cache_loader')
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.Cacher._init_cache_dir')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.Cacher._init_cache_dir')
 def _tweet_cache_loader(mock_init_cache_dir):
     tweet_cache_loader = TweetCacheLoader(expected_screen_name)
     assert mock_init_cache_dir.called
@@ -20,7 +20,7 @@ def test_tweet_cache_loader_init(tweet_cache_loader):
     assert expected_cache_path == tweet_cache_loader.cache_path
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cache_loader.load_pickle_data')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader.load_pickle_data')
 def test_load_cached_tweet(mock_load_pickle_data, tweet_cache_loader):
     expected_file_path = 'test'
     expected_tweet = mock_load_pickle_data.return_value
@@ -31,7 +31,7 @@ def test_load_cached_tweet(mock_load_pickle_data, tweet_cache_loader):
     mock_load_pickle_data.assert_called_with(expected_file_path)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cache_loader.Path')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader.Path')
 def test_load_cached_tweets(mock_path, tweet_cache_loader):
     _object = 'test'
     expected_cached_tweets = [_object]

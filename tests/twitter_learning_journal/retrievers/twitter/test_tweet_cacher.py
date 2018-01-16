@@ -3,14 +3,14 @@ from unittest.mock import patch
 from pytest import fixture
 
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.twitter_api.tweet_cacher import TweetCacher
+from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
 
 expected_cache_path = './data/pickle/tweets/screen name'
 expected_screen_name = 'screen name'
 
 
 @fixture(name='tweet_cacher_tuple')
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.Cacher._init_cache_dir')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.Cacher._init_cache_dir')
 def _tweet_cacher_tuple(mock_init_cache_dir):
     tweet = Tweet(id=1)
     tweet_cacher = TweetCacher(expected_screen_name, tweet)
@@ -29,7 +29,7 @@ def test_tweet_cacher_init(tweet_cacher_tuple):
     assert expected_tweet == tweet_cacher.tweet
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.path')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.path')
 def test_is_cached(mock_path, tweet_cacher_tuple):
     expected_is_cached = True
     mock_path.isfile.return_value = expected_is_cached
@@ -42,7 +42,7 @@ def test_is_cached(mock_path, tweet_cacher_tuple):
     mock_path.isfile.assert_called_with(expected_file_path)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.path')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.path')
 def test_is_not_cached(mock_path, tweet_cacher_tuple):
     expected_is_cached = False
     mock_path.isfile.return_value = expected_is_cached
@@ -55,7 +55,7 @@ def test_is_not_cached(mock_path, tweet_cacher_tuple):
     mock_path.isfile.assert_called_with(expected_file_path)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.write_pickle_data')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.write_pickle_data')
 def test_cache(mock_write_pickle_data, tweet_cacher_tuple):
     tweet = tweet_cacher_tuple[1]
     tweet_cacher = tweet_cacher_tuple[0]
@@ -65,7 +65,7 @@ def test_cache(mock_write_pickle_data, tweet_cacher_tuple):
     mock_write_pickle_data.assert_called_with(tweet, tweet_cacher.file_path)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.load_pickle_data')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweet_cacher.load_pickle_data')
 def test_get(mock_load_pickle_data, tweet_cacher_tuple):
     expected_tweet = tweet_cacher_tuple[1]
     mock_load_pickle_data.return_value = expected_tweet

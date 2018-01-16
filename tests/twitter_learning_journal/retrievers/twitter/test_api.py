@@ -1,11 +1,11 @@
 import os
 from unittest.mock import patch
 
-from app.twitter_learning_journal.twitter_api.api import get_api, get_auth_handler
+from app.twitter_learning_journal.retrievers.twitter.api import get_api, get_auth_handler
 
 
-@patch('app.twitter_learning_journal.twitter_api.api.get_auth_handler')
-@patch('app.twitter_learning_journal.twitter_api.api.tweepy')
+@patch('app.twitter_learning_journal.retrievers.twitter.api.get_auth_handler')
+@patch('app.twitter_learning_journal.retrievers.twitter.api.tweepy')
 def test_get_api(mock_tweepy, mock_get_auth_handler):
     api = get_api()
 
@@ -15,7 +15,7 @@ def test_get_api(mock_tweepy, mock_get_auth_handler):
     assert mock_tweepy.API.return_value == api
 
 
-@patch('app.twitter_learning_journal.twitter_api.api.tweepy')
+@patch('app.twitter_learning_journal.retrievers.twitter.api.tweepy')
 def test_get_auth_handler(mock_tweepy):
     os.environ['TWITTER_CONSUMER_KEY'] = 'twitter_consumer_key'
     os.environ['TWITTER_CONSUMER_SECRET'] = 'twitter_consumer_secret'

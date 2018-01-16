@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from app.twitter_learning_journal.retrievers.twitter import TwitterRetriever
+from app.twitter_learning_journal.retrievers.twitter_retriever import TwitterRetriever
 
 
 def test_init_twitter_retriever():

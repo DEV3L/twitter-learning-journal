@@ -4,12 +4,12 @@ from unittest.mock import MagicMock, patch
 from pytest import fixture
 
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.twitter_api.tweets import Tweets
+from app.twitter_learning_journal.retrievers.twitter.tweets import Tweets
 
 
 @fixture(name='tweets')
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacheLoader')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacheLoader')
 def _tweets(mock_tweet_cache_loader, mock_tweet_cacher):
     mock_twitter_api = MagicMock()
     tweets = Tweets(mock_twitter_api, 'screen_name')
@@ -28,14 +28,15 @@ def test_cached_tweets_is_cached(tweets):
     assert expected_cached_tweets == tweets.cached_tweets
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacheLoader')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacheLoader')
 def test_cached_tweets(mock_tweet_cache_loader, tweets):
     mock_tweet_cache_loader_instance = mock_tweet_cache_loader.return_value
 
     assert mock_tweet_cache_loader_instance.load_cached_tweets.return_value == tweets.cached_tweets
     mock_tweet_cache_loader.assert_called_with(tweets.screen_name)
 
-@patch('app.twitter_learning_journal.twitter_api.tweets.Cursor')
+
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Cursor')
 def test_call(mock_cursor, tweets):
     mock_cursor.return_value.items.return_value = ['1']
 
@@ -48,8 +49,8 @@ def test_call(mock_cursor, tweets):
     mock_cursor.assert_called_with(tweets._twitter_api.favorites, 'screen_name', count=50, tweet_mode='extended')
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
-@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets._call')
 def test_get(mock_call, mock_tweet_cacher, tweets):
     tweets._cached_tweets = []
     id = 1
@@ -91,9 +92,9 @@ def test_get(mock_call, mock_tweet_cacher, tweets):
     assert mock_tweet_cacher.return_value.cache.called
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
-@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets.extract_hashtags')
-@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets.extract_hashtags')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets._call')
 def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_cacher, tweets):
     tweets._cached_tweets = []
     full_text = 'full_text'
@@ -118,9 +119,9 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_
     assert mock_tweet_cacher.return_value.cache.called
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacher')
-@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets.extract_hashtags')
-@patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets.extract_hashtags')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets._call')
 def test_get_with_cached_tweets(mock_call, mock_extract_hashtags, mock_tweet_cacher, tweets):
     full_text = 'full_text'
 

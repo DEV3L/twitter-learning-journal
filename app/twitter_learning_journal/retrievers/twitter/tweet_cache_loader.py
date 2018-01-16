@@ -1,7 +1,7 @@
 from pathlib import Path
 
+from app.twitter_learning_journal.retrievers.twitter.cacher import Cacher
 from app.twitter_learning_journal.services.pickle_service import load_pickle_data
-from app.twitter_learning_journal.twitter_api.cacher import Cacher
 
 
 class TweetCacheLoader(Cacher):

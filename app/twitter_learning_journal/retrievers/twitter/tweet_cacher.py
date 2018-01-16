@@ -1,8 +1,8 @@
 from os import path, sep
 
 from app.twitter_learning_journal.models.tweet import Tweet
+from app.twitter_learning_journal.retrievers.twitter.cacher import Cacher
 from app.twitter_learning_journal.services.pickle_service import load_pickle_data, write_pickle_data
-from app.twitter_learning_journal.twitter_api.cacher import Cacher
 
 
 class TweetCacher(Cacher):

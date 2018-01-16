@@ -2,8 +2,8 @@ from tweepy import API
 from tweepy import Cursor
 
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.twitter_api.tweet_cache_loader import TweetCacheLoader
-from app.twitter_learning_journal.twitter_api.tweet_cacher import TweetCacher
+from app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader import TweetCacheLoader
+from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
 
 
 class Tweets:
