@@ -83,17 +83,14 @@ def test_cache(mock_pickle, mock_open):
     mock_pickle.dump.assert_called_with(tweet, mock_open.return_value)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.open')
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.pickle')
-def test_get(mock_pickle, mock_open):
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.load_pickle_data')
+def test_get(mock_load_pickle_data):
     expected_tweet = Tweet(id=1)
-    mock_pickle.load.return_value = expected_tweet
+    mock_load_pickle_data.return_value = expected_tweet
 
     tweet_cache = TweetCacher(expected_screen_name, expected_tweet)
 
     tweet = tweet_cache.get()
 
     assert expected_tweet == tweet
-
-    mock_open.assert_called_with(tweet_cache.file_path, 'rb')
-    mock_pickle.load.assert_called_with(mock_open.return_value)
+    mock_load_pickle_data.assert_called_with(tweet_cache.file_path)

@@ -1,15 +1,14 @@
 import pickle
-
-from app.twitter_learning_journal.dao.os_env import os_environ
-from app.twitter_learning_journal.models.tweet import Tweet
-
-tweet_cache_path = os_environ('TWEET_CACHE_PATH', default='./data/pickle/tweets/')
-
 from os import makedirs, path
+
+from app.twitter_learning_journal.builders.cache_path_builder import build_cache_path
+from app.twitter_learning_journal.models.tweet import Tweet
+from app.twitter_learning_journal.services.pickle_service import load_pickle_data
+
 
 class TweetCacher:
     def __init__(self, screen_name: str, tweet: Tweet):
-        self.cache_path = f'{tweet_cache_path}{screen_name}'
+        self.cache_path = build_cache_path(screen_name)
         self.tweet = tweet
         self.file_path = f'{self.cache_path}{tweet.id}'
 
@@ -22,7 +21,7 @@ class TweetCacher:
         pickle.dump(self.tweet, open(self.file_path, 'wb'))
 
     def get(self):
-        return pickle.load(open(self.file_path, 'rb'))
+        return load_pickle_data(self.file_path)
 
     def _init_cache_dir(self):
         if not path.isdir(self.cache_path):
