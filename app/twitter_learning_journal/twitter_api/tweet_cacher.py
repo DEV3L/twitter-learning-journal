@@ -1,17 +1,15 @@
-from os import makedirs, path
+from os import path
 
-from app.twitter_learning_journal.builders.cache_path_builder import build_cache_path
 from app.twitter_learning_journal.models.tweet import Tweet
 from app.twitter_learning_journal.services.pickle_service import load_pickle_data, write_pickle_data
+from app.twitter_learning_journal.twitter_api.cacher import Cacher
 
 
-class TweetCacher:
+class TweetCacher(Cacher):
     def __init__(self, screen_name: str, tweet: Tweet):
-        self.cache_path = build_cache_path(screen_name)
+        super().__init__(screen_name)
         self.tweet = tweet
         self.file_path = f'{self.cache_path}{tweet.id}'
-
-        self._init_cache_dir()
 
     def is_cached(self):
         return path.isfile(self.file_path)
@@ -21,7 +19,3 @@ class TweetCacher:
 
     def get(self):
         return load_pickle_data(self.file_path)
-
-    def _init_cache_dir(self):
-        if not path.isdir(self.cache_path):
-            makedirs(self.cache_path)
