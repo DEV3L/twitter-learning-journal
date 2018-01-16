@@ -37,7 +37,7 @@ class Tweets:
             TweetCacher(self.screen_name, tweet_model).cache()
             tweets.append(tweet_model)
 
-        return self.merge_lists(tweets, self.cached_tweets)
+        return tweets
 
     def _call(self):
         yield from Cursor(self._twitter_api_type, self.screen_name, tweet_mode='extended', count=50).items()
@@ -55,16 +55,6 @@ class Tweets:
         )
 
         return tweet_model
-
-    @staticmethod
-    def merge_lists(list_one: list, list_two: list):
-        merged_list = []
-        merged_list.extend(list_one)
-
-        list_two_only = [_object for _object in list_two if _object not in merged_list]
-        merged_list.extend(list_two_only)
-
-        return merged_list
 
     @staticmethod
     def extract_full_text(call_response):

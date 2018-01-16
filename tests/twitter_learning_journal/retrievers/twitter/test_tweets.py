@@ -143,24 +143,18 @@ def test_get_with_cached_tweets(mock_call, mock_extract_hashtags, mock_tweet_cac
         hashtags=mock_extract_hashtags.return_value
     )
 
-    expected_tweets = [
+    expected_tweets = []
+
+    cached_tweets = [
         expected_tweet_model_first,
         expected_tweet_model_second
     ]
-    tweets._cached_tweets = expected_tweets
+    tweets._cached_tweets = cached_tweets
 
     tweets_list = tweets.get()
 
     assert expected_tweets == tweets_list
     assert not mock_tweet_cacher.called
-
-
-def test_merge_lists():
-    expected_list = ['1', '2', '3', '4', '5']
-    list_one = ['1', '2', '3']
-    list_two = ['3', '4', '5']
-
-    assert expected_list == Tweets.merge_lists(list_one, list_two)
 
 
 def test_extract_urls_without_url_without_retweeted_status():
