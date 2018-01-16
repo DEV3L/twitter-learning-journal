@@ -1,14 +1,13 @@
 import os
 from pathlib import Path
 
-from app.twitter_learning_journal.builders.cache_path_builder import build_cache_path
 from app.twitter_learning_journal.services.pickle_service import load_pickle_data
+from app.twitter_learning_journal.twitter_api.cacher import Cacher
 
 
-class TweetCacheLoader:
+class TweetCacheLoader(Cacher):
     def __init__(self, screen_name):
-        self.screen_name = screen_name
-        self.cache_path = build_cache_path(screen_name)
+        super().__init__(screen_name)
 
     def load_cached_tweets(self):
         tweets = []

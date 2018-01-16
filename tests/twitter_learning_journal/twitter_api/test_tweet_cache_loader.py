@@ -7,10 +7,11 @@ from app.twitter_learning_journal.twitter_api.tweet_cache_loader import TweetCac
 expected_cache_path = './data/pickle/tweets/screen name'
 expected_screen_name = 'screen name'
 
-
 @fixture(name='tweet_cache_loader')
-def _tweet_cache_loader():
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.Cacher._init_cache_dir')
+def _tweet_cache_loader(mock_init_cache_dir):
     tweet_cache_loader = TweetCacheLoader(expected_screen_name)
+    assert mock_init_cache_dir.called
     return tweet_cache_loader
 
 
