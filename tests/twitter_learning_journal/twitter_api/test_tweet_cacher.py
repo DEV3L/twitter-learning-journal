@@ -71,16 +71,15 @@ def test_is_not_cached(mock_path):
     mock_path.isfile.assert_called_with(expected_file_path)
 
 
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.open')
-@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.pickle')
-def test_cache(mock_pickle, mock_open):
+@patch('app.twitter_learning_journal.twitter_api.tweet_cacher.write_pickle_data')
+def test_cache(mock_write_pickle_data):
     tweet = Tweet(id=1)
     tweet_cache = TweetCacher(expected_screen_name, tweet)
 
     tweet_cache.cache()
 
-    mock_open.assert_called_with(tweet_cache.file_path, 'wb')
-    mock_pickle.dump.assert_called_with(tweet, mock_open.return_value)
+    mock_write_pickle_data.assert_called_with(tweet, tweet_cache.file_path)
+
 
 
 @patch('app.twitter_learning_journal.twitter_api.tweet_cacher.load_pickle_data')
