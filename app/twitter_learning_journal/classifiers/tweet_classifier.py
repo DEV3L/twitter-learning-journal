@@ -8,7 +8,7 @@ from app.twitter_learning_journal.transformers.transform_str import tokenize, re
 
 
 class TweetClassifier():
-    def __init__(self, tweet: 'Tweet', *, classification_model=None, weight_text=1, weight_hashtag=3):
+    def __init__(self, tweet: Tweet, *, classification_model=None, weight_text=1, weight_hashtag=3):
         self.classification_model = get_classification_model(classification_model)
         self.tweet = tweet
         self.weight_text = weight_text
