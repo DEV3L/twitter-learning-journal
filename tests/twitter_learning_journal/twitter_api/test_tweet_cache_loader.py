@@ -22,7 +22,7 @@ def test_tweet_cache_loader_init(tweet_cache_loader):
 
 @patch('app.twitter_learning_journal.twitter_api.tweet_cache_loader.load_pickle_data')
 def test_load_cached_tweet(mock_load_pickle_data, tweet_cache_loader):
-    expected_file_path = f'{expected_cache_path}/test'
+    expected_file_path = 'test'
     expected_tweet = mock_load_pickle_data.return_value
 
     tweet = tweet_cache_loader._load_cached_tweet('test')

@@ -21,7 +21,7 @@ def _tweet_cacher_tuple(mock_init_cache_dir):
 
 def test_tweet_cacher_init(tweet_cacher_tuple):
     expected_tweet = tweet_cacher_tuple[1]
-    expected_file_path = f'{expected_cache_path}{expected_tweet.id}'
+    expected_file_path = f'{expected_cache_path}/{expected_tweet.id}'
     tweet_cacher = tweet_cacher_tuple[0]
 
     assert expected_cache_path == tweet_cacher.cache_path
@@ -33,7 +33,7 @@ def test_tweet_cacher_init(tweet_cacher_tuple):
 def test_is_cached(mock_path, tweet_cacher_tuple):
     expected_is_cached = True
     mock_path.isfile.return_value = expected_is_cached
-    expected_file_path = f'{expected_cache_path}1'
+    expected_file_path = f'{expected_cache_path}/1'
     tweet_cacher = tweet_cacher_tuple[0]
 
     is_cached = tweet_cacher.is_cached()
@@ -46,7 +46,7 @@ def test_is_cached(mock_path, tweet_cacher_tuple):
 def test_is_not_cached(mock_path, tweet_cacher_tuple):
     expected_is_cached = False
     mock_path.isfile.return_value = expected_is_cached
-    expected_file_path = f'{expected_cache_path}1'
+    expected_file_path = f'{expected_cache_path}/1'
 
     tweet_cacher = tweet_cacher_tuple[0]
     is_cached = tweet_cacher.is_cached()

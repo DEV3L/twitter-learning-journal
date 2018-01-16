@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from app.twitter_learning_journal.services.pickle_service import load_pickle_data
@@ -19,7 +18,7 @@ class TweetCacheLoader(Cacher):
 
         return tweets
 
-    def _load_cached_tweet(self, file):
-        file_path = f'{self.cache_path}{os.sep}{file}'
-        tweet = load_pickle_data(file_path)
+    @staticmethod
+    def _load_cached_tweet(file):
+        tweet = load_pickle_data(file)
         return tweet
