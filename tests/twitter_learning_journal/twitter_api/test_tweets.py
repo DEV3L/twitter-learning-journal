@@ -19,6 +19,20 @@ def _tweets():
     return tweets
 
 
+def test_cached_tweets_is_cached(tweets):
+    expected_cached_tweets = 'cached_value'
+    tweets._cached_tweets = expected_cached_tweets
+
+    assert expected_cached_tweets == tweets.cached_tweets
+
+
+@patch('app.twitter_learning_journal.twitter_api.tweets.TweetCacheLoader')
+def test_cached_tweets(mock_tweet_cache_loader, tweets):
+    mock_tweet_cache_loader_instance = mock_tweet_cache_loader.return_value
+
+    assert mock_tweet_cache_loader_instance.load_cached_tweets.return_value == tweets.cached_tweets
+    mock_tweet_cache_loader.assert_called_with(tweets.screen_name)
+
 @patch('app.twitter_learning_journal.twitter_api.tweets.Cursor')
 def test_call(mock_cursor, tweets):
     mock_cursor.return_value.items.return_value = ['1']
@@ -29,7 +43,7 @@ def test_call(mock_cursor, tweets):
     assert "<class 'generator'>" == str(type(generator_response))
     assert ['1'] == items
     assert mock_cursor.called
-    mock_cursor.assert_called_with(tweets._twitter_api.favorites, 'screen_name', count=200, tweet_mode='extended')
+    mock_cursor.assert_called_with(tweets._twitter_api.favorites, 'screen_name', count=50, tweet_mode='extended')
 
 
 @patch('app.twitter_learning_journal.twitter_api.tweets.Tweets._call')
@@ -90,6 +104,14 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, tweets):
 
     assert [expected_tweet_model] == tweets_list
     assert mock_call.called
+
+
+def test_merge_lists():
+    expected_list = ['1', '2', '3', '4', '5']
+    list_one = ['1', '2', '3']
+    list_two = ['3', '4', '5']
+
+    assert expected_list == Tweets.merge_lists(list_one, list_two)
 
 
 def test_extract_urls_without_url_without_retweeted_status():
