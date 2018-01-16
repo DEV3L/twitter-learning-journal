@@ -15,14 +15,6 @@ def test_load_pickle_data(mock_pickle, mock_open):
     mock_pickle.load.assert_called_with(mock_open.return_value)
 
 
-"""
-
-def write_pickle_data(_object, path):
-    pickle.dump(_object, open(path, 'wb'))
-
-"""
-
-
 @patch('app.twitter_learning_journal.services.pickle_service.open')
 @patch('app.twitter_learning_journal.services.pickle_service.pickle')
 def test_write_pickle_data(mock_pickle, mock_open):
