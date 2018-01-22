@@ -28,32 +28,34 @@ class TweetsProcessingService:
             word_count = count_tokens(_full_text)
             tweet.word_count = word_count
 
-    def classify_tweets(self, *, is_sub_classify=False):
+    def classify_tweets(self):
         [TweetClassifier(tweet, classification_model=self.classification_model).classify()
          for tweet in self.tweets]
 
-        if is_sub_classify:
-            self._sub_classify_tweets()
-
-    def _sub_classify_tweets(self):
+    def sub_classify_unclassified_tweets(self):
         sub_classification_model = self._create_sub_classification_model()
-
         unclassified_tweets = [tweet for tweet in self.tweets if not tweet.classification]
+
         tweets_processing_service = TweetsProcessingService(unclassified_tweets,
                                                             classification_model=sub_classification_model,
                                                             weight_text=self.sub_weight_text,
                                                             weight_hashtag=self.sub_weight_hashtag)
-        tweets_processing_service.classify_tweets(is_sub_classify=False)
+        tweets_processing_service.classify_tweets()
 
     def _create_sub_classification_model(self):
         classified_tweets = [tweet for tweet in self.tweets if tweet.classification]
-        sub_classification_model = dict(get_classification_model(None))
+        sub_classification_model = dict(get_classification_model(None))  # this could be passed and deep copy self
 
         for tweet in classified_tweets:
-            cleaned_full_text = remove_ignore_characters_from_str(tweet.full_text)
-            updated_classification = sub_classification_model[tweet.classification].union(cleaned_full_text)
-            sub_classification_model[tweet.classification] = updated_classification
+            add_words_to_classification_model(sub_classification_model, tweet)
+
         return sub_classification_model
+
+
+def add_words_to_classification_model(classification_model, tweet):
+    cleaned_full_text = remove_ignore_characters_from_str(tweet.full_text).lower()
+    updated_classification = classification_model[tweet.classification].union(cleaned_full_text.split())
+    classification_model[tweet.classification] = updated_classification
 
 
 def count_tokens(input_str):

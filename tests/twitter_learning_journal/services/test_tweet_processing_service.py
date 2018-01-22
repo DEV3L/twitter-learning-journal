@@ -1,7 +1,8 @@
 from pytest import mark
 
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService
+from app.twitter_learning_journal.services.tweets_processing_service import TweetsProcessingService, \
+    add_words_to_classification_model
 from tests.twitter_learning_journal import test_classification_model
 
 
@@ -56,3 +57,19 @@ def test_classify_tweets(expected_classification_values, hashtags, full_texts):
 
     for count, expected_classification_value in enumerate(expected_classification_values):
         assert expected_classification_value == tweets_processing_service.tweets[count].classification
+
+
+def test_add_words_to_classification_model():
+    classification = 'classification'
+    full_text = 'full text"Words'
+
+    expected_classification_model = {
+        classification: {'full', 'text', 'words'}
+    }
+
+    classification_model = {classification: set()}
+    tweet = Tweet(full_text=full_text, classification=classification)
+
+    add_words_to_classification_model(classification_model, tweet)
+
+    assert expected_classification_model == classification_model
