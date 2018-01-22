@@ -33,7 +33,7 @@ class TweetsProcessingService:
          for tweet in self.tweets]
 
     def sub_classify_unclassified_tweets(self):
-        sub_classification_model = self._create_sub_classification_model()
+        sub_classification_model = self._build_sub_classification_model()
         unclassified_tweets = [tweet for tweet in self.tweets if not tweet.classification]
 
         tweets_processing_service = TweetsProcessingService(unclassified_tweets,
@@ -42,9 +42,9 @@ class TweetsProcessingService:
                                                             weight_hashtag=self.sub_weight_hashtag)
         tweets_processing_service.classify_tweets()
 
-    def _create_sub_classification_model(self):
+    def _build_sub_classification_model(self):
         classified_tweets = [tweet for tweet in self.tweets if tweet.classification]
-        sub_classification_model = dict(get_classification_model(None))  # this could be passed and deep copy self
+        sub_classification_model = dict(get_classification_model(self.classification_model))
 
         for tweet in classified_tweets:
             add_words_to_classification_model(sub_classification_model, tweet)

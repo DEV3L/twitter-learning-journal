@@ -59,6 +59,26 @@ def test_classify_tweets(expected_classification_values, hashtags, full_texts):
         assert expected_classification_value == tweets_processing_service.tweets[count].classification
 
 
+def test_build_sub_classification_model():
+    classification = 'classification'
+
+    expected_classification_model = {
+        classification: {'full', 'text', 'words', 'swords'}
+    }
+
+    tweets = [
+        Tweet(hashtags='hashtag', full_text='full text words', classification=classification),
+        Tweet(hashtags='hashtag', full_text='full swords', classification=classification)]
+
+    classification_model = {classification: set()}
+    tweets_processing_service = TweetsProcessingService(tweets, classification_model=classification_model)
+    sub_classification_model = tweets_processing_service._build_sub_classification_model()
+
+    assert classification_model != sub_classification_model
+    assert expected_classification_model == sub_classification_model
+
+
+# move to separate test file when add_words_to_classification_model extracted from file
 def test_add_words_to_classification_model():
     classification = 'classification'
     full_text = 'full text"Words'
