@@ -55,15 +55,16 @@ def test_query(database):
     mock_session.query.assert_called_with('entity')
 
 
-@patch('app.twitter_learning_journal.database.sqlalchemy_database.Database.commit')
-@patch('app.twitter_learning_journal.database.sqlalchemy_database.Database.add_all')
-def test_commit_entities(mock_add_all, mock_commit, database):
+def test_commit_entities(database):
+    mock_add_all = MagicMock()
+    database.add_all = mock_add_all
+
     entities = ['list']
 
     database.commit_entities(entities)
 
     mock_add_all.assert_called_with(entities)
-    assert mock_commit.called
+    assert database._session.commit.called
 
 @patch('app.twitter_learning_journal.database.sqlalchemy_database.Base')
 def test_build_tables(mock_base):
