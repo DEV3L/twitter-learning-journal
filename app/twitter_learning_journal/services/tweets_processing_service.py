@@ -43,7 +43,7 @@ class TweetsProcessingService:
                                                             classification_model=sub_classification_model,
                                                             weight_text=self.sub_weight_text,
                                                             weight_hashtag=self.sub_weight_hashtag)
-        tweets_processing_service.classify_tweets()
+        tweets_processing_service.classify_tweets(is_sub_classify=False)
 
     def _create_sub_classification_model(self):
         classified_tweets = [tweet for tweet in self.tweets if tweet.classification]

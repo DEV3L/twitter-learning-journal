@@ -16,9 +16,8 @@ if __name__ == '__main__':
 
     tweets = tweet_dao.query_all()
     tweets_classifier = TweetsClassifier(tweets, tweet_dao)
+    tweets_classifier.classify()
 
-    #
-    # add_sub_classification_to_models(tweet_dao)
     #
     # train_details()
     #

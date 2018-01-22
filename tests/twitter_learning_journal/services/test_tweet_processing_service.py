@@ -6,9 +6,18 @@ from tests.twitter_learning_journal import test_classification_model
 
 
 def test_tweets_processing_service_init():
+    expected_weight_text = 1.0
+    expected_sub_weight_text = .1
+    expected_weight_hashtag = 3.0
+    expected_sub_weight_hashtag = .3
+
     tweets = []
     tweets_processing_service = TweetsProcessingService(tweets)
 
+    assert expected_weight_text == tweets_processing_service.weight_text
+    assert expected_sub_weight_text == tweets_processing_service.sub_weight_text
+    assert expected_weight_hashtag == tweets_processing_service.weight_hashtag
+    assert expected_sub_weight_hashtag == tweets_processing_service.sub_weight_hashtag
     assert tweets == tweets_processing_service.tweets
 
 
