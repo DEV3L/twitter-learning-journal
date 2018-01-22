@@ -55,12 +55,15 @@ def test_query(database):
     mock_session.query.assert_called_with('entity')
 
 
-def test_commit(database):
-    mock_session = database._session
+@patch('app.twitter_learning_journal.database.sqlalchemy_database.Database.commit')
+@patch('app.twitter_learning_journal.database.sqlalchemy_database.Database.add_all')
+def test_commit_entities(mock_add_all, mock_commit, database):
+    entities = ['list']
 
-    assert not database.commit()
-    assert mock_session.commit.called
+    database.commit_entities(entities)
 
+    mock_add_all.assert_called_with(entities)
+    assert mock_commit.called
 
 @patch('app.twitter_learning_journal.database.sqlalchemy_database.Base')
 def test_build_tables(mock_base):

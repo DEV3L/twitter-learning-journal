@@ -23,6 +23,9 @@ class Database():
     def commit(self):
         self._session.commit()
 
+    def commit_entities(self, entities: list):
+        self.add_all(entities)
+        self.commit()
 
 def build_tables(database):
     Base.metadata.create_all(database._engine)
