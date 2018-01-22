@@ -11,6 +11,7 @@ class TweetsClassifier():
         tweets_processing_service = TweetsProcessingService(self.tweets)
         tweets_processing_service.count_tweet_words()
         tweets_processing_service.classify_tweets()
+        tweets_processing_service.sub_classify_unclassified_tweets()
 
         self._save_tweets(tweets_processing_service.tweets)
 

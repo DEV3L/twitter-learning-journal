@@ -59,6 +59,26 @@ def test_classify_tweets(expected_classification_values, hashtags, full_texts):
         assert expected_classification_value == tweets_processing_service.tweets[count].classification
 
 
+def test_sub_classify_unclassified_tweets():
+    classification = 'classification'
+    classification_model = {
+        classification: {'text'}
+    }
+
+    expected_tweet_classifications = [classification, classification, classification, '']
+
+    tweets = [
+        Tweet(full_text='full text words', classification=classification),
+        Tweet(full_text='text', classification=None),
+        Tweet(full_text='words', classification=None),
+        Tweet(full_text='spoon', classification=None)
+    ]
+
+    tweets_processing_service = TweetsProcessingService(tweets, classification_model=classification_model)
+    tweets_processing_service.sub_classify_unclassified_tweets()
+
+    assert expected_tweet_classifications == [tweet.classification for tweet in tweets_processing_service.tweets]
+
 def test_build_sub_classification_model():
     classification = 'classification'
 
