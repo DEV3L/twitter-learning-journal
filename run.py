@@ -8,17 +8,16 @@ if __name__ == '__main__':
 
     database = Database()
     build_tables(database)
-
     tweet_dao = TweetDao(database)
 
     twitter_tweet_retriever = TwitterRetriever(tweet_dao, screen_name)
     twitter_tweet_retriever.fetch()
 
     tweets = tweet_dao.query_all()
-    tweets_classifier = TweetsClassifier(tweets, tweet_dao)
+    tweets_classifier = TweetsClassifier(tweets)
     tweets_classifier.classify()
+    database.commit_entities(tweets)
 
-    #
     # train_details()
     #
     # count_html_words()

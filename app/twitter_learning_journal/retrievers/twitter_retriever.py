@@ -14,6 +14,7 @@ class TwitterRetriever():
         retrieved_tweets.extend(self._fetch('tweet'))
         retrieved_tweets.extend(self._fetch('favorite'))
 
+        # should only save non-cached tweets
         self._save_tweets(retrieved_tweets)
 
         return retrieved_tweets

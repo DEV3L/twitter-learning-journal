@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from tweepy import API
 from tweepy import Cursor
 
@@ -14,6 +16,7 @@ class Tweets:
         self._twitter_api = twitter_api
         self._twitter_api_type = twitter_api.favorites if 'favorite' == tweet_type else twitter_api.user_timeline
         self._cached_tweets = None
+        self._realtime_rate_in_hours = 24
 
     @property
     def cached_tweets(self):
@@ -25,9 +28,29 @@ class Tweets:
 
         return self._cached_tweets
 
+    def has_new_tweets(self):
+        if not self.cached_tweets:
+            return True
+
+        _cached_tweets = list(self.cached_tweets)
+        _cached_tweets.sort(key=lambda tweet: tweet.created_at, reverse=True)
+
+        most_recent_tweet = _cached_tweets[0]
+        seconds_since_last_cached_tweet = (datetime.now() - most_recent_tweet.created_at).seconds
+        hours_since_last_cached_tweet = (seconds_since_last_cached_tweet / 60) / 60
+
+        return hours_since_last_cached_tweet > self._realtime_rate_in_hours
+
     def get(self):
         tweets = []
 
+        if self.has_new_tweets():
+            self._get_from_twitter(tweets)
+
+        tweets.extend(self.cached_tweets)
+        return tweets
+
+    def _get_from_twitter(self, tweets):
         for call_response in self._call():
             tweet_model = self._get_tweet(call_response)
 
@@ -36,8 +59,6 @@ class Tweets:
 
             TweetCacher(self.screen_name, tweet_model).cache()
             tweets.append(tweet_model)
-
-        return tweets
 
     def _call(self):
         yield from Cursor(self._twitter_api_type, self.screen_name, tweet_mode='extended', count=50).items()
