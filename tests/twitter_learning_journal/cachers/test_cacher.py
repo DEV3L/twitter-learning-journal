@@ -5,13 +5,12 @@ from app.twitter_learning_journal.cachers.cacher import Cacher
 expected_cache_path = './data/pickle/tweets/screen name'
 expected_screen_name = 'screen name'
 
-
 @patch('app.twitter_learning_journal.cachers.cacher.makedirs')
 @patch('app.twitter_learning_journal.cachers.cacher.path')
 def test_init_cache_dir_exists(mock_path, mock_makedirs):
     mock_path.isdir.return_value = True
 
-    cacher = Cacher(expected_screen_name, None, None)
+    cacher = Cacher(None, None, sub_directory=expected_screen_name)
 
     mock_path.isdir.assert_called_with(cacher.cache_path)
     assert not mock_makedirs.called
@@ -22,7 +21,7 @@ def test_init_cache_dir_exists(mock_path, mock_makedirs):
 def test_init_cache_dir_not_exists(mock_path, mock_makedirs):
     mock_path.isdir.return_value = False
 
-    cacher = Cacher(expected_screen_name, None, None)
+    cacher = Cacher(None, None, sub_directory=expected_screen_name)
 
     mock_path.isdir.assert_called_with(cacher.cache_path)
     mock_makedirs.assert_called_with(cacher.cache_path)
@@ -34,7 +33,7 @@ def test_is_cached(mock_path):
     mock_path.isfile.return_value = expected_is_cached
     expected_file_path = f'{expected_cache_path}/1'
 
-    cacher = Cacher(expected_screen_name, None, '1')
+    cacher = Cacher(None, '1', sub_directory=expected_screen_name)
 
     is_cached = cacher.is_cached()
 
@@ -48,7 +47,7 @@ def test_is_not_cached(mock_path):
     mock_path.isfile.return_value = expected_is_cached
     expected_file_path = f'{expected_cache_path}/1'
 
-    cacher = Cacher(expected_screen_name, None, '1')
+    cacher = Cacher(None, '1', sub_directory=expected_screen_name)
 
     is_cached = cacher.is_cached()
 
@@ -58,7 +57,7 @@ def test_is_not_cached(mock_path):
 
 @patch('app.twitter_learning_journal.cachers.cacher.write_pickle_data')
 def test_cache(mock_write_pickle_data):
-    cacher = Cacher(expected_screen_name, 'test', '1')
+    cacher = Cacher('test', '1', sub_directory=expected_screen_name)
 
     cacher.cache()
 
@@ -70,7 +69,7 @@ def test_get(mock_load_pickle_data):
     expected_entity = 'test'
     mock_load_pickle_data.return_value = expected_entity
 
-    cacher = Cacher(expected_screen_name, 'test', '1')
+    cacher = Cacher('test', '1', sub_directory=expected_screen_name)
 
     entity = cacher.get()
 

@@ -6,7 +6,7 @@ from app.twitter_learning_journal.services.pickle_service import load_pickle_dat
 
 class CacheLoader(Cacher):
     def __init__(self, sub_directory):
-        super().__init__(sub_directory, None, None)
+        super().__init__(None, None, sub_directory=sub_directory)
 
     def load_cached_entities(self):
         entities = []

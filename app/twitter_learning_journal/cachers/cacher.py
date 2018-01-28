@@ -6,14 +6,16 @@ from app.twitter_learning_journal.services.pickle_service import write_pickle_da
 
 
 class Cacher:
-    def __init__(self, sub_directory: str, entity, entity_id, *, cache_type: str = tweet_cache_path):
-        self.sub_directory = sub_directory
-
+    def __init__(self, entity, entity_id, *, sub_directory: str = '', cache_type: str = tweet_cache_path):
         self.entity = entity
         self.entity_id = entity_id
+        self.sub_directory = sub_directory
+        self.cache_type = cache_type
+
+        entity_path = f'{sep}{entity_id}' if entity_id else ''
 
         self.cache_path = build_cache_path(cache_type=cache_type, sub_directory=sub_directory)
-        self.file_path = f'{self.cache_path}{sep}{entity_id}'
+        self.file_path = f'{self.cache_path}{entity_path}'
 
         self._init_cache_dir()
 
