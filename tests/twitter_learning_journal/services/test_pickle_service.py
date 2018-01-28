@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
-from app.twitter_learning_journal.services.pickle_service import load_pickle_data, write_pickle_data
+from app.twitter_learning_journal.services.pickle_service import load_pickle_data, write_pickle_data, \
+    serialize
 
 
 @patch('app.twitter_learning_journal.services.pickle_service.open')
@@ -22,3 +23,13 @@ def test_write_pickle_data(mock_pickle, mock_open):
 
     mock_open.assert_called_with('path', 'wb')
     mock_pickle.dump.assert_called_with('object', mock_open.return_value)
+
+
+@patch('app.twitter_learning_journal.services.pickle_service.pickle.dumps')
+def test_serialize(mock_dumps):
+    mock_dumps.return_value = b'value'
+    value = "value"
+
+    byte_value = serialize(value)
+
+    assert bytes(value, encoding='UTF-8') == byte_value
