@@ -4,40 +4,43 @@ from urllib.request import Request
 from bs4 import BeautifulSoup
 
 from app.twitter_learning_journal.cachers.webpage_cacher import WebpageCacher
-from app.twitter_learning_journal.dao.tweet_dao import TweetDao
-from app.twitter_learning_journal.database.sqlalchemy_database import Database
-from app.twitter_learning_journal.models.detail import Detail
+from app.twitter_learning_journal.services.logging_service import LoggingService
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 
+logger = LoggingService('Blogs')
 
-def count_html_words():
-    database = Database()
-    tweet_dao = TweetDao(database)
-    details = tweet_dao._database.query(Detail).all()
 
+def classify_blogs(details):
     print(f'total details: {len(details)}')
     detail_count = 1
 
-    for detail in details:
-        if not detail.url:
-            pass
+    unclassified_blogs = []
+    classified_blogs = []
+    _details = [detail for detail in details if detail.url]
 
+    for detail in _details:
+        is_other = False
+        for url in detail.url.split('|'):
+            if is_other:
+                break
+
+            for other_url_type in not_blog_urls:
+                if is_other:
+                    break
+
+                if other_url_type in url:
+                    logger.info(f'@@@@ URL looks like not blog: {url}')
+                    detail.is_fully_classified = False
+                    detail.type = 'other'
+                    unclassified_blogs.append(detail)
+                    is_other = True
+
+    _details = [detail for detail in _details if detail not in unclassified_blogs]
+
+    for detail in _details:
         total_count = 0
 
         for url in detail.url.split('|'):
-            is_blog = True
-
-            for video_url in not_blog_urls:
-                if video_url in url:
-                    print(f'@@@@ URL looks like not blog: {url}')
-                    detail.is_fully_classified = False
-                    detail.type = 'other'
-                    database.add(detail)
-                    is_blog = False
-
-            if not is_blog:
-                continue
-
             url = url.replace('www.google.com/amp/s/', '')
 
             if not url:
@@ -99,8 +102,9 @@ def count_html_words():
             continue
 
         detail.count = total_count
-        database.add(detail)
-    database.commit()
+        classified_blogs.append(detail)
+
+    return classified_blogs, unclassified_blogs
 
 
 def remove_auxiiary_tags(html):

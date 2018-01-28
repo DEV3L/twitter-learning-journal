@@ -4,7 +4,7 @@ from app.twitter_learning_journal.database.sqlalchemy_database import Database, 
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.retrievers.details.podcast import PodcastExtractor
 from app.twitter_learning_journal.retrievers.twitter_retriever import TwitterRetriever
-from scripts.blogs import count_html_words
+from scripts.blogs import classify_blogs
 from scripts.trainers.detail_trainer import train_details
 
 if __name__ == '__main__':
@@ -24,9 +24,12 @@ if __name__ == '__main__':
 
     train_details()
 
-    count_html_words()
-
     details = database.query(Detail).all()
+
+    classified_blogs, unclassified_blogs = classify_blogs(details)
+    database.add_all(classified_blogs)
+    database.add_all(unclassified_blogs)
+    database.commit()
 
     podcast_extractor = PodcastExtractor(details)
     podcast_extractor.classify()
