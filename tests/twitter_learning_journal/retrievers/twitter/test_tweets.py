@@ -9,7 +9,7 @@ from app.twitter_learning_journal.retrievers.twitter.tweets import Tweets
 
 @fixture(name='tweets')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
-@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacheLoader')
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.CacheLoader')
 def _tweets(mock_tweet_cache_loader, mock_tweet_cacher):
     mock_twitter_api = MagicMock()
     tweets = Tweets(mock_twitter_api, 'screen_name')
@@ -28,12 +28,12 @@ def test_cached_tweets_is_cached(tweets):
     assert expected_cached_tweets == tweets.cached_tweets
 
 
-@patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacheLoader')
-def test_cached_tweets(mock_tweet_cache_loader, tweets):
-    mock_tweet_cache_loader_instance = mock_tweet_cache_loader.return_value
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.CacheLoader')
+def test_cached_tweets(mock_cache_loader, tweets):
+    mock_cache_loader_instance = mock_cache_loader.return_value
 
-    assert mock_tweet_cache_loader_instance.load_cached_tweets.return_value == tweets.cached_tweets
-    mock_tweet_cache_loader.assert_called_with(tweets.screen_name)
+    assert mock_cache_loader_instance.load_cached_entities.return_value == tweets.cached_tweets
+    mock_cache_loader.assert_called_with(tweets.screen_name)
 
 
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.Cursor')

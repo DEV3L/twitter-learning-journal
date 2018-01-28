@@ -3,9 +3,9 @@ from datetime import datetime
 from tweepy import API
 from tweepy import Cursor
 
+from app.twitter_learning_journal.cachers.cache_loader import CacheLoader
 from app.twitter_learning_journal.models.raw_data import RawData
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader import TweetCacheLoader
 from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
 from app.twitter_learning_journal.services.pickle_service import serialize
 
@@ -25,8 +25,8 @@ class Tweets:
         if self._cached_tweets is not None:
             return self._cached_tweets
 
-        tweet_cache_loader = TweetCacheLoader(self.screen_name)
-        self._cached_tweets = tweet_cache_loader.load_cached_tweets()
+        tweet_cache_loader = CacheLoader(self.screen_name)
+        self._cached_tweets = tweet_cache_loader.load_cached_entities()
 
         return self._cached_tweets
 
