@@ -4,9 +4,9 @@ from tweepy import API
 from tweepy import Cursor
 
 from app.twitter_learning_journal.cachers.cache_loader import CacheLoader
+from app.twitter_learning_journal.cachers.tweet_cacher import TweetCacher
 from app.twitter_learning_journal.models.raw_data import RawData
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
 from app.twitter_learning_journal.services.pickle_service import serialize
 
 
