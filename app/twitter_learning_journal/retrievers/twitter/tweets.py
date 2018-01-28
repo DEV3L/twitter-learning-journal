@@ -3,6 +3,7 @@ from datetime import datetime
 from tweepy import API
 from tweepy import Cursor
 
+from app.twitter_learning_journal.models.raw_data import RawData
 from app.twitter_learning_journal.models.tweet import Tweet
 from app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader import TweetCacheLoader
 from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
@@ -67,7 +68,7 @@ class Tweets:
     def _get_tweet(self, call_response):
         full_text = self.extract_full_text(call_response)
         urls = self.extract_urls(call_response)
-        pickled_response = serialize(call_response)
+
 
         tweet_model = Tweet(
             id=call_response.id,
@@ -76,9 +77,12 @@ class Tweets:
             hashtags=self.extract_hashtags(call_response),
             urls='|'.join(urls),
             type=self.tweet_type,
-            raw_data=pickled_response
         )
 
+        pickled_response = serialize(call_response)
+        raw_data = RawData(tweet=tweet_model, raw_data=pickled_response)
+
+        tweet_model.raw_data.append(raw_data)
         return tweet_model
 
     @staticmethod

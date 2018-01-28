@@ -1,12 +1,12 @@
 from unittest.mock import patch
 
-from app.twitter_learning_journal.retrievers.twitter.cacher import Cacher
+from app.twitter_learning_journal.cachers.cacher import Cacher
 
 expected_screen_name = 'screen name'
 
 
-@patch('app.twitter_learning_journal.retrievers.twitter.cacher.makedirs')
-@patch('app.twitter_learning_journal.retrievers.twitter.cacher.path')
+@patch('app.twitter_learning_journal.cachers.cacher.makedirs')
+@patch('app.twitter_learning_journal.cachers.cacher.path')
 def test_init_cache_dir_exists(mock_path, mock_makedirs):
     mock_path.isdir.return_value = True
 
@@ -16,8 +16,8 @@ def test_init_cache_dir_exists(mock_path, mock_makedirs):
     assert not mock_makedirs.called
 
 
-@patch('app.twitter_learning_journal.retrievers.twitter.cacher.makedirs')
-@patch('app.twitter_learning_journal.retrievers.twitter.cacher.path')
+@patch('app.twitter_learning_journal.cachers.cacher.makedirs')
+@patch('app.twitter_learning_journal.cachers.cacher.path')
 def test_init_cache_dir_not_exists(mock_path, mock_makedirs):
     mock_path.isdir.return_value = False
 

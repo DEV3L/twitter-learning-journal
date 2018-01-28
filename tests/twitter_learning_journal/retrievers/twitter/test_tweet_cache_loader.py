@@ -16,7 +16,7 @@ def _tweet_cache_loader(mock_init_cache_dir):
 
 
 def test_tweet_cache_loader_init(tweet_cache_loader):
-    assert expected_screen_name == tweet_cache_loader.screen_name
+    assert expected_screen_name == tweet_cache_loader.sub_directory
     assert expected_cache_path == tweet_cache_loader.cache_path
 
 
