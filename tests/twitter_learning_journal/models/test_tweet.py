@@ -12,6 +12,7 @@ def test_tweet():
     word_count = 0
     classification = 'classification'
 
+    expected_raw_data = b'raw_data'
     expected_str = '<Tweet(id=1, ' \
                    f'created_at={created_at}, ' \
                    f'full_text={full_text}, ' \
@@ -28,11 +29,12 @@ def test_tweet():
         hashtags=hashtags,
         type=_type,
         word_count=word_count,
-        classification=classification
+        classification=classification,
+        raw_data=expected_raw_data
     )
 
     assert [] == tweet.details
     assert 0 == tweet.word_count
     assert None == tweet.is_fully_classified
-
+    assert expected_raw_data == tweet.raw_data
     assert expected_str == str(tweet)

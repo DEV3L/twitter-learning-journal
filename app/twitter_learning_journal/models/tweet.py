@@ -1,5 +1,4 @@
-from sqlalchemy import Boolean
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Binary, Boolean, Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
 from app.twitter_learning_journal.models import Base
@@ -22,6 +21,7 @@ class Tweet(Base):
     classification = Column(String)
     is_fully_classified = Column(Boolean, default=False)
 
+    raw_data = Column(Binary, default=None)
 
     def __str__(self):
         return f'<Tweet(id={self.id}, ' \
