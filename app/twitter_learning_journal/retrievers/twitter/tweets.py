@@ -6,6 +6,7 @@ from tweepy import Cursor
 from app.twitter_learning_journal.models.tweet import Tweet
 from app.twitter_learning_journal.retrievers.twitter.tweet_cache_loader import TweetCacheLoader
 from app.twitter_learning_journal.retrievers.twitter.tweet_cacher import TweetCacher
+from app.twitter_learning_journal.services.pickle_service import serialize
 
 
 class Tweets:
@@ -66,13 +67,16 @@ class Tweets:
     def _get_tweet(self, call_response):
         full_text = self.extract_full_text(call_response)
         urls = self.extract_urls(call_response)
+        pickled_response = serialize(call_response)
+
         tweet_model = Tweet(
             id=call_response.id,
             created_at=call_response.created_at,
             full_text=full_text,
             hashtags=self.extract_hashtags(call_response),
             urls='|'.join(urls),
-            type=self.tweet_type
+            type=self.tweet_type,
+            raw_data=pickled_response
         )
 
         return tweet_model

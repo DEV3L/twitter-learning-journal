@@ -49,9 +49,10 @@ def test_call(mock_cursor, tweets):
     mock_cursor.assert_called_with(tweets._twitter_api.favorites, 'screen_name', count=50, tweet_mode='extended')
 
 
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.serialize')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets._call')
-def test_get(mock_call, mock_tweet_cacher, tweets):
+def test_get(mock_call, mock_tweet_cacher, mock_byte_serialize_object, tweets):
     tweets._cached_tweets = []
     id = 1
     created_at = datetime.now()
@@ -80,7 +81,8 @@ def test_get(mock_call, mock_tweet_cacher, tweets):
         created_at=created_at,
         full_text=full_text,
         hashtags='some_text|other_text',
-        type='favorite'
+        type='favorite',
+        raw_data=mock_byte_serialize_object.return_value
     )
 
     tweets_list = tweets.get()
@@ -92,10 +94,12 @@ def test_get(mock_call, mock_tweet_cacher, tweets):
     assert mock_tweet_cacher.return_value.cache.called
 
 
+@patch('app.twitter_learning_journal.retrievers.twitter.tweets.serialize')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.TweetCacher')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets.extract_hashtags')
 @patch('app.twitter_learning_journal.retrievers.twitter.tweets.Tweets._call')
-def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_cacher, tweets):
+def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_cacher,
+                                   mock_byte_serialize_object, tweets):
     tweets._cached_tweets = []
     full_text = 'full_text'
 
@@ -107,7 +111,8 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_
         created_at=tweet_response.created_at,
         full_text=full_text,
         type='favorite',
-        hashtags=mock_extract_hashtags.return_value
+        hashtags=mock_extract_hashtags.return_value,
+        raw_data=mock_byte_serialize_object.return_value
     )
 
     tweets_list = tweets.get()
