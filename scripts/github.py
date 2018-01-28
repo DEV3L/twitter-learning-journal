@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 import requests
 
-pickle_dir = './data/pickle/'
+pickle_dir = './data/pickle/github/'
 json_dir = './data/json/'
 
 repository_commits_json_file = f'{json_dir}repository_commits.json'
@@ -24,10 +24,12 @@ def _get_url(url):
 
     try:
         response = pickle.load(open(url_sha, 'rb'))
+        if response.status_code != 200:
+            raise Exception()
     except:
         response = requests.get(url)
         pickle.dump(response, open(url_sha, 'wb'))
-        time.sleep(5)
+        time.sleep(2)
 
     return response
 
