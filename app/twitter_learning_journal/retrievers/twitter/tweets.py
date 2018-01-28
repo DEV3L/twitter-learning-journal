@@ -71,6 +71,7 @@ class Tweets:
 
 
         tweet_model = Tweet(
+            screen_name=self.screen_name,
             id=call_response.id,
             created_at=call_response.created_at,
             full_text=full_text,

@@ -8,13 +8,3 @@ def test_detail_builder_init():
     detail_builder = DetailBuilder(tweet)
 
     assert tweet == detail_builder.tweet
-
-# @mark.parametrize('expected_title, tweet_text', [
-#     ('Title', 'Title'),
-#     ('title', 'title\n'),
-#     ('title', 'title\nextn'),
-#     ('url_value',)
-#
-# ])
-# def test_build_title():
-#     pass

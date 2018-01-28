@@ -49,5 +49,5 @@ def test_load_cached_entitys(mock_path, cache_loader):
     cached_entities = cache_loader.load_cached_entities()
 
     assert expected_cached_entitys == cached_entities
-    mock_load_cached_entity.assert_called_with(_object)
+    mock_load_cached_entity.assert_called_with(_object, is_include_cache_path=False)
     mock_path.assert_called_with(cache_loader.cache_path)

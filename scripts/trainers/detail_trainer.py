@@ -5,23 +5,27 @@ from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 from scripts.trainers.script_dependencies import make_database
 
+logging_level = logging.WARNING
 logger = logging.getLogger('detail_trainer')
 
+
+def _log(message):
+    logger.log(logging_level, message)
 
 def train_details():
     database = make_database()
     tweet_dao = TweetDao(database)
 
-    print('Detail trainer: Iterate through all non fully classified Tweets')
+    _log('Detail trainer: Iterate through all non fully classified Tweets')
     _tweets = tweet_dao.query_all()
 
-    print(f'Total Tweets: {len(_tweets)}')
+    _log(f'Total Tweets: {len(_tweets)}')
 
     _tweets = get_unclassified_tweets(_tweets)
 
     total = len(_tweets)
 
-    print(f'Total Tweets Not Fully Classified: {total}')
+    _log(f'Total Tweets Not Fully Classified: {total}')
 
     keywords = ['read',
                 'listen',
@@ -40,37 +44,29 @@ def train_details():
         has_quoted_keywords = False
         _full_text = ' '.join(remove_ignore_characters_from_str(tweet.full_text).split()).lower()
 
-        print('-----TWEET-----')
-        print(f' classification: {tweet.classification}')
-        print(f' url: {tweet.urls}')
-        print(f' {tweet.full_text}')
+        _log('-----TWEET-----')
+        _log(f' classification: {tweet.classification}')
+        _log(f' url: {tweet.urls}')
+        _log(f' {tweet.full_text}')
 
         for keyword in keywords:
             if keyword in _full_text:
+                logger.warning(f'"{keyword}" found in {_full_text}')
                 has_keywords = True
 
             if f'"{keyword}"' in _full_text or f"'{keyword}'" in _full_text:
                 has_quoted_keywords = True
 
         if has_keywords and not has_quoted_keywords:
-            if tweet.urls:
-                detail = create_detail(tweet, database)
-                print(f'Detail created: {detail}')
-
-                total_details += 1
-            else:
-                create_detail(tweet, database, detail_type='keyword')
-                # handle these later
-                # books, audio, videos
-                print()  # breakpoint for debugger to hit
-                continue
+            # handle these later books, audio, videos
+            create_detail(tweet, database, detail_type='keyword')
         elif not tweet.urls:
-            print('No details for tweet')
-            print('processed')
+            _log('No details for tweet')
+            _log('processed')
             tweet.is_fully_classified = True
         else:
             detail = create_detail(tweet, database)
-            print(f'Detail created: {detail}')
+            _log(f'Detail created: {detail}')
 
             total_details += 1
 
@@ -79,14 +75,15 @@ def train_details():
         database.commit()
         total_processed += 1
 
-    print(total_processed)
+    _log(total_processed)
 
     database.commit()
-    print('Done')
+    _log('Done')
 
 
 def create_detail(tweet, database, *, detail_type='blog'):
     detail = build_detail(tweet, detail_type=detail_type)
+    _log(f'created:\n{detail}')
     database.add(detail)
     return detail
 
