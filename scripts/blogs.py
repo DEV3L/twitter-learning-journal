@@ -3,6 +3,7 @@ from urllib.request import Request
 
 from bs4 import BeautifulSoup
 
+from app.twitter_learning_journal.cachers.webpage_cacher import WebpageCacher
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
@@ -39,14 +40,25 @@ def count_html_words():
 
             url = url.replace('www.google.com/amp/s/', '')
 
-            _request = Request(url)
-            _request.headers = headers
-
-            try:
-                html = request.urlopen(_request).read().decode('utf8')
-            except Exception as e:
-                print(f'could not open url: {url}')
+            if not url:
                 continue
+
+            webpage_cacher = WebpageCacher(url)
+
+            if not webpage_cacher.is_cached():
+                _request = Request(url)
+                _request.headers = headers
+
+                try:
+                    html = request.urlopen(_request).read().decode('utf8')
+                except Exception as e:
+                    print(f'could not open url: {url}')
+                    continue
+
+                webpage_cacher.entity = html
+                webpage_cacher.cache()
+            else:
+                html = webpage_cacher.get()
 
             html = remove_auxiiary_tags(html)
 
