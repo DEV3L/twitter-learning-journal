@@ -1,6 +1,24 @@
 {
   "archive": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "archive"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "archive"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "archive"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -293,27 +311,27 @@
       "stop_date": "2017-02-04",
       "count": 0,
       "repository": "archive"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "archive"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "archive"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
-      "count": 0,
-      "repository": "archive"
     }
   ],
   "courses": [
+    {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "courses"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "courses"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "courses"
+    },
     {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
@@ -605,30 +623,30 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "courses"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "courses"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "courses"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "courses"
     }
   ],
   "docker-node-js-webpack": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "docker-node-js-webpack"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "docker-node-js-webpack"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "docker-node-js-webpack"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -823,13 +841,13 @@
     {
       "start_date": "2017-05-21",
       "stop_date": "2017-05-27",
-      "count": 1,
+      "count": 0,
       "repository": "docker-node-js-webpack"
     },
     {
       "start_date": "2017-05-14",
       "stop_date": "2017-05-20",
-      "count": 0,
+      "count": 1,
       "repository": "docker-node-js-webpack"
     },
     {
@@ -865,13 +883,13 @@
     {
       "start_date": "2017-04-02",
       "stop_date": "2017-04-08",
-      "count": 1,
+      "count": 0,
       "repository": "docker-node-js-webpack"
     },
     {
       "start_date": "2017-03-26",
       "stop_date": "2017-04-01",
-      "count": 0,
+      "count": 1,
       "repository": "docker-node-js-webpack"
     },
     {
@@ -919,29 +937,343 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "docker-node-js-webpack"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "docker-node-js-webpack"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "docker-node-js-webpack"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "docker-node-js-webpack"
     }
   ],
+  "meda-sync-search": [
+    {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 5,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 16,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 25,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-12-31",
+      "stop_date": "2018-01-06",
+      "count": 1,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-12-24",
+      "stop_date": "2017-12-30",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-12-17",
+      "stop_date": "2017-12-23",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-12-10",
+      "stop_date": "2017-12-16",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-12-03",
+      "stop_date": "2017-12-09",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-11-26",
+      "stop_date": "2017-12-02",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-11-19",
+      "stop_date": "2017-11-25",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-11-12",
+      "stop_date": "2017-11-18",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-11-05",
+      "stop_date": "2017-11-11",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-10-29",
+      "stop_date": "2017-11-04",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-10-22",
+      "stop_date": "2017-10-28",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-10-15",
+      "stop_date": "2017-10-21",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-10-08",
+      "stop_date": "2017-10-14",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-10-01",
+      "stop_date": "2017-10-07",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-09-24",
+      "stop_date": "2017-09-30",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-09-17",
+      "stop_date": "2017-09-23",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-09-10",
+      "stop_date": "2017-09-16",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-09-03",
+      "stop_date": "2017-09-09",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-08-27",
+      "stop_date": "2017-09-02",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-08-20",
+      "stop_date": "2017-08-26",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-08-13",
+      "stop_date": "2017-08-19",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-08-06",
+      "stop_date": "2017-08-12",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-07-30",
+      "stop_date": "2017-08-05",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-07-23",
+      "stop_date": "2017-07-29",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-07-16",
+      "stop_date": "2017-07-22",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-07-09",
+      "stop_date": "2017-07-15",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-07-02",
+      "stop_date": "2017-07-08",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-06-25",
+      "stop_date": "2017-07-01",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-06-18",
+      "stop_date": "2017-06-24",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-06-11",
+      "stop_date": "2017-06-17",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-06-04",
+      "stop_date": "2017-06-10",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-05-28",
+      "stop_date": "2017-06-03",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-05-21",
+      "stop_date": "2017-05-27",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-05-14",
+      "stop_date": "2017-05-20",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-05-07",
+      "stop_date": "2017-05-13",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-04-30",
+      "stop_date": "2017-05-06",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-04-23",
+      "stop_date": "2017-04-29",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-04-16",
+      "stop_date": "2017-04-22",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-04-09",
+      "stop_date": "2017-04-15",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-04-02",
+      "stop_date": "2017-04-08",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-03-26",
+      "stop_date": "2017-04-01",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-03-19",
+      "stop_date": "2017-03-25",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-03-12",
+      "stop_date": "2017-03-18",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-03-05",
+      "stop_date": "2017-03-11",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-02-26",
+      "stop_date": "2017-03-04",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-02-19",
+      "stop_date": "2017-02-25",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-02-12",
+      "stop_date": "2017-02-18",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-02-05",
+      "stop_date": "2017-02-11",
+      "count": 0,
+      "repository": "meda-sync-search"
+    },
+    {
+      "start_date": "2017-01-29",
+      "stop_date": "2017-02-04",
+      "count": 0,
+      "repository": "meda-sync-search"
+    }
+  ],
   "python-files-by-date": [
+    {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "python-files-by-date"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "python-files-by-date"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "python-files-by-date"
+    },
     {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
@@ -1227,36 +1559,36 @@
     {
       "start_date": "2017-02-05",
       "stop_date": "2017-02-11",
-      "count": 41,
+      "count": 31,
       "repository": "python-files-by-date"
     },
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 4,
-      "repository": "python-files-by-date"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 4,
-      "repository": "python-files-by-date"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "python-files-by-date"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
-      "count": 0,
+      "count": 11,
       "repository": "python-files-by-date"
     }
   ],
   "python-flask-blockchain": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "python-flask-blockchain"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "python-flask-blockchain"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "python-flask-blockchain"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -1307,7 +1639,7 @@
     {
       "start_date": "2017-11-05",
       "stop_date": "2017-11-11",
-      "count": 3,
+      "count": 0,
       "repository": "python-flask-blockchain"
     },
     {
@@ -1319,13 +1651,13 @@
     {
       "start_date": "2017-10-22",
       "stop_date": "2017-10-28",
-      "count": 4,
+      "count": 3,
       "repository": "python-flask-blockchain"
     },
     {
       "start_date": "2017-10-15",
       "stop_date": "2017-10-21",
-      "count": 0,
+      "count": 4,
       "repository": "python-flask-blockchain"
     },
     {
@@ -1547,30 +1879,30 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "python-flask-blockchain"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "python-flask-blockchain"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "python-flask-blockchain"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "python-flask-blockchain"
     }
   ],
   "python-heroku-twitter-tweet-generator": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "python-heroku-twitter-tweet-generator"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "python-heroku-twitter-tweet-generator"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "python-heroku-twitter-tweet-generator"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -1699,13 +2031,13 @@
     {
       "start_date": "2017-08-06",
       "stop_date": "2017-08-12",
-      "count": 4,
+      "count": 0,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
       "start_date": "2017-07-30",
       "stop_date": "2017-08-05",
-      "count": 0,
+      "count": 4,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
@@ -1753,25 +2085,25 @@
     {
       "start_date": "2017-06-04",
       "stop_date": "2017-06-10",
-      "count": 2,
+      "count": 0,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
       "start_date": "2017-05-28",
       "stop_date": "2017-06-03",
-      "count": 1,
+      "count": 2,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
       "start_date": "2017-05-21",
       "stop_date": "2017-05-27",
-      "count": 12,
+      "count": 9,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
       "start_date": "2017-05-14",
       "stop_date": "2017-05-20",
-      "count": 0,
+      "count": 4,
       "repository": "python-heroku-twitter-tweet-generator"
     },
     {
@@ -1861,30 +2193,30 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "python-heroku-twitter-tweet-generator"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "python-heroku-twitter-tweet-generator"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "python-heroku-twitter-tweet-generator"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "python-heroku-twitter-tweet-generator"
     }
   ],
   "python-katas": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 2,
+      "repository": "python-katas"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 2,
+      "repository": "python-katas"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "python-katas"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -1899,13 +2231,13 @@
     {
       "start_date": "2017-12-17",
       "stop_date": "2017-12-23",
-      "count": 7,
+      "count": 2,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-12-10",
       "stop_date": "2017-12-16",
-      "count": 0,
+      "count": 5,
       "repository": "python-katas"
     },
     {
@@ -1929,13 +2261,13 @@
     {
       "start_date": "2017-11-12",
       "stop_date": "2017-11-18",
-      "count": 2,
+      "count": 1,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-11-05",
       "stop_date": "2017-11-11",
-      "count": 0,
+      "count": 1,
       "repository": "python-katas"
     },
     {
@@ -1953,13 +2285,13 @@
     {
       "start_date": "2017-10-15",
       "stop_date": "2017-10-21",
-      "count": 1,
+      "count": 0,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-10-08",
       "stop_date": "2017-10-14",
-      "count": 0,
+      "count": 1,
       "repository": "python-katas"
     },
     {
@@ -1995,25 +2327,25 @@
     {
       "start_date": "2017-08-27",
       "stop_date": "2017-09-02",
-      "count": 1,
+      "count": 0,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-08-20",
       "stop_date": "2017-08-26",
-      "count": 3,
+      "count": 1,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-08-13",
       "stop_date": "2017-08-19",
-      "count": 18,
+      "count": 5,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-08-06",
       "stop_date": "2017-08-12",
-      "count": 1,
+      "count": 17,
       "repository": "python-katas"
     },
     {
@@ -2055,13 +2387,13 @@
     {
       "start_date": "2017-06-18",
       "stop_date": "2017-06-24",
-      "count": 4,
+      "count": 0,
       "repository": "python-katas"
     },
     {
       "start_date": "2017-06-11",
       "stop_date": "2017-06-17",
-      "count": 0,
+      "count": 4,
       "repository": "python-katas"
     },
     {
@@ -2177,342 +2509,28 @@
       "stop_date": "2017-02-04",
       "count": 0,
       "repository": "python-katas"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "python-katas"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "python-katas"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
-      "count": 0,
-      "repository": "python-katas"
-    }
-  ],
-  "python-package-archetype": [
-    {
-      "start_date": "2017-12-31",
-      "stop_date": "2018-01-06",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-12-24",
-      "stop_date": "2017-12-30",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-12-17",
-      "stop_date": "2017-12-23",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-12-10",
-      "stop_date": "2017-12-16",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-12-03",
-      "stop_date": "2017-12-09",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-11-26",
-      "stop_date": "2017-12-02",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-11-19",
-      "stop_date": "2017-11-25",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-11-12",
-      "stop_date": "2017-11-18",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-11-05",
-      "stop_date": "2017-11-11",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-10-29",
-      "stop_date": "2017-11-04",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-10-22",
-      "stop_date": "2017-10-28",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-10-15",
-      "stop_date": "2017-10-21",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-10-08",
-      "stop_date": "2017-10-14",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-10-01",
-      "stop_date": "2017-10-07",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-09-24",
-      "stop_date": "2017-09-30",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-09-17",
-      "stop_date": "2017-09-23",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-09-10",
-      "stop_date": "2017-09-16",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-09-03",
-      "stop_date": "2017-09-09",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-08-27",
-      "stop_date": "2017-09-02",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-08-20",
-      "stop_date": "2017-08-26",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-08-13",
-      "stop_date": "2017-08-19",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-08-06",
-      "stop_date": "2017-08-12",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-07-30",
-      "stop_date": "2017-08-05",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-07-23",
-      "stop_date": "2017-07-29",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-07-16",
-      "stop_date": "2017-07-22",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-07-09",
-      "stop_date": "2017-07-15",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-07-02",
-      "stop_date": "2017-07-08",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-06-25",
-      "stop_date": "2017-07-01",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-06-18",
-      "stop_date": "2017-06-24",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-06-11",
-      "stop_date": "2017-06-17",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-06-04",
-      "stop_date": "2017-06-10",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-05-28",
-      "stop_date": "2017-06-03",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-05-21",
-      "stop_date": "2017-05-27",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-05-14",
-      "stop_date": "2017-05-20",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-05-07",
-      "stop_date": "2017-05-13",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-04-30",
-      "stop_date": "2017-05-06",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-04-23",
-      "stop_date": "2017-04-29",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-04-16",
-      "stop_date": "2017-04-22",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-04-09",
-      "stop_date": "2017-04-15",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-04-02",
-      "stop_date": "2017-04-08",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-03-26",
-      "stop_date": "2017-04-01",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-03-19",
-      "stop_date": "2017-03-25",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-03-12",
-      "stop_date": "2017-03-18",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-03-05",
-      "stop_date": "2017-03-11",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-02-26",
-      "stop_date": "2017-03-04",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-02-19",
-      "stop_date": "2017-02-25",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-02-12",
-      "stop_date": "2017-02-18",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-02-05",
-      "stop_date": "2017-02-11",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-01-29",
-      "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "python-package-archetype"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
-      "count": 1,
-      "repository": "python-package-archetype"
     }
   ],
   "track-my-beer": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 0,
+      "repository": "track-my-beer"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 0,
+      "repository": "track-my-beer"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "track-my-beer"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
       "count": 0,
@@ -2545,19 +2563,19 @@
     {
       "start_date": "2017-11-26",
       "stop_date": "2017-12-02",
-      "count": 3,
+      "count": 0,
       "repository": "track-my-beer"
     },
     {
       "start_date": "2017-11-19",
       "stop_date": "2017-11-25",
-      "count": 4,
+      "count": 6,
       "repository": "track-my-beer"
     },
     {
       "start_date": "2017-11-12",
       "stop_date": "2017-11-18",
-      "count": 6,
+      "count": 7,
       "repository": "track-my-beer"
     },
     {
@@ -2803,45 +2821,45 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "track-my-beer"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "track-my-beer"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "track-my-beer"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "track-my-beer"
     }
   ],
   "twitter-learning-journal": [
     {
+      "start_date": "2018-01-21",
+      "stop_date": "2018-01-27",
+      "count": 10,
+      "repository": "twitter-learning-journal"
+    },
+    {
+      "start_date": "2018-01-14",
+      "stop_date": "2018-01-20",
+      "count": 30,
+      "repository": "twitter-learning-journal"
+    },
+    {
+      "start_date": "2018-01-07",
+      "stop_date": "2018-01-13",
+      "count": 0,
+      "repository": "twitter-learning-journal"
+    },
+    {
       "start_date": "2017-12-31",
       "stop_date": "2018-01-06",
-      "count": 12,
+      "count": 16,
       "repository": "twitter-learning-journal"
     },
     {
       "start_date": "2017-12-24",
       "stop_date": "2017-12-30",
-      "count": 34,
+      "count": 15,
       "repository": "twitter-learning-journal"
     },
     {
       "start_date": "2017-12-17",
       "stop_date": "2017-12-23",
-      "count": 4,
+      "count": 29,
       "repository": "twitter-learning-journal"
     },
     {
@@ -3117,24 +3135,6 @@
     {
       "start_date": "2017-01-29",
       "stop_date": "2017-02-04",
-      "count": 0,
-      "repository": "twitter-learning-journal"
-    },
-    {
-      "start_date": "2017-01-22",
-      "stop_date": "2017-01-28",
-      "count": 0,
-      "repository": "twitter-learning-journal"
-    },
-    {
-      "start_date": "2017-01-15",
-      "stop_date": "2017-01-21",
-      "count": 0,
-      "repository": "twitter-learning-journal"
-    },
-    {
-      "start_date": "2017-01-08",
-      "stop_date": "2017-01-14",
       "count": 0,
       "repository": "twitter-learning-journal"
     }
