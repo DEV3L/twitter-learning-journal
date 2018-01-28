@@ -3,15 +3,13 @@ from collections import defaultdict
 from app.twitter_learning_journal.transformers.transform_datetime import transform_datetime_to_iso_date_str
 from scripts.models.aggregate_result import AggregateResult
 from scripts.models.report_entry import ReportEntry
-from scripts.podcasts import podcast_words_per_minute
 
 
 def process_podcasts(podcasts):
     aggregate_result = AggregateResult('Podcasts')
 
     for podcast in podcasts:
-        words = podcast.count
-        minutes = words / podcast_words_per_minute
+        minutes = podcast.count
         hours = minutes / 60
 
         podcast_date_key = transform_datetime_to_iso_date_str(podcast.start_date)
