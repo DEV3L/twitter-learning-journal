@@ -23,13 +23,21 @@ By doing this, there are a great deal of things we can measure!
 
 
 # Environment Variables
+VARIABLE_NAME `Default`
 * Twitter Api Credentials
   * TWITTER_ACCESS_TOKEN
   * TWITTER_CONSUMER_KEY
   * TWITTER_CONSUMER_SECRET
   * TWITTER_TOKEN_SECRET
-
-
+* Logging
+  * DEFAULT_LOGGING_FORMAT `%(asctime)s - %(name)s - %(levelname)s - %(message)s`
+  * DEFAULT_LOGGING_LEVEL `20`
+* Pickle Cache Directories
+  * CACHE_PATH `./data/pickle`
+  * WEBPAGE_CACHE_PATH `./data/pickle/web_pages/`
+  * TWEET_CACHE_PATH `./data/pickle/tweets/`
+  * GITHUB_CACHE_PATH `./data/pickle/tweets/`
+  
 # References
 
 * [Introduction to SQLite In Python](https://www.pythoncentral.io/introduction-to-sqlite-in-python/)
