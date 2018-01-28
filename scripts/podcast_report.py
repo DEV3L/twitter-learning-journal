@@ -10,7 +10,7 @@ def process_podcasts(podcasts):
     aggregate_result = AggregateResult('Podcasts')
 
     for podcast in podcasts:
-        words = podcast.word_count
+        words = podcast.count
         minutes = words / podcast_words_per_minute
         hours = minutes / 60
 

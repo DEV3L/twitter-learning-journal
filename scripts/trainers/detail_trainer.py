@@ -1,41 +1,11 @@
+import logging
+
+from app.twitter_learning_journal.builders.detail_builder import build_detail
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
-from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 from scripts.trainers.script_dependencies import make_database
 
-
-def create_detail(tweet, database, *, detail_type='blog'):
-    _title = tweet.full_text.splitlines()[0]
-    title = tweet.urls or _title.lower()
-    full_text_without_ignore_characters = remove_ignore_characters_from_str(tweet.full_text.lower())
-
-    if tweet.urls and full_text_without_ignore_characters.startswith('listened to'):
-        lines = full_text_without_ignore_characters.splitlines()
-        title = ' '.join(lines[0].replace('listened to', '').split()).strip()
-
-    detail = Detail(title=title)
-    detail.tweet_id = tweet.id
-    detail.start_date = tweet.created_at
-    detail.stop_date = tweet.created_at
-    detail.title = title
-    detail.url = tweet.urls
-    detail.is_fully_classified = True
-
-    if 'listened to' in tweet.full_text.lower():
-        detail.type = 'podcast'
-        detail.word_count = 20
-    else:
-        detail.type = 'blog'
-        detail.word_count = 500
-
-    if detail_type:
-        detail.type = detail_type
-
-    detail.classification = tweet.classification
-
-    database.add(detail)
-
-    return detail
+logger = logging.getLogger('detail_trainer')
 
 
 def train_details():
@@ -47,15 +17,20 @@ def train_details():
 
     print(f'Total Tweets: {len(_tweets)}')
 
-    _tweets = [tweet for tweet in _tweets if not tweet.is_fully_classified]
-    _tweets = [tweet for tweet in _tweets if tweet.type == 'tweet']
-    _tweets = sorted(_tweets, key=lambda x: x.created_at, reverse=True)
+    _tweets = get_unclassified_tweets(_tweets)
 
     total = len(_tweets)
 
     print(f'Total Tweets Not Fully Classified: {total}')
 
-    keywords = ['read', 'listen', 'listened', 'listened to', 'watched', 'watch']
+    keywords = ['read',
+                'listen',
+                'listened',
+                'listened to',
+                'watched',
+                'watch',
+                'attended',
+                'attending']
 
     total_processed = 0
     total_details = 0
@@ -63,7 +38,6 @@ def train_details():
     for tweet in _tweets:
         has_keywords = False
         has_quoted_keywords = False
-        _full_text_original = tweet.full_text
         _full_text = ' '.join(remove_ignore_characters_from_str(tweet.full_text).split()).lower()
 
         print('-----TWEET-----')
@@ -109,6 +83,19 @@ def train_details():
 
     database.commit()
     print('Done')
+
+
+def create_detail(tweet, database, *, detail_type='blog'):
+    detail = build_detail(tweet, detail_type=detail_type)
+    database.add(detail)
+    return detail
+
+
+def get_unclassified_tweets(tweets):
+    tweets = [tweet for tweet in tweets if not tweet.is_fully_classified]
+    tweets = [tweet for tweet in tweets if tweet.type == 'tweet']
+    tweets = sorted(tweets, key=lambda x: x.created_at, reverse=True)
+    return tweets
 
 
 if __name__ == '__main__':

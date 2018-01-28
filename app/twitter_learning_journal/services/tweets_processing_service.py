@@ -25,8 +25,8 @@ class TweetsProcessingService:
     def count_tweet_words(self):
         for tweet in self.tweets:
             _full_text = remove_ignore_characters_from_str(tweet.full_text)
-            word_count = count_tokens(_full_text)
-            tweet.word_count = word_count
+            count = count_tokens(_full_text)
+            tweet.count = count
 
     def classify_tweets(self):
         [TweetClassifier(tweet, classification_model=self.classification_model).classify()

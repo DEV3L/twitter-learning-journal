@@ -11,7 +11,7 @@ def test_detail():
     _type = 'type'
     title = 'title'
     url = 'url'
-    word_count = 0
+    count = 0
     classification = 'classification'
     is_fully_classified = None
 
@@ -22,7 +22,7 @@ def test_detail():
                    f'type={_type}, ' \
                    f'title={title}, ' \
                    f'url={url}, ' \
-                   f'word_count={word_count}, ' \
+                   f'count={count}, ' \
                    f'classification={classification}, ' \
                    f'is_fully_classified={is_fully_classified})>'
 
@@ -33,7 +33,7 @@ def test_detail():
         type=_type,
         title=title,
         url=url,
-        word_count=word_count,
+        count=count,
         classification=classification
     )
 

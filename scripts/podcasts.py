@@ -27,7 +27,7 @@ def count_podcast_words(details):
             else:
                 logger.warning(f'Podcast url: {url} not mapped')
 
-        detail.word_count = minutes * podcast_words_per_minute
+        detail.count = minutes * podcast_words_per_minute
     return podcast_details
 
 podcast_urls_and_times = {

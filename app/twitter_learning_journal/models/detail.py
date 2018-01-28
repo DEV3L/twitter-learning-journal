@@ -22,7 +22,7 @@ class Detail(Base):
     type = Column(String)
     title = Column(String)
     url = Column(String)
-    word_count = Column(Integer)
+    count = Column(Integer)
     classification = Column(String)
     is_fully_classified = Column(Boolean, default=False)
 
@@ -34,7 +34,7 @@ class Detail(Base):
                f'type={self.type}, ' \
                f'title={self.title}, ' \
                f'url={self.url}, ' \
-               f'word_count={self.word_count}, ' \
+               f'count={self.count}, ' \
                f'classification={self.classification}, ' \
                f'is_fully_classified={self.is_fully_classified})>'
 

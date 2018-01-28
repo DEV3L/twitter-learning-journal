@@ -12,11 +12,11 @@ def process_books(report_start_date, report_stop_date, books):
 
     for book in books:
         pages = book.pages - devaiation_book_pages
-        word_count = pages * average_words_per_page
+        count = pages * average_words_per_page
 
         days_to_read_book = (book.stop_date - book.start_date).days + 1
 
-        total_minutes = word_count / average_reading_speed_in_minutes
+        total_minutes = count / average_reading_speed_in_minutes
         total_hours = total_minutes / 60
 
         average_knowlege_consumption_velocity = total_hours / days_to_read_book

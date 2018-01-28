@@ -47,8 +47,8 @@ def _build_title(tweet):
 def _set_detail_type_and_size(detail, tweet):
     if 'listened to' in tweet.full_text.lower():
         detail.type = 'podcast'
-        detail.word_count = 20
+        detail.count = 20
     else:
         detail.type = 'blog'
 
-        detail.word_count = default_blog_size
+        detail.count = default_blog_size

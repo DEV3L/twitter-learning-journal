@@ -29,6 +29,15 @@ class Tweets:
 
         return self._cached_tweets
 
+    def get(self):
+        tweets = []
+
+        if self.has_new_tweets():
+            self._get_from_twitter(tweets)
+
+        tweets.extend(self.cached_tweets)
+        return tweets
+
     def has_new_tweets(self):
         if not self.cached_tweets:
             return True
@@ -41,15 +50,6 @@ class Tweets:
         hours_since_last_cached_tweet = (seconds_since_last_cached_tweet / 60) / 60
 
         return hours_since_last_cached_tweet > self._realtime_rate_in_hours
-
-    def get(self):
-        tweets = []
-
-        if self.has_new_tweets():
-            self._get_from_twitter(tweets)
-
-        tweets.extend(self.cached_tweets)
-        return tweets
 
     def _get_from_twitter(self, tweets):
         for call_response in self._call():

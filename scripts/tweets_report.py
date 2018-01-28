@@ -10,7 +10,7 @@ def process_tweets(tweets):
     aggregate_result = AggregateResult('Tweets')
 
     for tweet in tweets:
-        words = tweet.word_count
+        words = tweet.count
         tweet_date_key = transform_datetime_to_iso_date_str(tweet.created_at)
         minutes = words / average_tweet_reading_speed
         hours = minutes / 60

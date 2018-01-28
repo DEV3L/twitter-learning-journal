@@ -13,7 +13,7 @@ def _add_tweets_to_timeline(tweets, timeline):
 def _count_tweet_words(tweets):
     tweet_words = 0
     for tweet in tweets:
-        tweet_words += tweet.word_count
+        tweet_words += tweet.count
     return tweet_words
 
 
@@ -45,12 +45,12 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
     for detail in details:
         if detail.type == 'podcast':
             total_podcasts += 1
-            podcast_words += detail.word_count
+            podcast_words += detail.count
         elif detail.type != 'blog':
             continue
         else:
             total_blogs += 1
-            blog_words += detail.word_count
+            blog_words += detail.count
 
     for key in sorted(timeline.keys()):
         tweets = [tweet for tweet in timeline[key]]
@@ -65,7 +65,7 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
             if not classification_value:
                 classification_value = 'not_classified'
 
-            classification_values[classification_value] += tweet.word_count
+            classification_values[classification_value] += tweet.count
 
         for audio_detail in audio_books:
             if key_date >= audio_detail.start_date and key_date <= audio_detail.stop_date:
@@ -87,7 +87,7 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
         for detail in [detail for detail in details if detail.is_fully_classified]:
             if detail.start_date is not None and \
                             detail.stop_date is not None and \
-                            detail.word_count is not None:
+                            detail.count is not None:
 
                 print(
                     f'type:{detail.type}, start_date:{detail.start_date.date()}, '
@@ -97,8 +97,8 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
                     total_days = (detail.stop_date - detail.start_date).days
                     total_days += 1
 
-                    word_count = detail.word_count or 0
-                    total_words = word_count
+                    count = detail.count or 0
+                    total_words = count
 
                     if detail.type == 'audio':
                         """
@@ -106,7 +106,7 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
                         "publishers recommend books on tape to be voiced at 150-160 wpm"
                         """
                         words_per_minute = 10  # 125  # well below stated suggestion
-                        total_words = words_per_minute * word_count
+                        total_words = words_per_minute * count
 
                     average_words_per_day = total_words / total_days
                     classification_values[detail.classification] += average_words_per_day
@@ -123,7 +123,7 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
             classification_count = classification_values.get(classification_name)
             classification[classification_name].append(classification_count or 0)
 
-        print(f'date={key}:tweets_count={count}:total_words={word_count}|classifications:{display_str}')
+        print(f'date={key}:tweets_count={count}:total_words={count}|classifications:{display_str}')
 
     _audio_books = []
 
@@ -160,9 +160,9 @@ def create_timeline(start_date, stop_date, tweets: list, details: list, audio_bo
 
         data = ''
         classifcation_total_words = 0
-        for word_count in classification[classification_name]:
-            classifcation_total_words += word_count
-            data += f'{word_count},'
+        for count in classification[classification_name]:
+            classifcation_total_words += count
+            data += f'{count},'
 
         classification_counts[classification_name] += classifcation_total_words
 

@@ -21,7 +21,7 @@ def count_html_words():
         if not detail.url:
             pass
 
-        total_words = 0
+        total_count = 0
 
         for url in detail.url.split('|'):
             is_blog = True
@@ -77,16 +77,16 @@ def count_html_words():
                 words = words - devation
 
             print(f'counted words: {words}')
-            total_words += words
+            total_count += words
 
         detail_count += 1
 
         print(f'processed: {detail_count}')
 
-        if total_words == 0:
+        if total_count == 0:
             continue
 
-        detail.word_count = total_words
+        detail.count = total_count
         database.add(detail)
     database.commit()
 

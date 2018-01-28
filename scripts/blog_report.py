@@ -10,7 +10,7 @@ def process_blogs(blogs):
     aggregate_result = AggregateResult('Blogs')
 
     for blog in blogs:
-        words = blog.word_count
+        words = blog.count
         blog_date_key = transform_datetime_to_iso_date_str(blog.start_date)
         minutes = words / average_blog_reading_speed
         hours = minutes / 60
