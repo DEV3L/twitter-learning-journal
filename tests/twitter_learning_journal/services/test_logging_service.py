@@ -55,19 +55,28 @@ def test_create_stream_handler(mock_logging, logging_service):
     assert mock_logging.StreamHandler.return_value == stream_handler
 
 
-def test_log_message(logging_service):
+def test_info(logging_service):
     mock_logger = MagicMock()
     logging_service._logger = mock_logger
 
-    logging_service.log_message('message')
+    logging_service.info('message')
 
     mock_logger.info.assert_called_with('message')
 
 
-def test_log_warning(logging_service):
+def test_warning(logging_service):
     mock_logger = MagicMock()
     logging_service._logger = mock_logger
 
-    logging_service.log_exception('message')
+    logging_service.warning('message')
+
+    mock_logger.warning.assert_called_with('message')
+
+
+def test_exception(logging_service):
+    mock_logger = MagicMock()
+    logging_service._logger = mock_logger
+
+    logging_service.exception('message')
 
     mock_logger.exception.assert_called_with('message')

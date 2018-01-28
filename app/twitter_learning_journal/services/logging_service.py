@@ -24,10 +24,13 @@ class LoggingService:
         self._logger = self._build_logger()
         return self._logger
 
-    def log_message(self, message):
+    def info(self, message):
         self.logger.info(message)
 
-    def log_exception(self, message):
+    def warning(self, message):
+        self.logger.warning(message)
+
+    def exception(self, message):
         self.logger.exception(message)
 
     def _build_logger(self):
