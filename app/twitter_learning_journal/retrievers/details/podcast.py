@@ -43,9 +43,9 @@ class PodcastExtractor:
             if counter:
                 counter_str = counter[0]
                 try:
-                    minutes = int(counter_str[1:].replace('m', ''))
-                except:
-                    pass
+                    minutes = int(counter_str[1:].replace('m', '').strip())
+                except ValueError:
+                    logger.warning(f'{counter_str} not parsed')
 
             detail.type = 'podcast'
 
