@@ -17,8 +17,6 @@ def build_detail(tweet, *, detail_type='blog'):
 
     detail = Detail(title=title,
                     tweet_id=tweet.id,
-                    start_date=tweet.created_at,
-                    stop_date=tweet.created_at,
                     url=tweet.urls,
                     is_fully_classified=True,
                     classification=tweet.classification)

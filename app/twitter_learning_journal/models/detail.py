@@ -1,6 +1,5 @@
 from sqlalchemy import Boolean
 from sqlalchemy import Column
-from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -17,8 +16,6 @@ class Detail(Base):
     tweet_id = Column(Integer, ForeignKey('tweet.id'))
     tweet = relationship('Tweet', back_populates='details')
 
-    start_date = Column(DateTime)
-    stop_date = Column(DateTime)
     type = Column(String)
     title = Column(String)
     url = Column(String)
@@ -29,8 +26,6 @@ class Detail(Base):
     def __str__(self):
         return f'<Detail(id={self.id}, ' \
                f'tweet_id={self.tweet_id}, ' \
-               f'start_date={self.start_date}, ' \
-               f'stop_date={self.stop_date}, ' \
                f'type={self.type}, ' \
                f'title={self.title}, ' \
                f'url={self.url}, ' \
