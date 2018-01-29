@@ -17,29 +17,56 @@ class PodcastExtractor:
     @property
     def podcasts(self):
         # share url from pocket cast has 'pca.st' in it
-        podcasts = [detail for detail in self.details if 'pca.st' in detail.url]
+        podcasts = [detail for detail in self.details
+                    if 'pca.st' in detail.url or
+                    'listened to' in detail.tweet.full_text.lower() or
+                    'listend to' in detail.tweet.full_text.lower()]
         return podcasts
 
     def classify(self):
         podcasts = self.podcasts
 
         for detail in podcasts:
-            detail.type = 'podcast'
+            full_text = detail.tweet.full_text
+            full_text = full_text \
+                .replace('@AgileUprising\nPodcast', '@AgileUprising Podcast') \
+                .replace('@AgileUprising', 'Agile Uprising')
+
+            if 'listened to' in full_text.lower() \
+                    or 'listend to' in full_text.lower():
+                title = ':'.join(full_text.split('\n')[0].split(':')[1:]).strip()
+                detail.title = title
+
             minutes = self.podcast_default_minutes
+            counter = [line for line in full_text.split('\n') if line.startswith('^')]
+
+            if counter:
+                counter_str = counter[0]
+                try:
+                    minutes = int(counter_str[1:].replace('m', ''))
+                except:
+                    pass
+
+            detail.type = 'podcast'
 
             for url in detail.url.split('|'):
                 # auto extraction to be implemented
                 if url in podcast_urls_and_times:
                     minutes = podcast_urls_and_times[url]
-                    detail.is_fully_classified = True
-                else:
-                    logger.warning(f'Podcast url: {url} not mapped')
 
             detail.count = minutes
+
+            if self.podcast_default_minutes == minutes:
+                logger.warning(f'Default time on podcast:{detail.id} - {detail.title}')
+            else:
+                detail.is_fully_classified = True
 
 
 # manually extracted times predates count ^ identifier
 podcast_urls_and_times = {
+    'https://ryanripley.com/afh-074-the-past-present-future-of-scrum/': 76,
+    'http://pca.st/up86': 70,
+    'http://pca.st/8Y4G': 75,
     'http://pca.st/Z0Kh': 42,
     'http://pca.st/9GMB': 78,
     'http://pca.st/Ha6R': 49,
@@ -52,7 +79,7 @@ podcast_urls_and_times = {
     'http://pca.st/Lc6p': 25,
     'http://pca.st/H4Ym': 56,
     'http://pca.st/7zSP': 30,
-    'http://pca.st/8TLM': 20,
+    'http://pca.st/8TLM': 21,
     'http://pca.st/uRCi': 50,
     'http://pca.st/q9RK': 57,
     'http://pca.st/nN91': 62,
