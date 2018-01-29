@@ -5,6 +5,7 @@ from scripts import clean_title
 
 
 class BookDetail:
+    screen_name = None
     start_date = None
     stop_date = None
     title = None

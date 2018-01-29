@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.twitter_learning_journal.models import Base
 from app.twitter_learning_journal.models.detail import Detail
-from app.twitter_learning_journal.models.raw_data import RawData
+from app.twitter_learning_journal.models.tweet_raw_data import TweetRawData
 
 
 class Tweet(Base):
@@ -12,7 +12,7 @@ class Tweet(Base):
     id = Column(Integer, primary_key=True)
 
     details = relationship(Detail, back_populates='tweet')
-    raw_data = relationship(RawData, back_populates='tweet')
+    tweet_raw_data = relationship(TweetRawData, back_populates='tweet')
 
     screen_name = Column(String)
     created_at = Column(DateTime)

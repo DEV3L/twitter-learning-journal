@@ -5,8 +5,8 @@ from tweepy import Cursor
 
 from app.twitter_learning_journal.cachers.cache_loader import CacheLoader
 from app.twitter_learning_journal.cachers.tweet_cacher import TweetCacher
-from app.twitter_learning_journal.models.raw_data import RawData
 from app.twitter_learning_journal.models.tweet import Tweet
+from app.twitter_learning_journal.models.tweet_raw_data import TweetRawData
 from app.twitter_learning_journal.services.pickle_service import serialize
 
 
@@ -81,9 +81,9 @@ class Tweets:
         )
 
         pickled_response = serialize(call_response)
-        raw_data = RawData(tweet=tweet_model, raw_data=pickled_response)
+        raw_data = TweetRawData(tweet=tweet_model, raw_data=pickled_response)
 
-        tweet_model.raw_data.append(raw_data)
+        tweet_model.tweet_raw_data.append(raw_data)
         return tweet_model
 
     @staticmethod

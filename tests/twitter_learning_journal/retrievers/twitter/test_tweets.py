@@ -82,7 +82,7 @@ def test_get(mock_call, mock_tweet_cacher, mock_byte_serialize_object, tweets):
         full_text=full_text,
         hashtags='some_text|other_text',
         type='favorite',
-        raw_data=mock_byte_serialize_object.return_value
+        tweet_raw_data=mock_byte_serialize_object.return_value
     )
 
     tweets_list = tweets.get()
@@ -112,7 +112,7 @@ def test_get_with_retweeted_status(mock_call, mock_extract_hashtags, mock_tweet_
         full_text=full_text,
         type='favorite',
         hashtags=mock_extract_hashtags.return_value,
-        raw_data=mock_byte_serialize_object.return_value
+        tweet_raw_data=mock_byte_serialize_object.return_value
     )
 
     tweets_list = tweets.get()
