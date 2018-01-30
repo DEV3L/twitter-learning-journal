@@ -11,7 +11,7 @@ def process_blogs(blogs):
 
     for blog in blogs:
         words = blog.count
-        blog_date_key = transform_datetime_to_iso_date_str(blog.start_date)
+        blog_date_key = transform_datetime_to_iso_date_str(blog.tweet.created_at)
         minutes = words / average_blog_reading_speed
         hours = minutes / 60
 
@@ -52,8 +52,8 @@ def create_blog_report_entry(blog, minutes):
     report_entry.title = title
     report_entry.url = blog.title
     report_entry.classification = blog.classification
-    report_entry.start_date = blog.start_date.date()
-    report_entry.stop_date = blog.stop_date.date()
+    report_entry.start_date = blog.tweet.created_at.date()
+    report_entry.stop_date = blog.tweet.created_at.date()
     report_entry.length = f'{minutes:.2f} minutes'
     report_entry.distribution_percent = 1
 

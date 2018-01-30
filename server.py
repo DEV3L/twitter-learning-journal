@@ -62,7 +62,7 @@ def _index():
                        if report_start_date <= tweet.created_at <= report_stop_date]
 
     filtered_details = [detail for detail in details
-                        if report_stop_date >= detail.start_date >= report_start_date]
+                        if report_stop_date >= detail.tweet.created_at >= report_start_date]
 
     timeline = build_timeline(report_start_date, report_stop_date)
 

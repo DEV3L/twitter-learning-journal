@@ -12,7 +12,7 @@ def process_podcasts(podcasts):
         minutes = podcast.count
         hours = minutes / 60
 
-        podcast_date_key = transform_datetime_to_iso_date_str(podcast.start_date)
+        podcast_date_key = transform_datetime_to_iso_date_str(podcast.tweet.created_at)
 
         if podcast_date_key not in aggregate_result.timeline:
             aggregate_result.timeline[podcast_date_key] = defaultdict(int)
@@ -36,8 +36,8 @@ def create_podcast_report_entry(podcast, minutes):
 
     report_entry.title = title
     report_entry.classification = podcast.classification
-    report_entry.start_date = podcast.start_date.date()
-    report_entry.stop_date = podcast.stop_date.date()
+    report_entry.start_date = podcast.tweet.created_at.date()
+    report_entry.stop_date = podcast.tweet.created_at.date()
     report_entry.length = f'{int(minutes)} minutes'
     report_entry.distribution_percent = 1
 
