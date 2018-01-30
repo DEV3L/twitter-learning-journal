@@ -1,6 +1,6 @@
 import logging
 
-from app.twitter_learning_journal.builders.detail_builder import build_detail
+from app.twitter_learning_journal.builders.detail_builder import DetailBuilder
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
 from scripts.trainers.script_dependencies import make_database
@@ -82,7 +82,8 @@ def train_details():
 
 
 def create_detail(tweet, database, *, detail_type='blog'):
-    detail = build_detail(tweet, detail_type=detail_type)
+    detail_builder = DetailBuilder(tweet, detail_type=detail_type)
+    detail = detail_builder.build(tweet)
     _log(f'created:\n{detail}')
     database.add(detail)
     return detail

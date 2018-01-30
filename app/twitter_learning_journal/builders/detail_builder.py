@@ -1,52 +1,41 @@
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.models.tweet import Tweet
-from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
-
-default_podcast_size = 20
-default_video_size = 10
-default_blog_size = 500
 
 
 class DetailBuilder:
-    def __init__(self, tweet: Tweet):
+    default_detail_type = 'blog'
+    default_detail_size = 500
+    max_title_length = 30
+
+    def __init__(self, tweet: Tweet, detail_type=None):
         self.tweet = tweet
+        self.detail_type = detail_type or self.default_detail_type
 
+    def build(self):
+        detail = Detail(title=self.title,
+                        tweet_id=self.tweet.id,
+                        url=self.tweet.urls,
+                        type=self.detail_type,
+                        is_fully_classified=False,
+                        classification=self.tweet.classification,
+                        count=self.default_detail_size)
+        return detail
 
-def build_detail(tweet, *, detail_type='blog'):
-    title = _build_title(tweet)
+    @property
+    def title(self):
+        title = ''
+        full_text = self.tweet.full_text
 
-    detail = Detail(title=title,
-                    tweet_id=tweet.id,
-                    url=tweet.urls,
-                    is_fully_classified=True,
-                    classification=tweet.classification)
+        if not full_text.strip():
+            return title
 
-    _set_detail_type_and_size(detail, tweet)
+        line_number = 0
 
-    if detail_type:
-        detail.type = detail_type
+        while not title:
+            title = self.tweet.full_text.splitlines()[line_number]
+            line_number += 1
 
-    return detail
+        if len(title) > self.max_title_length:
+            title = title[:self.max_title_length]
 
-
-def _build_title(tweet):
-    _title = tweet.full_text.splitlines()[0]
-    title = _title
-
-    full_text_without_ignore_characters = remove_ignore_characters_from_str(tweet.full_text.lower())
-
-    if tweet.urls and full_text_without_ignore_characters.startswith('listened to'):
-        lines = full_text_without_ignore_characters.splitlines()
-        title = ' '.join(lines[0].replace('listened to', '').split()).strip()
-
-    return title
-
-
-def _set_detail_type_and_size(detail, tweet):
-    if 'listened to' in tweet.full_text.lower():
-        detail.type = 'podcast'
-        detail.count = 20
-    else:
-        detail.type = 'blog'
-
-        detail.count = default_blog_size
+        return title
