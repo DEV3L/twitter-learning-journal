@@ -7,3 +7,13 @@ def test_init():
     video_extractor = VideoExtractor(tweet)
 
     assert tweet == video_extractor.tweet
+
+    #
+    # @mark.parametrize('expected_video, full_text', [
+    #     (),
+    #     (),
+    #
+    # ])
+    # def test_extract():
+    #
+    #     pass
