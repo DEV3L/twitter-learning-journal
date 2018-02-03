@@ -52,7 +52,7 @@ class Tweets:
 
         return hours_since_last_cached_tweet > self._realtime_rate_in_hours
 
-    def _get_from_twitter(self, tweets):
+    def _get_from_twitter(self, tweets: list):
         for call_response in self._call():
             tweet_model = self._get_tweet(call_response)
 
