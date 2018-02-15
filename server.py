@@ -9,10 +9,10 @@ from app.twitter_learning_journal.controllers.dashboard import dashboard_bluepri
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
+from app.twitter_learning_journal.retrievers.details.books import get_books
 from scripts.audio_books import get_audio_books
 from scripts.blog_report import process_blogs
 from scripts.book_report import process_books, process_audio_books
-from scripts.books import get_books
 from scripts.github_report import process_github
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
