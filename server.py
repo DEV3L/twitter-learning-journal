@@ -6,6 +6,7 @@ from flask import Flask, render_template, request
 from flask_script import Manager
 
 from app.twitter_learning_journal.controllers.dashboard import dashboard_blueprint
+from app.twitter_learning_journal.controllers.login import login_blueprint
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
@@ -20,6 +21,7 @@ from scripts.tweets_report import process_tweets
 
 app = Flask(__name__)
 app.register_blueprint(dashboard_blueprint)
+app.register_blueprint(login_blueprint)
 
 manager = Manager(app)
 
