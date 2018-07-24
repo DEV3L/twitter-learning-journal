@@ -6,6 +6,10 @@ from datetime import datetime, timedelta
 
 import requests
 
+from app.twitter_learning_journal.services.logging_service import LoggingService
+
+logger = LoggingService('github')
+
 pickle_dir = './data/pickle/github/'
 json_dir = './data/json/'
 
@@ -24,11 +28,15 @@ def _get_url(url):
 
     try:
         response = pickle.load(open(url_sha, 'rb'))
+        logger.info(f'Cache Load: {url}')
         if response.status_code != 200:
             raise Exception()
     except:
         response = requests.get(url)
         pickle.dump(response, open(url_sha, 'wb'))
+        if response.status_code == 403:
+            return None
+        logger.info(f'Retrieved/Cached: {url}')
         time.sleep(2)
 
     return response
@@ -42,9 +50,16 @@ if __name__ == '__main__':
 
     repository_participations = []
     response_repositories = [repository for repository in response.json() if not repository['private']]
+    logger.info(f'Total repositories: {len(response_repositories)}')
+
     for repository in response_repositories:
+        logger.info(repository)
         participation_url = f'https://api.github.com/repos/DEV3L/{repository["name"]}/stats/participation'
         response = _get_url(participation_url)
+
+        if not response:
+            continue
+
         repository_participations.append((repository["name"], response.json()))
 
     repository_commits = {}
@@ -52,7 +67,11 @@ if __name__ == '__main__':
     for repository_name, repository_participation in repository_participations:
         repository_commit_history = []
 
-        owner_commits = repository_participation['owner']
+        try:
+            owner_commits = repository_participation['owner']
+        except:
+            logger.warning("Cache bad: " + repository_name)
+            continue
 
         if not sum(owner_commits) or repository_name == 'angular-starter':
             continue

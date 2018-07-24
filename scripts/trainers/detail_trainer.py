@@ -12,8 +12,7 @@ logger = logging.getLogger('detail_trainer')
 def _log(message):
     logger.log(logging_level, message)
 
-def train_details():
-    database = make_database()
+def train_details(database):
     tweet_dao = TweetDao(database)
 
     _log('Detail trainer: Iterate through all non fully classified Tweets')
@@ -83,7 +82,7 @@ def train_details():
 
 def create_detail(tweet, database, *, detail_type='blog'):
     detail_builder = DetailBuilder(tweet, detail_type=detail_type)
-    detail = detail_builder.build(tweet)
+    detail = detail_builder.build()
     _log(f'created:\n{detail}')
     database.add(detail)
     return detail
