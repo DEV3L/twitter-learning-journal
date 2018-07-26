@@ -3,15 +3,81 @@ from datetime import datetime
 from app.twitter_learning_journal.models.book import Book
 
 
-def get_books():
+def get_books(tweets):
+    books = [tweet for tweet in tweets
+                if 'finished reading' in tweet.full_text.lower() or
+                'started reading' in tweet.full_text.lower() or
+                'began reading' in tweet.full_text.lower()]
+
+    for book in books:
+        print(book)
+
+    # for detail in details:
+
+
+
     return legacy_books
 
+
+false_book_lines = [
+    'Finished reading The American Tycoon: A biography on Henry Ford (recommend if you want some corollaries for some modern events) Starting Turn the Ship Around! A True Story of Building Leaders by Breaking the Rules'
+]
 
 def _date(date_str):
     return datetime.strptime(date_str, '%Y-%m-%d')
 
-
 legacy_books = [
+    Book(screen_name='dev3l_',
+         title='Begging Node.js',
+         classification='engineering',
+         pages=308,
+         start_date=_date('2018-06-13'),
+         stop_date=_date('2018-07-24'),
+         ),
+    Book(screen_name='dev3l_',
+         title='Continuous Delivery',
+         classification='engineering',
+         pages=463,
+         start_date=_date('2018-03-17'),
+         stop_date=_date('2018-05-22'),
+         ),
+    Book(screen_name='dev3l_',
+         title='React for Real',
+         classification='engineering',
+         pages=120,
+         start_date=_date('2018-04-09'),
+         stop_date=_date('2018-04-12'),
+         ),
+    Book(screen_name='dev3l_',
+         title='Clean Architecture',
+         classification='engineering',
+         pages=432,
+         start_date=_date('2018-03-03'),
+         stop_date=_date('2018-04-07'),
+         ),
+    Book(screen_name='dev3l_',
+         title='The The Art of Saying No',
+         classification='agile',
+         pages=172,
+         start_date=_date('2018-02-13'),
+         stop_date=_date('2018-02-28'),
+         ),
+    Book(screen_name='dev3l_',
+         title='The Checklist Manifesto',
+         classification='leadership',
+         pages=208,
+         start_date=_date('2018-02-01'),
+         stop_date=_date('2018-02-25'),
+         ),
+    Book(screen_name='dev3l_',
+         title='Inspired - How To Create Products Customers Love',
+         classification='agile',
+         pages=242,
+         start_date=_date('2018-01-13'),
+         stop_date=_date('2018-01-27'),
+         ),
+
+
     Book(screen_name='dev3l_',
          title='Cracking the PM Interview',
          classification='agile',
@@ -52,7 +118,7 @@ legacy_books = [
          classification='agile',
          pages=400,
          start_date=_date('2017-08-09'),
-         stop_date=_date('2018-01-03'),
+         stop_date=_date('2018-01-07'),
          ),
     Book(screen_name='dev3l_',
          title='Pragmatic Thinking and Learning',

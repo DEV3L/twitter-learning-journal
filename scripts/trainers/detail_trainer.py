@@ -3,7 +3,7 @@ import logging
 from app.twitter_learning_journal.builders.detail_builder import DetailBuilder
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.transformers.transform_str import remove_ignore_characters_from_str
-from scripts.trainers.script_dependencies import make_database
+
 
 logging_level = logging.WARNING
 logger = logging.getLogger('detail_trainer')

@@ -69,7 +69,7 @@ def _index():
     timeline = build_timeline(report_start_date, report_stop_date)
 
     # books
-    books = [book for book in get_books()]
+    books = [book for book in get_books(tweets)]
     filtered_books = [book for book in books
                       if book.start_date <= report_stop_date and book.stop_date >= report_start_date]
     books_aggregate_result = process_books(report_start_date, report_stop_date, filtered_books)

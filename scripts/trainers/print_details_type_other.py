@@ -3,7 +3,7 @@ from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
 
 
-def classify_other_details():
+def print_details_type_other():
     database = Database()
     tweet_dao = TweetDao(database)
     details = tweet_dao._database.query(Detail).all()

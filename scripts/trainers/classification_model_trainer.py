@@ -1,53 +1,17 @@
+from app.twitter_learning_journal.classifiers import get_classification_model
 from app.twitter_learning_journal.classifiers.word_classifier import WordClassifier
 from app.twitter_learning_journal.dao.tweet_dao import TweetDao
+from app.twitter_learning_journal.database.sqlalchemy_database import Database
 
-classification_model = {
-    'engineering': {'iot', 'engineer', 'stranglerapplication', 'softwaredevelopment', 'nodejs', 'flask',
-                    '100daysofcode', 'dev', 'leaddev', 'bizdev', 'development', 'adventofcode', 'software',
-                    'deeplearning', 'less', 'mythicalmanmonth', 'opencv', 'lambda', 'codereview', 'docker', 'bigdata',
-                    'python', 'devops', 'es6', 'hacktoberfest', 'javascript', 'bots', 'devdiscuss', 'engineering',
-                    'myelixirstatus', 'machinelearning', 'elasticsearch', 'vuejs', 'microservices',
-                    'artificialintelligence', 'micropython', 'springone', 'codemash', 'reactjs', 'alldaydevops', 'mqtt',
-                    'ruby'},
-    'leadership': {'leadership', 'lead', 'anyonecanlead'},
-    'agile': {'agile', 'experimentation', 'connection', 'doersdecide', 'demo', 'agile2017', 'experiment', 'continuous',
-              'scrum', 'waste', 'continuousdelivery', 'flow', 'productbacklogitems', 'transformation',
-              'continuousimprovement', 'everydayagile', 'agileleadership', 'designthinking', 'personas',
-              'systemsthinking', 'digitaltransformation', 'wip', 'tasktop', 'orgdesign', 'growth', 'kanban',
-              'goalsetting', 'process', 'cynefin', 'change', 'autonomy', 'agileaus', 'xp', 'aatc2017', 'scrumban',
-              'people', 'disciplinedagile', 'kaizen', 'agilequotes', 'modernagile', 'leanagile', 'outcome', 'lean',
-              'value', 'onagile', 'trust'},
-    'management': {'management', 'teams', 'teamwork'},
-    'happiness': {'happiness', 'happycows', 'happinessadvantage', 'lifehacks'},
-    'culture': {'onshift, onshiftgsd', 'onshiftcares', 'onshiftpicnic', 'onshiftengineering', 'innovation', 'onshift',
-                'inverseconwaymaneuver', 'onshiftgsd', 'livelong', 'zenmonday', 'gsd', 'cultureaced', 'oshackday'},
-    'quality': {'softwaretesting', 'testautomation', 'watir', 'testing', 'cucumber', 'qa', 'makeyourownlane',
-                'pageobject', 'selenium'},
-    'other': {'valid', 'responsibility', 'ideservethis', 'computervision', 'jengacode', 'photo', 'dumb', 'westyaward',
-              'gameofthrones', 'gobblegobble', 'classic', 'virtual', 'turkishswiftie', 'got', 'friends',
-              'musiccitycode', 'itsjustnotthathard', 'vogue', 'anger', 'july4th', 'disappointed', 'happythanksgiving',
-              'laborday', 'successtips', 'cle', 'singer', 'modernsecurityseries', 'summer', 'sketchnote', 'failure',
-              'foreverswiftie', 'mha17', 'recommended', 'savethehorsies', 'lego', 'internet'},
-    'conferences': {'bettersoftwarecon', 'goat17', 'oredev', 'onagile2017', 'lightningtalks', 'oredev2017', 'srecon',
-                    'gotochgo', 'conference', 'pyconie', 'does17', 'pyohio', 'yow17', 'dataengconf', 'yow16'},
-    'startup': {'growthhacking', 'startup', 'entrepreneur', 'ceo', 'vc'},
-    'coach': {'mentorship', 'excellence', 'coaching', 'mentoring', 'techcoach', 'hourofcode', 'craft', 'refactoring',
-              'pairprogramming', 'agilecoach', 'transparency', 'mobprogramming', 'legacycode', 'extremeprogramming',
-              'tdd', 'comments', 'safe', 'scrummaster', 'programmerhumor', 'boyscoutrule', 'makingworkvisible',
-              'strongstylepairing'},
-    'learning': {'hypothesis', 'learning', 'reading', 'fail'},
-    'product': {'productmanagement', 'prodmgmt', 'product', 'servicedesign', 'ux', 'cx', 'ui', 'orddesign',
-                'productnerd', 'arch', 'productcraft', 'customerfirst', 'design'},
-    'diversity': {'diversity'},
-}
-
-from scripts.trainers.script_dependencies import make_database
 if __name__ == '__main__':
-    database = make_database()
+    database = Database()
     tweet_dao = TweetDao(database)
 
     _tweets = tweet_dao.query_all()
     total = len(_tweets)
+
+    classification_model = get_classification_model(None)  # global
+
     print(f'Total Tweets: {total}')
 
     for count, tweet in enumerate(_tweets):
