@@ -37,6 +37,7 @@ def _get_url(url):
         response = requests.get(url)
         pickle.dump(response, open(url_sha, 'wb'))
         if response.status_code == 403:
+            print("RATE LIMITED!!! TRY AGAIN LATER")
             return None
         logger.info(f'Retrieved/Cached: {url}')
         time.sleep(2)
@@ -46,7 +47,7 @@ def _get_url(url):
 
 if __name__ == '__main__':
     # run until all hits are cache loads or 403 github rate limit
-    github_user = 'jrj92280'
+    github_user = 'DEV3L'
     repositories_url = f'https://api.github.com/users/{github_user}/repos'
 
     response = _get_url(repositories_url)
