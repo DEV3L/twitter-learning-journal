@@ -31,7 +31,7 @@ default_report_start_date = '2017-03-01'
 default_report_stop_date = '2018-07-25'
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     try:
         return _index()
@@ -59,8 +59,9 @@ def _index():
 
     screen_name = request.args.get('screen_name', default_screen_name)
 
-    report_start_date, report_stop_date = get_report_date_ranges(request.args.get('report_start_date'),
-                                                                 request.args.get('report_stop_date'))
+    report_start_date, report_stop_date = get_report_date_ranges(
+        request.args.get('report_start_date') or request.form.get('report_start_date'),
+        request.args.get('report_stop_date') or request.form.get('report_stop_date'), )
 
     filtered_tweets = [tweet for tweet in tweets
                        if report_start_date <= tweet.created_at <= report_stop_date]
@@ -197,7 +198,9 @@ def _index():
                            tweet_entry_reports=tweet_entry_reports,
                            github_entry_reports=github_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
-                           akcv=f'{average_kcv:.2f} hours/day', )
+                           akcv=f'{average_kcv:.2f} hours/day',
+                           report_start_date=report_start_date.date(),
+                           report_stop_date=report_stop_date.date())
 
 
 def get_report_date_ranges(report_start_date_str, report_stop_date_str):
