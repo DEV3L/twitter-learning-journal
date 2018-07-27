@@ -45,6 +45,7 @@ def _get_url(url):
 
 
 if __name__ == '__main__':
+    # run until all hits are cache loads or 403 github rate limit
     github_user = 'jrj92280'
     repositories_url = f'https://api.github.com/users/{github_user}/repos'
 
@@ -56,7 +57,7 @@ if __name__ == '__main__':
 
     for repository in response_repositories:
         logger.info(repository)
-        participation_url = f'https://api.github.com/repos/DEV3L/{repository["name"]}/stats/participation'
+        participation_url = f'https://api.github.com/repos/{github_user}/{repository["name"]}/stats/participation'
         response = _get_url(participation_url)
 
         if not response:

@@ -50,7 +50,7 @@ def create_blog_report_entry(blog, minutes):
     title = title.title()
 
     report_entry.title = title
-    report_entry.url = blog.title
+    report_entry.url = blog.url
     report_entry.classification = blog.classification
     report_entry.start_date = blog.tweet.created_at.date()
     report_entry.stop_date = blog.tweet.created_at.date()

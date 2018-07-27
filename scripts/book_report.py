@@ -89,7 +89,7 @@ def process_videos(videos):
     aggregate_result = AggregateResult('Videos')
 
     for video in videos:
-        video.title = "title"
+        video.title = video.full_text
         video.start_date = video.created_at
         video.stop_date = video.created_at
 
@@ -122,8 +122,45 @@ def process_videos(videos):
 
     return aggregate_result
 
+def process_pairings(pairings):
+    aggregate_result = AggregateResult('Pairing')
 
-def create_book_report_entry(book, distribution_percent, *, is_book=True, is_video=False):
+    for pairing in pairings:
+        pairing.title = pairing.full_text
+        pairing.start_date = pairing.created_at
+        pairing.stop_date = pairing.created_at
+
+        pairing.length = 15
+
+        if pairing.full_text.find("^") != -1:
+            try:
+                counter = pairing.full_text[pairing.full_text.find("^") + 1:].split("\n")[0].replace("m", "")
+                pairing.length = int(counter)
+            except:
+                print(f'Could not parse counter: {pairing.full_text}')
+
+        total_hours = pairing.length / 60
+        knowlege_consumption_velocity = total_hours
+
+        pairing_date_key = transform_datetime_to_iso_date_str(pairing.created_at)
+
+        if pairing_date_key not in aggregate_result.timeline:
+            aggregate_result.timeline[pairing_date_key] = defaultdict(int)
+
+        aggregate_result.timeline[pairing_date_key][pairing.classification] += knowlege_consumption_velocity
+
+        aggregate_result.item_count += 1
+        aggregate_result.kcv += knowlege_consumption_velocity
+
+        pairing_report_entry = create_book_report_entry(pairing, 1, is_book=False, is_pairing=True)
+        aggregate_result.report_entries.append(pairing_report_entry)
+
+    aggregate_result.report_entries.sort(key=lambda pairing_report_entry: pairing_report_entry.start_date, reverse=True)
+
+    return aggregate_result
+
+
+def create_book_report_entry(book, distribution_percent, *, is_book=True, is_video=False, is_pairing=False):
     report_entry = ReportEntry()
 
     title = book.title.title()
@@ -137,6 +174,9 @@ def create_book_report_entry(book, distribution_percent, *, is_book=True, is_vid
         report_entry.length = f'{book.pages} pages'
     elif is_video:
         report_entry.medium = 'Video'
+        report_entry.length = f'{book.length} minutes'
+    elif is_pairing:
+        report_entry.medium = 'Paired'
         report_entry.length = f'{book.length} minutes'
     else:
         report_entry.medium = 'Audio Book'
