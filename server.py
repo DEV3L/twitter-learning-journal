@@ -11,10 +11,11 @@ from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.retrievers.details.books import get_books
+from app.twitter_learning_journal.retrievers.details.pairings import get_pairings
 from app.twitter_learning_journal.retrievers.details.videos import get_videos
 from scripts.audio_books import get_audio_books
 from scripts.blog_report import process_blogs
-from scripts.book_report import process_books, process_audio_books, process_videos
+from scripts.book_report import process_books, process_audio_books, process_videos, process_pairings
 from scripts.github_report import process_github
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
@@ -27,8 +28,8 @@ app.register_blueprint(login_blueprint)
 manager = Manager(app)
 
 default_screen_name = 'dev3l_'
-default_report_start_date = '2017-03-01'
-default_report_stop_date = '2018-07-25'
+default_report_start_date = '2018-05-04'
+default_report_stop_date = '2018-07-27'
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -50,6 +51,7 @@ def _index():
     tweet_entry_reports = []
     github_entry_reports = []
     video_entry_reports = []
+    pairing_entry_reports = []
 
     database = Database()
     tweet_dao = TweetDao(database)
@@ -124,6 +126,15 @@ def _index():
     aggregate_timelines.append(videos_aggregate_result.timeline)
     video_entry_reports.extend(videos_aggregate_result.report_entries)
 
+    # pairing
+    pairings = get_pairings(tweets)
+    filtered_pairings = [pairing for pairing in pairings
+                       if pairing.created_at <= report_stop_date and pairing.created_at >= report_start_date]
+    pairings_aggregate_result = process_pairings(filtered_pairings)
+    aggregates.append(pairings_aggregate_result)
+    aggregate_timelines.append(pairings_aggregate_result.timeline)
+    pairing_entry_reports.extend(pairings_aggregate_result.report_entries)
+
     # aggregates
     results = []
 
@@ -136,7 +147,8 @@ def _index():
         'Podcasts': 'podcasts',
         'Blogs': 'blogs',
         'Tweets': 'tweets/favorites',
-        'Videos': 'videos'
+        'Videos': 'videos',
+        'Pairing': 'pairing'
     }
 
     for aggregate in aggregates:
@@ -197,6 +209,8 @@ def _index():
                            podcast_entry_reports=podcast_entry_reports,
                            tweet_entry_reports=tweet_entry_reports,
                            github_entry_reports=github_entry_reports,
+                           video_entry_reports=video_entry_reports,
+                           pairing_entry_reports=pairing_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day',
                            report_start_date=report_start_date.date(),
