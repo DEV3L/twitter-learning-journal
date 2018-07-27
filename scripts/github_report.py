@@ -75,7 +75,7 @@ def create_github_report_entry(weekly_commit, minutes_per_day, overlap):
     title = weekly_commit['repository']
 
     report_entry.title = title
-    report_entry.url = f'https://github.com/DEV3L/{title}'
+    report_entry.url = f'https://github.com/jrj92280/{title}'
     report_entry.classification = 'engineering'
     report_entry.start_date = weekly_commit['start_date']
     report_entry.stop_date = weekly_commit['stop_date']

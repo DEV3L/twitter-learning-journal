@@ -29,6 +29,8 @@ def _get_url(url):
     try:
         response = pickle.load(open(url_sha, 'rb'))
         logger.info(f'Cache Load: {url}')
+        if response.status_code == 404:
+            return None
         if response.status_code != 200:
             raise Exception()
     except:
@@ -43,7 +45,7 @@ def _get_url(url):
 
 
 if __name__ == '__main__':
-    github_user = 'DEV3L'
+    github_user = 'jrj92280'
     repositories_url = f'https://api.github.com/users/{github_user}/repos'
 
     response = _get_url(repositories_url)
