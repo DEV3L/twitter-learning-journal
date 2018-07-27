@@ -37,10 +37,54 @@ def get_audio_books():
 
     return [book for book in audio_books.values()]
 
-
 audio_book_data = {
-    # making work visible
+    # hard thing about hard things
+    ('started listening to: the hard thing about hard things', '2018-07-06', 'audio book', 'start', 477, 'agile'),
+    ('finished listening to: the hard thing about hard things', '2018-07-17', 'audio book', 'stop', 477, 'agile'),
 
+    # talent code
+    ('started listening to: the talent code', '2018-06-25', 'audio book', 'start', 366, 'agile'),
+    ('finished listening to: the talent code', '2018-07-06', 'audio book', 'stop', 366, 'agile'),
+
+    # pitch perfect
+    ('started listening to: talk like ted', '2018-06-04', 'audio book', 'start', 462, 'leadership'),
+    ('finished listening to: talk like ted', '2018-06-25', 'audio book', 'stop', 462, 'leadership'),
+
+    # pitch perfect
+    ('started listening to: pitch perfect', '2018-05-22', 'audio book', 'start', 471, 'leadership'),
+    ('finished listening to: pitch perfect', '2018-06-04', 'audio book', 'stop', 471, 'leadership'),
+
+    # linchpin
+    ('started listening to: linchpin: are you indispensable?', '2018-04-30', 'audio book', 'start', 507, 'leadership'),
+    ('finished listening to: linchpin: are you indispensable?', '2018-05-22', 'audio book', 'stop', 507, 'leadership'),
+
+    # the four
+    ('started listening to: the four: the hidden dna of amazon, apple, facebook, and google',
+     '2018-04-12', 'audio book', 'start', 512, 'leadership'),
+    ('finished listening to: the four: the hidden dna of amazon, apple, facebook, and google',
+     '2018-04-30', 'audio book', 'stop', 512, 'leadership'),
+
+    # accelerate
+    ('started listening to: accelerate: building and scaling high performing technology organizations',
+     '2018-04-01', 'audio book', 'start', 298, 'agile'),
+    ('finished listening to: accelerate: building and scaling high performing technology organizations',
+     '2018-04-12', 'audio book', 'stop', 298, 'agile'),
+
+    # principles
+    ('started listening to: principles', '2018-03-04', 'audio book', 'start', 964, 'leadership'),
+    ('finished listening to: principles', '2018-04-01', 'audio book', 'stop', 964, 'leadership'),
+
+    # the personal mba
+    ('started listening to: the personal mba', '2018-02-12', 'audio book', 'start', 805, 'leadership'),
+    ('finished listening to: the personal mba', '2018-03-03', 'audio book', 'stop', 805, 'leadership'),
+
+    # how to measure anything
+    ('started listening to: how to measure anything', '2018-01-04', 'audio book', 'start', 760, 'agile'),
+    ('finished listening to: how to measure anything', '2018-02-12', 'audio book', 'stop', 760, 'agile'),
+
+
+
+    # making work visible
     ('started listening to: making work visible', '2017-12-11', 'audio book', 'start', 310, 'agile'),
     ('finished listening to: making work visible', '2017-12-16', 'audio book', 'stop', 310, 'agile'),
 

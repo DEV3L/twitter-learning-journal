@@ -11,9 +11,10 @@ from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.retrievers.details.books import get_books
+from app.twitter_learning_journal.retrievers.details.videos import get_videos
 from scripts.audio_books import get_audio_books
 from scripts.blog_report import process_blogs
-from scripts.book_report import process_books, process_audio_books
+from scripts.book_report import process_books, process_audio_books, process_videos
 from scripts.github_report import process_github
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
@@ -26,8 +27,8 @@ app.register_blueprint(login_blueprint)
 manager = Manager(app)
 
 default_screen_name = 'dev3l_'
-default_report_start_date = '2017-11-28'
-default_report_stop_date = '2017-12-28'
+default_report_start_date = '2017-03-01'
+default_report_stop_date = '2018-07-25'
 
 
 @app.route("/")
@@ -48,6 +49,7 @@ def _index():
     blogs_entry_reports = []
     tweet_entry_reports = []
     github_entry_reports = []
+    video_entry_reports = []
 
     database = Database()
     tweet_dao = TweetDao(database)
@@ -69,7 +71,7 @@ def _index():
     timeline = build_timeline(report_start_date, report_stop_date)
 
     # books
-    books = [book for book in get_books(tweets)]
+    books = get_books(tweets)
     filtered_books = [book for book in books
                       if book.start_date <= report_stop_date and book.stop_date >= report_start_date]
     books_aggregate_result = process_books(report_start_date, report_stop_date, filtered_books)
@@ -112,6 +114,15 @@ def _index():
     aggregate_timelines.append(tweet_aggregate_result.timeline)
     tweet_entry_reports.extend(tweet_aggregate_result.report_entries)
 
+    # videos
+    videos = get_videos(tweets)
+    filtered_videos = [video for video in videos
+                       if video.created_at <= report_stop_date and video.created_at >= report_start_date]
+    videos_aggregate_result = process_videos(filtered_videos)
+    aggregates.append(videos_aggregate_result)
+    aggregate_timelines.append(videos_aggregate_result.timeline)
+    video_entry_reports.extend(videos_aggregate_result.report_entries)
+
     # aggregates
     results = []
 
@@ -123,7 +134,8 @@ def _index():
         'GitHub': 'commits',
         'Podcasts': 'podcasts',
         'Blogs': 'blogs',
-        'Tweets': 'tweets/favorites'
+        'Tweets': 'tweets/favorites',
+        'Videos': 'videos'
     }
 
     for aggregate in aggregates:

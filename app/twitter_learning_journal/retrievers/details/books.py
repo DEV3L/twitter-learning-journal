@@ -4,17 +4,13 @@ from app.twitter_learning_journal.models.book import Book
 
 
 def get_books(tweets):
-    books = [tweet for tweet in tweets
-                if 'finished reading' in tweet.full_text.lower() or
-                'started reading' in tweet.full_text.lower() or
-                'began reading' in tweet.full_text.lower()]
-
-    for book in books:
-        print(book)
-
-    # for detail in details:
-
-
+    # books = [tweet for tweet in tweets
+    #             if 'finished reading' in tweet.full_text.lower() or
+    #             'started reading' in tweet.full_text.lower() or
+    #             'began reading' in tweet.full_text.lower()]
+    #
+    # for book in books:
+    #     print(book)
 
     return legacy_books
 
@@ -27,6 +23,13 @@ def _date(date_str):
     return datetime.strptime(date_str, '%Y-%m-%d')
 
 legacy_books = [
+    Book(screen_name='dev3l_',
+         title='The Art of Scalability: Scalable Web Architecture, Processes, and Organizations for the Modern Enterprise',
+         classification='engineering',
+         pages=559,
+         start_date=_date('2018-07-24'),
+         stop_date=_date('2018-09-24'),
+         ),
     Book(screen_name='dev3l_',
          title='Begging Node.js',
          classification='engineering',

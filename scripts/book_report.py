@@ -85,14 +85,48 @@ def process_audio_books(report_start_date, report_stop_date, audio_books):
     return aggregate_result
 
 
-def create_book_report_entry(book, distribution_percent, *, is_book=True):
+def process_videos(videos):
+    aggregate_result = AggregateResult('Videos')
+
+    for video in videos:
+        video.title = "title"
+        video.start_date = video.created_at
+        video.stop_date = video.created_at
+
+        video.length = 2.5
+
+        if video.full_text.find("^") != -1:
+            try:
+                counter = video.full_text[video.full_text.find("^") + 1:].split("\n")[0].replace("m", "")
+                video.length = int(counter)
+            except:
+                print(f'Could not parse counter: {video.full_text}')
+
+        total_hours = video.length / 60
+        knowlege_consumption_velocity = total_hours
+
+        video_date_key = transform_datetime_to_iso_date_str(video.created_at)
+
+        if video_date_key not in aggregate_result.timeline:
+            aggregate_result.timeline[video_date_key] = defaultdict(int)
+
+        aggregate_result.timeline[video_date_key][video.classification] += knowlege_consumption_velocity
+
+        aggregate_result.item_count += 1
+        aggregate_result.kcv += knowlege_consumption_velocity
+
+        video_report_entry = create_book_report_entry(video, 1, is_book=False, is_video=True)
+        aggregate_result.report_entries.append(video_report_entry)
+
+    aggregate_result.report_entries.sort(key=lambda video_report_entry: video_report_entry.start_date, reverse=True)
+
+    return aggregate_result
+
+
+def create_book_report_entry(book, distribution_percent, *, is_book=True, is_video=False):
     report_entry = ReportEntry()
 
     title = book.title.title()
-    if 'Pm' in title:
-        title = title.replace('Pm', 'PM')
-    if 'F*Cked' in title:
-        title = title.replace('F*Cked', 'F*cked')
 
     report_entry.title = title
     report_entry.classification = book.classification
@@ -101,6 +135,9 @@ def create_book_report_entry(book, distribution_percent, *, is_book=True):
 
     if is_book:
         report_entry.length = f'{book.pages} pages'
+    elif is_video:
+        report_entry.medium = 'Video'
+        report_entry.length = f'{book.length} minutes'
     else:
         report_entry.medium = 'Audio Book'
         report_entry.length = f'{int(book.length)} minutes'
