@@ -25,10 +25,12 @@ def _sha_url(url):
 
 def _get_url(url):
     url_sha = f'{pickle_dir}{_sha_url(url)}'
-
+    
     try:
         response = pickle.load(open(url_sha, 'rb'))
         logger.info(f'Cache Load: {url}')
+        if response.status_code == 404:
+            return None
         if response.status_code != 200:
             raise Exception()
     except:
