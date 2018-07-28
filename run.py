@@ -8,19 +8,19 @@ from scripts.blogs import classify_blogs
 from scripts.trainers.detail_trainer import train_details
 
 if __name__ == '__main__':
-    screen_name = 'dev3l_'
+    screen_name = 'stahlish'
 
     database = Database()
-    build_tables(database)
-    tweet_dao = TweetDao(database)
-
-    twitter_tweet_retriever = TwitterRetriever(tweet_dao, screen_name)
-    twitter_tweet_retriever.fetch()
-
-    tweets = tweet_dao.query_all()
-    tweets_classifier = TweetsClassifier(tweets)
-    tweets_classifier.classify()
-    database.commit_entities(tweets)
+    # build_tables(database)
+    # tweet_dao = TweetDao(database)
+    #
+    # twitter_tweet_retriever = TwitterRetriever(tweet_dao, screen_name)
+    # twitter_tweet_retriever.fetch()
+    #
+    # tweets = tweet_dao.query_all()
+    # tweets_classifier = TweetsClassifier(tweets)
+    # tweets_classifier.classify()
+    # database.commit_entities(tweets)
 
     train_details(database)
 

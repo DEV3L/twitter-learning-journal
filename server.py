@@ -29,9 +29,9 @@ app.register_blueprint(login_blueprint)
 
 manager = Manager(app)
 
-default_screen_name = 'dev3l_'
+default_screen_name = 'stahlish'
 default_report_start_date = '2017-04-10'
-default_report_stop_date = '2018-07-27'
+default_report_stop_date = '2018-07-28'
 
 
 @app.route("/", methods=['GET', 'POST'])

@@ -47,7 +47,7 @@ def _get_url(url):
 
 if __name__ == '__main__':
     # run until all hits are cache loads or 403 github rate limit
-    github_user = 'DEV3L'
+    github_user = 'stahlscott'
     repositories_url = f'https://api.github.com/users/{github_user}/repos'
 
     response = _get_url(repositories_url)
