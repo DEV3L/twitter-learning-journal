@@ -173,6 +173,35 @@
         </div>
         <hr/>
         <div class="container-fluid">
+            <h2>Conferences</h2>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-sm table-striped table-bordered">
+                    <caption>Conferences</caption>
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Length</th>
+                        <th>Classification</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for entry_report in conference_entry_reports %}
+                        <tr>
+                            <td><span title="{{ entry_report.url }}">{{ entry_report.title }}</span></td>
+                            <td>{{ entry_report.length }}</td>
+                            <td>{{ entry_report.classification }}</td>
+                            <td>{{ entry_report.start_date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr/>
+        <div class="container-fluid">
             <h2>Blogs</h2>
         </div>
         <div class="row">
@@ -229,13 +258,14 @@
                 </table>
             </div>
         </div>
+        <hr/>
         <div class="container-fluid">
             <h2>Pairings</h2>
         </div>
         <div class="row">
             <div class="col">
                 <table class="table table-sm table-striped table-bordered">
-                    <caption>Videos</caption>
+                    <caption>Pairings</caption>
                     <thead>
                     <tr>
                         <th>Title</th>
@@ -257,6 +287,7 @@
                 </table>
             </div>
         </div>
+        <hr/>
         <div class="container-fluid">
             <h2>Tweets</h2>
         </div>
@@ -285,6 +316,7 @@
                 </table>
             </div>
         </div>
+        <hr/>
         <div class="container-fluid">
             <h2>Conversion Legend</h2>
         </div>

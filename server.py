@@ -11,11 +11,13 @@ from app.twitter_learning_journal.dao.tweet_dao import TweetDao
 from app.twitter_learning_journal.database.sqlalchemy_database import Database
 from app.twitter_learning_journal.models.detail import Detail
 from app.twitter_learning_journal.retrievers.details.books import get_books
+from app.twitter_learning_journal.retrievers.details.conferences import get_conferences
 from app.twitter_learning_journal.retrievers.details.pairings import get_pairings
 from app.twitter_learning_journal.retrievers.details.videos import get_videos
 from scripts.audio_books import get_audio_books
 from scripts.blog_report import process_blogs
-from scripts.book_report import process_books, process_audio_books, process_videos, process_pairings
+from scripts.book_report import process_books, process_audio_books, process_videos, process_pairings, \
+    process_conferences
 from scripts.github_report import process_github
 from scripts.podcast_report import process_podcasts
 from scripts.timeline import build_timeline
@@ -28,7 +30,7 @@ app.register_blueprint(login_blueprint)
 manager = Manager(app)
 
 default_screen_name = 'dev3l_'
-default_report_start_date = '2018-05-04'
+default_report_start_date = '2017-04-10'
 default_report_stop_date = '2018-07-27'
 
 
@@ -52,6 +54,8 @@ def _index():
     github_entry_reports = []
     video_entry_reports = []
     pairing_entry_reports = []
+    conference_entry_reports = []
+
 
     database = Database()
     tweet_dao = TweetDao(database)
@@ -135,6 +139,16 @@ def _index():
     aggregate_timelines.append(pairings_aggregate_result.timeline)
     pairing_entry_reports.extend(pairings_aggregate_result.report_entries)
 
+    # conferences
+    conferences = get_conferences(tweets)
+    filtered_conferences = [conference for conference in conferences
+                       if conference.created_at <= report_stop_date and conference.created_at >= report_start_date]
+    conferences_aggregate_result = process_conferences(filtered_conferences)
+    aggregates.append(conferences_aggregate_result)
+    aggregate_timelines.append(conferences_aggregate_result.timeline)
+    conference_entry_reports.extend(conferences_aggregate_result.report_entries)
+
+
     # aggregates
     results = []
 
@@ -148,7 +162,8 @@ def _index():
         'Blogs': 'blogs',
         'Tweets': 'tweets/favorites',
         'Videos': 'videos',
-        'Pairing': 'pairing'
+        'Pairing': 'pairing',
+        'Conferences': 'conferences'
     }
 
     for aggregate in aggregates:
@@ -211,6 +226,7 @@ def _index():
                            github_entry_reports=github_entry_reports,
                            video_entry_reports=video_entry_reports,
                            pairing_entry_reports=pairing_entry_reports,
+                           conference_entry_reports=conference_entry_reports,
                            tkcv=f'{total_kcv:.2f} hours',
                            akcv=f'{average_kcv:.2f} hours/day',
                            report_start_date=report_start_date.date(),

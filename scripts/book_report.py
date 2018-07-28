@@ -159,8 +159,52 @@ def process_pairings(pairings):
 
     return aggregate_result
 
+def process_conferences(conferences):
+    aggregate_result = AggregateResult('Conferences')
 
-def create_book_report_entry(book, distribution_percent, *, is_book=True, is_video=False, is_pairing=False):
+    for conference in conferences:
+        conference.title = conference.full_text
+        conference.start_date = conference.created_at
+        conference.stop_date = conference.created_at
+
+        conference.length = 30
+
+        if conference.full_text.lower().startswith("i'm at"):
+            conference.length = 60
+
+        if conference.full_text.find("^") != -1:
+            try:
+                counter = conference.full_text[conference.full_text \
+                            .find("^") + 1:] \
+                            .split("\n")[0] \
+                            .replace("m", "") \
+                            .replace("in", "") \
+                            .split(" ")[0]
+                conference.length = int(counter)
+            except:
+                print(f'Could not parse counter: {conference.full_text}')
+
+        total_hours = conference.length / 60
+        knowlege_consumption_velocity = total_hours
+
+        conference_date_key = transform_datetime_to_iso_date_str(conference.created_at)
+
+        if conference_date_key not in aggregate_result.timeline:
+            aggregate_result.timeline[conference_date_key] = defaultdict(int)
+
+        aggregate_result.timeline[conference_date_key][conference.classification] += knowlege_consumption_velocity
+
+        aggregate_result.item_count += 1
+        aggregate_result.kcv += knowlege_consumption_velocity
+
+        conference_report_entry = create_book_report_entry(conference, 1, is_book=False, is_conference=True)
+        aggregate_result.report_entries.append(conference_report_entry)
+
+    aggregate_result.report_entries.sort(key=lambda conference_report_entry: conference_report_entry.start_date, reverse=True)
+
+    return aggregate_result
+
+def create_book_report_entry(book, distribution_percent, *, is_book=True, is_video=False, is_pairing=False, is_conference=False):
     report_entry = ReportEntry()
 
     title = book.title.title()
@@ -177,6 +221,9 @@ def create_book_report_entry(book, distribution_percent, *, is_book=True, is_vid
         report_entry.length = f'{book.length} minutes'
     elif is_pairing:
         report_entry.medium = 'Paired'
+        report_entry.length = f'{book.length} minutes'
+    elif is_conference:
+        report_entry.medium = 'Conferences'
         report_entry.length = f'{book.length} minutes'
     else:
         report_entry.medium = 'Audio Book'
