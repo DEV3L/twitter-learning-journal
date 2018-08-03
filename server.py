@@ -70,7 +70,9 @@ def _index():
         request.args.get('report_stop_date') or request.form.get('report_stop_date'), )
 
     filtered_tweets = [tweet for tweet in tweets
-                       if report_start_date <= tweet.created_at <= report_stop_date]
+                       if report_start_date <= tweet.created_at <= report_stop_date
+                       and tweet.classification == 'agile'
+                       ]
 
     filtered_details = [detail for detail in details
                         if report_stop_date >= detail.tweet.created_at >= report_start_date]
@@ -80,7 +82,10 @@ def _index():
     # books
     books = get_books(tweets)
     filtered_books = [book for book in books
-                      if book.start_date <= report_stop_date and book.stop_date >= report_start_date]
+                      if book.start_date <= report_stop_date
+                      and book.stop_date >= report_start_date
+                      and book.classification == 'agile'
+                      ]
     books_aggregate_result = process_books(report_start_date, report_stop_date, filtered_books)
     aggregates.append(books_aggregate_result)
     aggregate_timelines.append(books_aggregate_result.timeline)
@@ -89,27 +94,36 @@ def _index():
     # audio books
     audio_books = get_audio_books()
     filtered_audio_books = [audio_book for audio_book in audio_books
-                            if audio_book.start_date <= report_stop_date and audio_book.stop_date >= report_start_date]
+                            if audio_book.start_date <= report_stop_date
+                            and audio_book.stop_date >= report_start_date
+                            and audio_book.classification == 'agile'
+                            ]
     audio_books_aggregate_result = process_audio_books(report_start_date, report_stop_date, filtered_audio_books)
     aggregates.append(audio_books_aggregate_result)
     aggregate_timelines.append(audio_books_aggregate_result.timeline)
     book_entry_reports.extend(audio_books_aggregate_result.report_entries)
 
-    # github
-    github_aggregate_result = process_github(report_start_date, report_stop_date)
-    aggregates.append(github_aggregate_result)
-    aggregate_timelines.append(github_aggregate_result.timeline)
-    github_entry_reports.extend(github_aggregate_result.report_entries)
+    # # engineering
+    # # github
+    # github_aggregate_result = process_github(report_start_date, report_stop_date)
+    # aggregates.append(github_aggregate_result)
+    # aggregate_timelines.append(github_aggregate_result.timeline)
+    # github_entry_reports.extend(github_aggregate_result.report_entries)
 
     # podcasts
-    podcast_details = [detail for detail in filtered_details if detail.type == 'podcast']
+    podcast_details = [detail for detail in filtered_details
+                       if detail.type == 'podcast'
+                       and detail.classification == 'agile'
+                       ]
     podcast_aggregate_result = process_podcasts(podcast_details)
     aggregates.append(podcast_aggregate_result)
     aggregate_timelines.append(podcast_aggregate_result.timeline)
     podcast_entry_reports.extend(podcast_aggregate_result.report_entries)
 
     # blogs
-    blog_details = [detail for detail in filtered_details if detail.type == 'blog']
+    blog_details = [detail for detail in filtered_details
+                    if detail.type == 'blog'
+                    and detail.classification == 'agile']
     blog_aggregate_result = process_blogs(blog_details)
     aggregates.append(blog_aggregate_result)
     aggregate_timelines.append(blog_aggregate_result.timeline)
@@ -122,7 +136,7 @@ def _index():
     tweet_entry_reports.extend(tweet_aggregate_result.report_entries)
 
     # videos
-    videos = get_videos(tweets)
+    videos = get_videos([tweet for tweet in tweets if tweet.classification == 'agile'])
     filtered_videos = [video for video in videos
                        if video.created_at <= report_stop_date and video.created_at >= report_start_date]
     videos_aggregate_result = process_videos(filtered_videos)
@@ -130,17 +144,17 @@ def _index():
     aggregate_timelines.append(videos_aggregate_result.timeline)
     video_entry_reports.extend(videos_aggregate_result.report_entries)
 
-    # pairing
-    pairings = get_pairings(tweets)
-    filtered_pairings = [pairing for pairing in pairings
-                       if pairing.created_at <= report_stop_date and pairing.created_at >= report_start_date]
-    pairings_aggregate_result = process_pairings(filtered_pairings)
-    aggregates.append(pairings_aggregate_result)
-    aggregate_timelines.append(pairings_aggregate_result.timeline)
-    pairing_entry_reports.extend(pairings_aggregate_result.report_entries)
+    # # pairing
+    #     # pairings = get_pairings(tweets)
+    #     # filtered_pairings = [pairing for pairing in pairings
+    #     #                    if pairing.created_at <= report_stop_date and pairing.created_at >= report_start_date]
+    #     # pairings_aggregate_result = process_pairings(filtered_pairings)
+    #     # aggregates.append(pairings_aggregate_result)
+    #     # aggregate_timelines.append(pairings_aggregate_result.timeline)
+    #     # pairing_entry_reports.extend(pairings_aggregate_result.report_entries)
 
     # conferences
-    conferences = get_conferences(tweets)
+    conferences = get_conferences([tweet for tweet in tweets if tweet.classification == 'agile'])
     filtered_conferences = [conference for conference in conferences
                        if conference.created_at <= report_stop_date and conference.created_at >= report_start_date]
     conferences_aggregate_result = process_conferences(filtered_conferences)
@@ -157,12 +171,12 @@ def _index():
     mediums = {
         'Books': 'books',
         'Audio Books': 'books',
-        'GitHub': 'commits',
+        # 'GitHub': 'commits',
         'Podcasts': 'podcasts',
         'Blogs': 'blogs',
         'Tweets': 'tweets/favorites',
         'Videos': 'videos',
-        'Pairing': 'pairing',
+        # 'Pairing': 'pairing',
         'Conferences': 'conferences'
     }
 
@@ -191,15 +205,6 @@ def _index():
             for timeline_entry_classification in timeline_entry.keys():
                 timeline_entry[timeline_entry_classification] += aggregate_timeline_entry[timeline_entry_classification]
 
-    def transform_timeline_into_series(timeline):
-        series = defaultdict(list)
-
-        for key_date, daily_classifications in timeline.items():
-            for classification in daily_classifications:
-                series[classification].append(f'{daily_classifications[classification]:.2f}')
-
-        return series
-
     _series = transform_timeline_into_series(timeline)
 
     series = []
@@ -227,11 +232,21 @@ def _index():
                            video_entry_reports=video_entry_reports,
                            pairing_entry_reports=pairing_entry_reports,
                            conference_entry_reports=conference_entry_reports,
-                           tkcv=f'{total_kcv:.2f} hours',
+                           tkcv=f'{total_kcv:.2f} total hours',
                            akcv=f'{average_kcv:.2f} hours/day',
                            report_start_date=report_start_date.date(),
                            report_stop_date=report_stop_date.date())
 
+def transform_timeline_into_series(timeline):
+    series = defaultdict(list)
+
+    for key_date, daily_classifications in timeline.items():
+        for classification in daily_classifications:
+            if classification != "agile":
+                continue
+            series[classification].append(f'{daily_classifications[classification]:.2f}')
+
+    return series
 
 def get_report_date_ranges(report_start_date_str, report_stop_date_str):
     report_start_date_str = report_start_date_str or default_report_start_date
