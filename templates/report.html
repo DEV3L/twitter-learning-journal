@@ -25,10 +25,6 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <p style="margin: 10px; padding: 5px">
-            <span class="font-weight-bold">Justin Beall KCV Profile</span>
-            <!-- - From {{report_start_date}} To {{report_stop_date}} -->
-        </p>
         <form style="margin: 10px; padding: 5px" action="" method="post">
             <span class="input text">
                 <span class="font-italic">Start Date</span>
@@ -43,8 +39,12 @@
             </span>
         </form>
     </div>
-    <div class="container-fluid border">
-        <h5>KCV = {{ tkcv }} - {{ akcv }}</h5>
+    <div class="m-2 p-0 container-fluid text-center">
+        <p style="margin: 0px; padding: 5px">
+            <span class="font-weight-bold">Justin Beall KCV Profile</span>
+{#             - From {{report_start_date}} To {{report_stop_date}}#}
+        </p>
+        <h5 clas="m-0 p-0 card" >KCV = {{ tkcv }} - {{ akcv }}</h5>
     </div>
     <hr/>
 </div>
@@ -94,14 +94,14 @@
                     </thead>
                     <tbody>
                     {% for entry_report in book_entry_reports %}
-                        <tr>
-                            <td>{{ entry_report.title }}</td>
-                            <td>{{ entry_report.medium }}</td>
-                            <td>{{ entry_report.length }}</td>
-                            <td>{{ entry_report.distribution_percent }}</td>
-                            <td>{{ entry_report.classification }}</td>
-                            <td>{{ entry_report.start_date }}</td>
-                            <td>{{ entry_report.stop_date }}</td>
+                        <tr class="m-0 p-0">
+                            <td class="m-0 p-0">{{ entry_report.title }}</td>
+                            <td class="m-0 p-0">{{ entry_report.medium }}</td>
+                            <td class="m-0 p-0">{{ entry_report.length }}</td>
+                            <td class="m-0 p-0">{{ entry_report.distribution_percent }}</td>
+                            <td class="m-0 p-0">{{ entry_report.classification }}</td>
+                            <td class="m-0 p-0">{{ entry_report.start_date }}</td>
+                            <td class="m-0 p-0">{{ entry_report.stop_date }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
