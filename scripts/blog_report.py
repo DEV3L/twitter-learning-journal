@@ -13,6 +13,10 @@ def process_blogs(blogs):
         words = blog.count
         blog_date_key = transform_datetime_to_iso_date_str(blog.tweet.created_at)
         minutes = words / average_blog_reading_speed
+
+        if minutes > 30:
+            minutes = 30
+
         hours = minutes / 60
 
         if blog_date_key not in aggregate_result.timeline:

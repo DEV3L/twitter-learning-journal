@@ -4,6 +4,8 @@ def get_conferences(tweets):
                    or tweet.full_text.lower().startswith('attending')
                    or tweet.full_text.lower().startswith('attended')
                    or tweet.full_text.lower().startswith('extreme fake it till you make it')
+                   or "getting ready for" in tweet.full_text.lower()
+                   or "getting started with" in tweet.full_text.lower()
                    ]
 
     for conference in conferences:

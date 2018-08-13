@@ -81,7 +81,8 @@ global_classification_model = {
               'standup', 'future', 'fear', 'slow', 'down', 'speed', 'up', 'cycletime', 'impact', 'waterfall',
               'waterfalls', 'distribution', 'ardita_k', 'mattbarcomb',
               'productmanagement', 'prodmgmt', 'product', 'servicedesign', 'ux', 'cx', 'ui', 'orddesign',
-              'productnerd', 'arch', 'productcraft', 'customerfirst', 'design', 'po', 'johncutlefish'
+              'productnerd', 'arch', 'productcraft', 'customerfirst', 'design', 'po', 'johncutlefish',
+              'agile2018', 'agilealliance'
               },
     # 'diversity': {'diversity', 'women'},
     # 'other': {'valid', 'ideservethis', 'computervision', 'jengacode', 'photo', 'dumb', 'westyaward',

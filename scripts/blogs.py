@@ -61,7 +61,20 @@ def classify_blogs(details):
                 webpage_cacher.entity = html
                 webpage_cacher.cache()
             else:
-                html = webpage_cacher.get()
+                try:
+                    html = webpage_cacher.get()
+                except:
+                    _request = Request(url)
+                    _request.headers = headers
+
+                    try:
+                        html = request.urlopen(_request).read().decode('utf8')
+                    except Exception as e:
+                        print(f'could not open url: {url}')
+                        continue
+
+                    webpage_cacher.entity = html
+                    webpage_cacher.cache()
 
             html = remove_auxiiary_tags(html)
 
